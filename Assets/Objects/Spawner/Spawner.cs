@@ -20,7 +20,7 @@ public class Spawner : MonoBehaviour
 	{
 		this._spawnTimer = this._spawnPeriod;
 		this._renderer = this.GetComponent<Renderer>();
-		
+
 		this._renderer.material.SetColor( "_Color", this.color );
 		this._renderer.material.SetColor( "_EmissionColor", this.color );
 	}
@@ -71,9 +71,7 @@ public class Spawner : MonoBehaviour
 
 	private void OnTriggerEnter( Collider other )
 	{
-		var component = other.gameObject.GetComponent<Unit>();
-
-		if ( component )
+		if ( other.gameObject.layer == 3 )
 			this._triggers.Add( other.gameObject );
 	}
 

@@ -8,19 +8,17 @@ public class Bullet : MonoBehaviour
 	public float lifeTime = .5f;
 	public float damage = 10f;
 
-	private Renderer _renderer;
-	private Rigidbody _rigidbody;
+	private RootObject ro;
 
 	private void Start ()
 	{
-		this._rigidbody = this.GetComponent<Rigidbody>();
-		this._renderer = this.GetComponent<Renderer>();
-		this.transform.Rotate( 90f, 0, 0 );
-		this._rigidbody.velocity = this.initialVelocity;
-		this._rigidbody.AddForce( this.transform.up * this.force, ForceMode.Impulse );
+		this.ro = this.gameObject.GetComponent<RootObject>();
 
-		this._renderer.material.SetColor( "_Color", this.color );
-		this._renderer.material.SetColor( "_EmissionColor", this.color );
+		this.ro.rigidbody.velocity = this.initialVelocity;
+		this.ro.rigidbody.AddForce( this.transform.forward * this.force, ForceMode.Impulse );
+
+		this.ro.renderer.material.SetColor( "_Color", this.color );
+		this.ro.renderer.material.SetColor( "_EmissionColor", this.color );
 	}
 
 	private void Update ()
@@ -28,9 +26,7 @@ public class Bullet : MonoBehaviour
 		this.lifeTime -= Time.deltaTime;
 
 		if ( this.lifeTime <= 0 )
-		{
 			Destroy( this.gameObject );
-		}
 	}
 
 	private void OnCollisionEnter( Collision other )
@@ -38,8 +34,6 @@ public class Bullet : MonoBehaviour
 		var unit = other.gameObject.GetComponent<Unit>();
 
 		if ( unit )
-		{
 			unit.hp -= this.damage;
-		}
 	}
 }

@@ -11,22 +11,20 @@ public class Death : MonoBehaviour
 	[SerializeField]
 	private Material deathMaterial;
 
-	private Renderer _renderer;
-	private Rigidbody _rigidbody;
+	private RootObject ro;
 
 	private void Start ()
 	{
-		this._renderer = this.GetComponent<Renderer>();
-		this._rigidbody = this.GetComponent<Rigidbody>();
+		this.ro = this.GetComponent<RootObject>();
 	}
 
 	public void Die ()
 	{
-		this._rigidbody.constraints = RigidbodyConstraints.None;
-		this._rigidbody.useGravity = true;
+		this.ro.rigidbody.constraints = RigidbodyConstraints.None;
+		this.ro.rigidbody.useGravity = true;
 
 		if ( this.deathMaterial )
-			this._renderer.material = this.deathMaterial;
+			this.ro.renderer.material = this.deathMaterial;
 
 		foreach ( MonoBehaviour script in this.gameObject.GetComponents<MonoBehaviour>() )
 		{
