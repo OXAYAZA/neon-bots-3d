@@ -3,7 +3,7 @@ using UnityEngine;
 public class Death : MonoBehaviour
 {
 	[SerializeField]
-	private bool dieOnCollision;
+	private bool dieOnCollision = false;
 
 	[SerializeField]
 	private float existTime = 10f;
@@ -11,20 +11,24 @@ public class Death : MonoBehaviour
 	[SerializeField]
 	private Material deathMaterial;
 
-	private RootObject ro;
+	private GameObject body;
+	private Rigidbody rigidBody;
+	private new Renderer renderer;
 
 	private void Start ()
 	{
-		this.ro = this.GetComponent<RootObject>();
+		this.body = this.transform.Find( "Body" ).gameObject;
+		this.rigidBody = this.GetComponent<Rigidbody>();
+		this.renderer = this.body.GetComponent<Renderer>();
 	}
 
 	public void Die ()
 	{
-		this.ro.rigidbody.constraints = RigidbodyConstraints.None;
-		this.ro.rigidbody.useGravity = true;
+		this.rigidBody.constraints = RigidbodyConstraints.None;
+		this.rigidBody.useGravity = true;
 
 		if ( this.deathMaterial )
-			this.ro.renderer.material = this.deathMaterial;
+			this.renderer.material = this.deathMaterial;
 
 		foreach ( MonoBehaviour script in this.gameObject.GetComponents<MonoBehaviour>() )
 		{

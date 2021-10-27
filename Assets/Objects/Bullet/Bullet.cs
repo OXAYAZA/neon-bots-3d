@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Bullet : MonoBehaviour
+public class Bullet : RootObject
 {
 	public Color color = new Color( 200, 200, 200 );
 	public float force = 400f;
@@ -8,17 +8,15 @@ public class Bullet : MonoBehaviour
 	public float lifeTime = .5f;
 	public float damage = 10f;
 
-	private RootObject ro;
-
-	private void Start ()
+	private new void Start ()
 	{
-		this.ro = this.gameObject.GetComponent<RootObject>();
+		base.Start();
 
-		this.ro.rigidbody.velocity = this.initialVelocity;
-		this.ro.rigidbody.AddForce( this.transform.forward * this.force, ForceMode.Impulse );
+		this.rigidBody.velocity = this.initialVelocity;
+		this.rigidBody.AddForce( this.transform.forward * this.force, ForceMode.Impulse );
 
-		this.ro.renderer.material.SetColor( "_Color", this.color );
-		this.ro.renderer.material.SetColor( "_EmissionColor", this.color );
+		this.renderer.material.SetColor( "_Color", this.color );
+		this.renderer.material.SetColor( "_EmissionColor", this.color );
 	}
 
 	private void Update ()

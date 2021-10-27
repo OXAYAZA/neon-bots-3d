@@ -9,12 +9,12 @@ public class RootObject : MonoBehaviour
 	public new Renderer renderer;
 
 	[HideInInspector]
-	public new Rigidbody rigidbody;
+	public Rigidbody rigidBody;
 
-	private void Start ()
+	public void Start ()
 	{
 		this.body = this.transform.Find( "Body" ).gameObject;
 		this.renderer = this.body.GetComponent<Renderer>();
-		this.rigidbody = this.gameObject.GetComponent<Rigidbody>();
+		this.rigidBody = this.gameObject.GetComponent<Rigidbody>();
 	}
 }

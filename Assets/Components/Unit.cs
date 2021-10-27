@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-public class Unit : MonoBehaviour
+public class Unit : RootObject
 {
 	public float hp = 100f;
 	public string fraction = "neutral";
@@ -12,24 +12,21 @@ public class Unit : MonoBehaviour
 	[SerializeField]
 	private float torque = 50f;
 
-	private RootObject ro;
 	private Vector3 _movementDirection = Vector3.zero;
 	private Vector3 _rotatingDirection = Vector3.zero;
 	private Vector3 _expectedMovementDirection = Vector3.zero;
 	private Vector3 _expectedRotatingDirection = Vector3.zero;
 	private Death _death;
 
-	private void Start ()
+	private new void Start ()
 	{
-		this.ro = this.gameObject.GetComponent<RootObject>();
+		base.Start();
 		this._death = this.gameObject.GetComponent<Death>();
 
-		Debug.Log( this.gameObject + " : " + this.ro.body + " : " + this.ro.renderer );
-
-		if ( this.ro.renderer )
+		if ( this.renderer )
 		{
-			this.ro.renderer.material.SetColor( "_Color", this.color );
-			this.ro.renderer.material.SetColor( "_EmissionColor", this.color );
+			this.renderer.material.SetColor( "_Color", this.color );
+			this.renderer.material.SetColor( "_EmissionColor", this.color );
 		}
 	}
 
@@ -82,7 +79,7 @@ public class Unit : MonoBehaviour
 
 	private void FixedUpdate()
 	{
-		this.ro.rigidbody.AddForce( this._movementDirection * this.acceleration, ForceMode.Acceleration );
-		this.ro.rigidbody.AddTorque( this._rotatingDirection * this.torque, ForceMode.Acceleration );
+		this.rigidBody.AddForce( this._movementDirection * this.acceleration, ForceMode.Acceleration );
+		this.rigidBody.AddTorque( this._rotatingDirection * this.torque, ForceMode.Acceleration );
 	}
 }
