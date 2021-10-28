@@ -27,7 +27,7 @@ public class CameraController : MonoBehaviour
 
 		RaycastHit hit;
 		var ray = this._cam.ScreenPointToRay( Input.mousePosition );
-		var tmp = Physics.Raycast( ray.origin, ray.direction, out hit, 100 );
+		var tmp = Physics.Raycast( ray.origin, ray.direction, out hit, 100, 1 << 7 );
 		this.cursor = tmp ? hit.point : this.transform.position;
 		this._point.position = this.cursor;
 	}

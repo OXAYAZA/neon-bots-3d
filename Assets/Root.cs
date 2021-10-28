@@ -12,6 +12,8 @@ public class Root : MonoBehaviour
 	public List<GameObject> touchControl;
 	public InputType controlType;
 
+	public List<GameObject> primitives;
+
 	[HideInInspector]
 	public bool gamePaused;
 
