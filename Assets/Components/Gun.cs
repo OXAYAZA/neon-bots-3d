@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
-	[SerializeField]
-	private GameObject bullet;
+	public GameObject bullet;
 
 	[SerializeField]
 	private float shotReload = 0.5f;

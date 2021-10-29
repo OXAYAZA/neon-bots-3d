@@ -6,40 +6,19 @@ using UnityEditor;
 
 public class BotTurret : MonoBehaviour
 {
+	[SerializeField]
+	private float _visionRadius = 20;
+
 	private Unit _unit;
 	private Gun _gun;
 	private GameObject _target;
 	private Vector3 _direction;
-	private double _distance;
-	private GameObject _visionSphere;
-
-	[SerializeField]
-	private float _visionRadius = 20;
+	private float _distance;
 
 	private void Start()
 	{
 		this._unit = this.GetComponent<Unit>();
 		this._gun = this.GetComponent<Gun>();
-
-		this._visionSphere = new GameObject( "VisionSphere" );
-
-		this._visionSphere.transform.parent = this.gameObject.transform;
-		this._visionSphere.transform.localPosition = Vector3.zero;
-		this._visionSphere.transform.localRotation = Quaternion.identity;
-		this._visionSphere.transform.localScale = new Vector3( this._visionRadius * 2, this._visionRadius * 2, this._visionRadius * 2 );
-
-		this._visionSphere.AddComponent<MeshFilter>();
-		var vsMeshFilter = this._visionSphere.GetComponent<MeshFilter>();
-		var vsMeshSource = Root.Instance.primitives.Single( item => item.name == "Sphere" );
-		vsMeshFilter.mesh = vsMeshSource.GetComponent<MeshFilter>().mesh;
-
-		this._visionSphere.AddComponent<MeshRenderer>();
-		var vsRenderer = this._visionSphere.GetComponent<Renderer>();
-		vsRenderer.material = (Material)AssetDatabase.LoadAssetAtPath("Assets/Objects/Turret/Vision.mat", typeof(Material));
-
-		this._visionSphere.AddComponent<SphereCollider>();
-		var vsCollider = this._visionSphere.GetComponent<Collider>();
-		vsCollider.isTrigger = true;
 	}
 
 	private void Update()
@@ -63,7 +42,7 @@ public class BotTurret : MonoBehaviour
 		var targetObjects = this.ScopeCheck();
 		foreach ( var targetObject in targetObjects )
 		{
-			var target = targetObject.transform.parent.GetComponent<Unit>();
+			var target = targetObject.GetComponent<Unit>();
 			if ( target && target.fraction != this._unit.fraction )
 				this._target = targetObject;
 		}
@@ -78,8 +57,15 @@ public class BotTurret : MonoBehaviour
 
 	private void Calculate ()
 	{
-		this._direction = new Vector3( this._target.transform.position.x - this.transform.position.x, 0, this._target.transform.position.z - this.transform.position.z );
-		this._distance = Math.Sqrt( Math.Pow( this._target.transform.position.x - this.transform.position.x, 2 ) + Math.Pow( this._target.transform.position.z - this.transform.position.z, 2 ) );
+		this._distance = Vector3.Distance( this.transform.position, this._target.transform.position );
+
+		var bulletVelocity = this._gun.bullet.GetComponent<Bullet>().force / 10;
+		var timeDistance = this._distance / bulletVelocity;
+		var targetPosition = this._target.transform.position;
+		var targetVelocity = this._target.GetComponent<Rigidbody>().velocity;
+		var aimPoint = targetPosition + targetVelocity * timeDistance;
+
+		this._direction = aimPoint - this.transform.position;
 	}
 
 	private void Rotate ()
@@ -95,10 +81,36 @@ public class BotTurret : MonoBehaviour
 
 	private List<UnityEngine.GameObject> ScopeCheck ()
 	{
-		Collider[] hitColliders = Physics.OverlapSphere( this.transform.position, this._visionRadius, 1 << 3 );
-		return hitColliders
+		// Getting of all colliders that overlapping sphere
+		return Physics.OverlapSphere( this.transform.position, this._visionRadius, 1 << 3 )
+			// Filtering out colliders that are related to current game object
 			.Where( hitCollider => hitCollider.gameObject.transform.parent != this.transform )
-			.Select( hitCollider => hitCollider.gameObject )
+			// Getting colliders game objects
+			.Select( hitCollider => hitCollider.gameObject.transform.parent.gameObject )
+			// Converting the result to List
 			.ToList();
+	}
+
+	private void OnDrawGizmos()
+	{
+		if ( this._target )
+		{
+			var bulletVelocity = 40f;
+			var timeDistance = this._distance / bulletVelocity;
+			var targetPosition = this._target.transform.position;
+			var targetVelocity = this._target.GetComponent<Rigidbody>().velocity;
+			var aimPoint = targetPosition + targetVelocity * timeDistance;
+
+			Gizmos.color = Color.yellow;
+			Gizmos.DrawRay( this.transform.position, this._target.transform.position - this.transform.position );
+			Gizmos.DrawWireSphere( targetPosition, 1.5f );
+
+			Gizmos.color = Color.gray;
+			Gizmos.DrawRay( targetPosition, targetVelocity );
+
+			Gizmos.color = Color.green;
+			Gizmos.DrawWireSphere( aimPoint, 1.5f );
+			Gizmos.DrawRay( this.transform.position, aimPoint - this.transform.position );
+		}
 	}
 }
