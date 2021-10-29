@@ -257,7 +257,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 855679f841964c19a84cc460b09cc742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 10000
+  body: {fileID: 0}
+  renderer: {fileID: 0}
+  rigidBody: {fileID: 0}
+  hp: 1000
   fraction: neutral
   color: {r: 1, g: 1, b: 1, a: 1}
   acceleration: 300
