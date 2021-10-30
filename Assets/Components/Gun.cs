@@ -11,7 +11,7 @@ public class Gun : MonoBehaviour
 	[SerializeField]
 	private AudioClip shotSound;
 
-	private Unit _unit;
+	private ObjectData _data;
 	private Rigidbody _rigidBody;
 	private AudioSource _audioSource;
 	private float _shotReloading = 0;
@@ -19,7 +19,7 @@ public class Gun : MonoBehaviour
 
 	private void Start ()
 	{
-		this._unit = this.gameObject.GetComponent<Unit>();
+		this._data = this.gameObject.GetComponent<ObjectData>();
 		this._rigidBody = this.gameObject.GetComponent<Rigidbody>();
 		this._audioSource = this.GetComponent<AudioSource>();
 
@@ -52,13 +52,14 @@ public class Gun : MonoBehaviour
 			{
 				var iniTrans = socket.transform;
 				var tmp = Instantiate( this.bullet, iniTrans.position, iniTrans.rotation );
+				var tmpData = tmp.GetComponent<ObjectData>();
 				var tmpBullet = tmp.GetComponent<Bullet>();
 
+				if ( tmpData )
+					tmpData.color = this._data.color;
+
 				if ( tmpBullet )
-				{
-					tmpBullet.color = this._unit.color;
 					tmpBullet.initialVelocity = this._rigidBody.velocity;
-				}
 			}
 
 			if ( this._audioSource && this.shotSound )

@@ -11,19 +11,26 @@ public class Death : MonoBehaviour
 	[SerializeField]
 	private Material deathMaterial;
 
+	[SerializeField]
+	private GameObject explosionPrefab;
+
+	private ObjectData data;
 	private GameObject body;
 	private Rigidbody rigidBody;
 	private new Renderer renderer;
+	private bool state = true;
 
 	private void Start ()
 	{
 		this.body = this.transform.Find( "Body" ).gameObject;
+		this.data = this.GetComponent<ObjectData>();
 		this.rigidBody = this.GetComponent<Rigidbody>();
 		this.renderer = this.body.GetComponent<Renderer>();
 	}
 
 	public void Die ()
 	{
+		this.state = false;
 		this.rigidBody.constraints = RigidbodyConstraints.None;
 		this.rigidBody.useGravity = true;
 
@@ -38,6 +45,14 @@ public class Death : MonoBehaviour
 				Destroy( script );
 		}
 
+		if ( this.explosionPrefab )
+		{
+			var iniTrans = this.transform;
+			var tmpObject = Instantiate( this.explosionPrefab, iniTrans.position, iniTrans.rotation );
+			ParticleSystem.MainModule main = tmpObject.GetComponent<ParticleSystem>().main;
+			main.startColor = this.data.color;
+		}
+
 		this.Invoke( nameof( this.RemoveGameObject ), this.existTime );
 	}
 
@@ -48,7 +63,7 @@ public class Death : MonoBehaviour
 
 	private void OnCollisionEnter( Collision other )
 	{
-		if ( this.dieOnCollision )
+		if ( this.dieOnCollision && this.state )
 			this.Die();
 	}
 }

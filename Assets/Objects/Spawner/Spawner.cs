@@ -3,9 +3,6 @@ using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
-	public string fraction = "none";
-	public Color color = new Color( 200, 200, 200 );
-
 	[SerializeField]
 	private GameObject obj;
 
@@ -13,28 +10,27 @@ public class Spawner : MonoBehaviour
 	private float _spawnPeriod = 5f;
 
 	private float _spawnTimer;
-	private Renderer _renderer;
+	private ObjectData data;
+	private new Renderer renderer;
 	private List<GameObject> _triggers = new List<GameObject>();
 
 	private void Start()
 	{
+		this.data = this.gameObject.GetComponent<ObjectData>();
+		this.renderer = this.transform.Find("Body").gameObject.GetComponent<Renderer>();
 		this._spawnTimer = this._spawnPeriod;
-		this._renderer = this.GetComponent<Renderer>();
-
-		this._renderer.material.SetColor( "_Color", this.color );
-		this._renderer.material.SetColor( "_EmissionColor", this.color );
 	}
 
 	private void SpawnObject()
 	{
 		var initialTransform = this.transform;
 		var tmp = Instantiate( this.obj, initialTransform.position, initialTransform.rotation );
-		var tmpUnit = tmp.GetComponent<Unit>();
+		var tmpData = tmp.GetComponent<ObjectData>();
 
-		if ( tmpUnit )
+		if ( tmpData )
 		{
-			tmpUnit.fraction = this.fraction;
-			tmpUnit.color = this.color;
+			tmpData.fraction = this.data.fraction;
+			tmpData.color = this.data.color;
 		}
 	}
 
@@ -43,9 +39,7 @@ public class Spawner : MonoBehaviour
 		if ( this._spawnTimer <= 0 )
 		{
 			if ( this._triggers.Count <= 0 )
-			{
 				this.SpawnObject();
-			}
 
 			this._spawnTimer = this._spawnPeriod;
 		}
@@ -58,14 +52,14 @@ public class Spawner : MonoBehaviour
 		if ( this._triggers.Count != 0 )
 		{
 			var busyColor = new Color( 1, 1, 1, 0.5f );
-			this._renderer.material.SetColor( "_Color", busyColor );
-			this._renderer.material.SetColor( "_EmissionColor", busyColor );
+			this.renderer.material.SetColor( "_Color", busyColor );
+			this.renderer.material.SetColor( "_EmissionColor", busyColor );
 		}
 
 		else
 		{
-			this._renderer.material.SetColor( "_Color", this.color );
-			this._renderer.material.SetColor( "_EmissionColor", this.color );
+			this.renderer.material.SetColor( "_Color", this.data.color );
+			this.renderer.material.SetColor( "_EmissionColor", this.data.color );
 		}
 	}
 

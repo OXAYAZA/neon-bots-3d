@@ -2,7 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BotTurret : MonoBehaviour
+public class BotStupid : MonoBehaviour
 {
 	[SerializeField]
 	private float _visionRadius = 30;
@@ -32,6 +32,7 @@ public class BotTurret : MonoBehaviour
 		{
 			this.Calculate();
 			this.Rotate();
+			this.Move();
 			this.Attack();
 		}
 	}
@@ -72,9 +73,17 @@ public class BotTurret : MonoBehaviour
 		this._unit.Rotate( this._direction );
 	}
 
+	private void Move ()
+	{
+		if ( this._distance > this._visionRadius * 0.5 )
+			this._unit.Move( this.transform.forward );
+		else if ( this._distance < this._visionRadius * 0.25 )
+			this._unit.Move( -this.transform.forward );
+	}
+
 	private void Attack ()
 	{
-		if ( this._gun && this._distance < this._visionRadius && Vector3.Angle( this.transform.forward, this._direction ) < 5f )
+		if ( this._gun && this._distance < this._visionRadius && Vector3.Angle( this.transform.forward, this._direction ) < 3f )
 			this._gun.Shot();
 	}
 
@@ -106,6 +115,7 @@ public class BotTurret : MonoBehaviour
 
 			Gizmos.color = Color.gray;
 			Gizmos.DrawRay( targetPosition, targetVelocity );
+			Gizmos.DrawRay( this.transform.position, this.gameObject.GetComponent<Rigidbody>().velocity );
 
 			Gizmos.color = Color.green;
 			Gizmos.DrawWireSphere( aimPoint, 1.5f );

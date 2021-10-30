@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class BotSimp : MonoBehaviour
 {
+	private ObjectData _data;
 	private Unit _unit;
 	private Gun _gun;
 	private GameObject _target;
@@ -11,6 +12,7 @@ public class BotSimp : MonoBehaviour
 
 	private void Start()
 	{
+		this._data = this.GetComponent<ObjectData>();
 		this._unit = this.GetComponent<Unit>();
 		this._gun = this.GetComponent<Gun>();
 	}
@@ -32,13 +34,14 @@ public class BotSimp : MonoBehaviour
 	{
 		this._target = null;
 		this._distance = Double.PositiveInfinity;
-		
+
 		var objects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
 
 		foreach ( var obj in objects )
 		{
 			var unit = obj.GetComponent<Unit>();
-			if ( unit && obj != this.gameObject && unit.fraction != this._unit.fraction )
+			var data = obj.GetComponent<ObjectData>();
+			if ( obj != this.gameObject && unit && data && data.fraction != this._data.fraction )
 			{
 				var trs = obj.GetComponent<Transform>();
 				var distance = Math.Sqrt( Math.Pow( trs.position.x - this.transform.position.x, 2 ) + Math.Pow( trs.position.z - this.transform.position.z, 2 ) );

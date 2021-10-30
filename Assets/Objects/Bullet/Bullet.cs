@@ -2,7 +2,6 @@ using UnityEngine;
 
 public class Bullet : RootObject
 {
-	public Color color = new Color( 200, 200, 200 );
 	public float force = 400f;
 	public Vector3 initialVelocity = new Vector3( 0, 0, 0 );
 	public float lifeTime = .5f;
@@ -15,8 +14,8 @@ public class Bullet : RootObject
 		this.rigidBody.velocity = this.initialVelocity;
 		this.rigidBody.AddForce( this.transform.forward * this.force, ForceMode.Impulse );
 
-		this.renderer.material.SetColor( "_Color", this.color );
-		this.renderer.material.SetColor( "_EmissionColor", this.color );
+		this.renderer.material.SetColor( "_Color", this.data.color );
+		this.renderer.material.SetColor( "_EmissionColor", this.data.color );
 	}
 
 	private void Update ()

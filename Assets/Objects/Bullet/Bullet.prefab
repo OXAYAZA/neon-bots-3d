@@ -106,6 +106,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7629808598416385738}
   - component: {fileID: 7629808598416385733}
+  - component: {fileID: -5508933210695514306}
   - component: {fileID: 7629808598416385735}
   - component: {fileID: 7629808598416385734}
   m_Layer: 0
@@ -146,6 +147,20 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 84
   m_CollisionDetection: 1
+--- !u!114 &-5508933210695514306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7629808598416385729}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f3c416a00791426abc61a0c39336eabe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 200, g: 200, b: 200, a: 1}
+  fraction: 
 --- !u!114 &7629808598416385735
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,6 +174,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   color: {r: 200, g: 200, b: 200, a: 1}
+  body: {fileID: 0}
+  renderer: {fileID: 0}
+  rigidBody: {fileID: 0}
   force: 400
   initialVelocity: {x: 0, y: 0, z: 0}
   lifeTime: 1
@@ -178,3 +196,4 @@ MonoBehaviour:
   dieOnCollision: 1
   existTime: 3
   deathMaterial: {fileID: 2100000, guid: f4337e72ca178144bbf5dbfef816f554, type: 2}
+  explosionPrefab: {fileID: 1992161513975992594, guid: 532d6bd68d2b64441ac2301eab980ccc, type: 3}

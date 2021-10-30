@@ -3,8 +3,6 @@
 public class Unit : RootObject
 {
 	public float hp = 100f;
-	public string fraction = "neutral";
-	public Color color = new Color( 200, 200, 200 );
 
 	[SerializeField]
 	private float acceleration = 500f;
@@ -25,8 +23,8 @@ public class Unit : RootObject
 
 		if ( this.renderer )
 		{
-			this.renderer.material.SetColor( "_Color", this.color );
-			this.renderer.material.SetColor( "_EmissionColor", this.color );
+			this.renderer.material.SetColor( "_Color", this.data.color );
+			this.renderer.material.SetColor( "_EmissionColor", this.data.color );
 		}
 	}
 
