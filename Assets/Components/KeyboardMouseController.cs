@@ -2,22 +2,32 @@ using UnityEngine;
 
 public class KeyboardMouseController : MonoBehaviour
 {
-	[SerializeField]
-	private GameObject cameraObj;
-
+	private new GameObject camera;
+	private CameraController cameraController;
 	private Unit hero;
 	private Gun gun;
 	private Vector3 _cursorPos = Vector3.zero;
 
-	private void Start ()
+	public void Start ()
 	{
-		this.hero = Root.Instance.hero.GetComponent<Unit>();
-		this.gun = Root.Instance.hero.GetComponent<Gun>();
+		this.Reconf();
+		Root.Instance.reconfEvent.AddListener( this.Reconf );
+	}
 
-		if ( this.cameraObj )
+	public void Reconf ()
+	{
+		this.camera = Root.Instance.camera;
+
+		if ( Root.Instance.local.hero )
 		{
-			CameraController controller = this.cameraObj.GetComponent<CameraController>();
-			this._cursorPos = controller.cursor;
+			this.hero = Root.Instance.local.hero.GetComponent<Unit>();
+			this.gun = Root.Instance.local.hero.GetComponent<Gun>();
+		}
+
+		if ( this.camera )
+		{
+			this.cameraController = this.camera.GetComponent<CameraController>();
+			this._cursorPos = this.cameraController.cursor;
 		}
 	}
 
@@ -31,12 +41,11 @@ public class KeyboardMouseController : MonoBehaviour
 
 		if ( this.hero )
 		{
-			if ( this.cameraObj )
+			if ( this.camera )
 			{
-				CameraController controller = this.cameraObj.GetComponent<CameraController>();
-				this._cursorPos = controller.cursor;
+				this._cursorPos = this.cameraController.cursor;
 
-				if ( this._cursorPos != this.cameraObj.transform.position )
+				if ( this._cursorPos != this.camera.transform.position )
 				{
 					var direction = new Vector3( this._cursorPos.x - this.hero.transform.position.x, 0, this._cursorPos.z - this.hero.transform.position.z );
 					this.hero.Rotate( direction );

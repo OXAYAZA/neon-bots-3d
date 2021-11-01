@@ -9,16 +9,23 @@ public class HPBar : MonoBehaviour
 	private float initialHP;
 	private float initialWidth;
 
-	void Start()
+	private void Start()
 	{
-		this.hero = Root.Instance.hero.GetComponent<Unit>();
+		this.hero = Root.Instance.local.hero.GetComponent<Unit>();
 		this.bar = this.transform.Find( "Percentage" ).gameObject.GetComponent<RectTransform>();
 		this.text = this.transform.Find( "Text" ).gameObject.GetComponent<Text>();
 		this.initialWidth = this.bar.sizeDelta.x;
 		this.initialHP = this.hero.hp;
+		Root.Instance.reconfEvent.AddListener( this.Reconf );
 	}
 
-	void Update()
+	private void Reconf ()
+	{
+		if ( Root.Instance.local.hero )
+			this.hero = Root.Instance.local.hero.GetComponent<Unit>();
+	}
+
+	private void Update()
 	{
 		this.bar.sizeDelta = new Vector2( this.initialWidth * ( this.hero.hp / this.initialHP ), this.bar.sizeDelta.y );
 		this.text.text = "HP: " + this.hero.hp;

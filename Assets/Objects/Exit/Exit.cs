@@ -32,13 +32,13 @@ public class Exit : MonoBehaviour
 
 	private void OnTriggerEnter ( Collider other )
 	{
-		if ( other.gameObject.transform.parent.gameObject == Root.Instance.hero )
+		if ( other.gameObject.transform.parent.gameObject == Root.Instance.local.hero )
 			this.activation = true;
 	}
 
 	private void OnTriggerExit ( Collider other )
 	{
-		if ( other.gameObject.transform.parent.gameObject == Root.Instance.hero )
+		if ( other.gameObject.transform.parent.gameObject == Root.Instance.local.hero )
 			this.activation = false;
 	}
 }

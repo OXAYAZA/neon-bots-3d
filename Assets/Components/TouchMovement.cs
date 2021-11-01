@@ -5,7 +5,14 @@
 	private new void Start ()
 	{
 		base.Start();
-		this.hero = Root.Instance.hero.GetComponent<Unit>();
+		this.Reconf();
+		Root.Instance.reconfEvent.AddListener( this.Reconf );
+	}
+
+	public void Reconf ()
+	{
+		if ( Root.Instance.local.hero )
+			this.hero = Root.Instance.local.hero.GetComponent<Unit>();
 	}
 
 	private new void Update ()

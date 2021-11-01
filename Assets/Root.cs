@@ -1,18 +1,25 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 public class Root : MonoBehaviour
 {
 	public static Root Instance { get; private set; }
 
-	public GameObject map;
-	public GameObject hero;
-	public GameObject pauseMenu;
-	public List<GameObject> touchControl;
+	public GameObject rootLocal;
+	public new GameObject camera;
+	public List<GameObject> UILayers;
 	public InputType controlType;
 
-	public List<GameObject> primitives;
+	[HideInInspector]
+	public UnityEvent reconfEvent;
+
+	[HideInInspector]
+	public RootLocal local;
+
+	[HideInInspector]
+	public CameraController cameraController;
 
 	[HideInInspector]
 	public bool gamePaused;
@@ -22,20 +29,55 @@ public class Root : MonoBehaviour
 
 	private void Awake()
 	{
+		Debug.Log( "Root Awake" );
+
 		if ( Instance == null )
+		{
+			this.local = this.rootLocal.GetComponent<RootLocal>();
+			this.local.Link( this );
 			Instance = this;
+			DontDestroyOnLoad( this.gameObject );
+			Instance.Init();
+		}
+
+		else
+		{
+			Instance.local = this.rootLocal.GetComponent<RootLocal>();
+			Instance.local.Link( Instance );
+			Destroy( this.gameObject );
+			Debug.Log( "Root Invoke Reconfiguration" );
+			Instance.reconfEvent.Invoke();
+		}
 	}
 
-	private void Start ()
+	private void Init ()
 	{
+		this.reconfEvent = new UnityEvent();
+		this.reconfEvent.AddListener( this.Reconf );
+		this.cameraController = this.camera.GetComponent<CameraController>();
 		this.kmControl = this.gameObject.GetComponent<KeyboardMouseController>();
-		this.controlType = InputType.KeyboardMouse;
-
-		if ( this.pauseMenu )
-			this.pauseMenu.SetActive( false );
-
+		this.DisableControlKeyboardMouse();
 		this.DisableControlTouch();
-		this.EnableControlKeyboardMouse();
+		this.SwitchControl( this.controlType );
+		this.Reconf();
+	}
+
+	private void Reconf ()
+	{
+		var scene = SceneManager.GetActiveScene();
+		this.HideUILayers();
+		this.ShowUILayer( "Misc" );
+
+		if ( scene.name == "Menu" )
+		{
+			this.ShowUILayer( "MainMenu" );
+		}
+
+		else
+		{
+			this.ShowUILayer( "GameUI" );
+			if ( this.controlType == InputType.Touch ) this.ShowUILayer( "TouchControl" );
+		}
 	}
 
 	public void PlayPauseGame()
@@ -46,14 +88,17 @@ public class Root : MonoBehaviour
 		{
 			if ( this.gamePaused )
 			{
-				this.ClosePauseMenu();
 				this.PlayGame();
+				this.HideUILayers();
+				this.ShowUILayer( "GameUI" );
+				if ( this.controlType == InputType.Touch ) this.ShowUILayer( "TouchControl" );
 			}
 
 			else
 			{
 				this.PauseGame();
-				this.OpenPauseMenu();
+				this.HideUILayers();
+				this.ShowUILayer( "PauseMenu" );
 			}
 		}
 	}
@@ -68,6 +113,19 @@ public class Root : MonoBehaviour
 	{
 		Time.timeScale = 1;
 		this.gamePaused = false;
+	}
+
+	public void HideUILayers ()
+	{
+		foreach ( var layer in this.UILayers )
+			layer.SetActive( false );
+	}
+
+	public void ShowUILayer ( string layerName )
+	{
+		foreach ( var layer in this.UILayers )
+			if ( layerName == layer.name )
+				layer.SetActive( true );
 	}
 
 	public void ExitGame ()
@@ -92,18 +150,6 @@ public class Root : MonoBehaviour
 		this.GoToScene( "Menu" );
 	}
 
-	public void OpenPauseMenu ()
-	{
-		if ( this.pauseMenu )
-			this.pauseMenu.SetActive( true );
-	}
-
-	public void ClosePauseMenu ()
-	{
-		if ( this.pauseMenu )
-			this.pauseMenu.SetActive( false );
-	}
-
 	public void SwitchControl ( InputType inputType )
 	{
 		switch ( this.controlType )
@@ -125,30 +171,26 @@ public class Root : MonoBehaviour
 				this.EnableControlTouch();
 				break;
 		}
+
+		this.controlType = inputType;
 	}
 
 	private void EnableControlTouch ()
 	{
-		foreach ( GameObject gObject in this.touchControl )
-			gObject.SetActive( true );
-
-		this.controlType = InputType.Touch;
+		// this.ShowUILayer( "TouchControl" );
 	}
 
 	private void DisableControlTouch ()
 	{
-		foreach ( GameObject gObject in this.touchControl )
-			gObject.SetActive( false );
+		// this.ShowUILayer( "TouchControl" );
 	}
 
 	private void EnableControlKeyboardMouse ()
 	{
 		if ( this.kmControl )
 			this.kmControl.enabled = true;
-
-		this.controlType = InputType.KeyboardMouse;
 	}
-	
+
 	private void DisableControlKeyboardMouse ()
 	{
 		if ( this.kmControl )

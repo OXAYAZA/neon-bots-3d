@@ -6,8 +6,17 @@
 	private new void Start ()
 	{
 		base.Start();
-		this.hero = Root.Instance.hero.GetComponent<Unit>();
-		this.gun = Root.Instance.hero.GetComponent<Gun>();
+		this.Reconf();
+		Root.Instance.reconfEvent.AddListener( this.Reconf );
+	}
+	
+	public void Reconf ()
+	{
+		if ( Root.Instance.local.hero )
+		{
+			this.hero = Root.Instance.local.hero.GetComponent<Unit>();
+			this.gun = Root.Instance.local.hero.GetComponent<Gun>();
+		}
 	}
 
 	private new void Update ()
