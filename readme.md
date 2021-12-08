@@ -1,6 +1,6 @@
 # Unity Project
 
-| (Web version)[https://play.unity.com/mg/other/build_1-b]
+| [Web version](https://play.unity.com/mg/other/build_1-b)
 
 ## Проблемы
 - [X] Учет инерции юнита при выстреле снарядом
