@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class Watcher : MonoBehaviour
 {
-    [SerializeField]
-    private GameObject target;
+    public GameObject target;
 
-    [SerializeField]
-    private Vector3 offset;
+    public Vector3 offset = new(0, 20f, -20f);
 
     private void Update()
     {

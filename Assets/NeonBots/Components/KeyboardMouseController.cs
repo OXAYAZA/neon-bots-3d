@@ -4,13 +4,7 @@ public class KeyboardMouseController : MonoBehaviour
 {
     private Unit unit;
 
-    private Gun gun;
-
-    private void Init()
-    {
-        this.unit = this.GetComponent<Unit>();
-        this.gun = this.GetComponent<Gun>();
-    }
+    public void Init(Unit unit) => this.unit = unit;
 
     private void Update()
     {
@@ -42,7 +36,15 @@ public class KeyboardMouseController : MonoBehaviour
 
             if(Input.GetKey(KeyCode.W)) this.unit.Move(Vector3.forward);
 
-            if(Input.GetMouseButton(0) && this.gun) this.gun.Shot();
+            if(Input.GetKey(KeyCode.LeftArrow)) this.unit.Rotate(Vector3.left);
+
+            if(Input.GetKey(KeyCode.RightArrow)) this.unit.Rotate(Vector3.right);
+
+            if(Input.GetKey(KeyCode.UpArrow)) this.unit.Rotate(Vector3.forward);
+
+            if(Input.GetKey(KeyCode.DownArrow)) this.unit.Rotate(Vector3.back);
+
+            if(Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space)) this.unit.Shot();
         }
     }
 }

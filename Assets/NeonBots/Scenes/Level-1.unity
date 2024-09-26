@@ -1568,7 +1568,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cameraSpawn: {fileID: 1017598720}
-  heroSpawn: {fileID: 0}
+  heroSpawn: {fileID: 413777759}
+  hero: {fileID: 0}
 --- !u!4 &1235317579
 Transform:
   m_ObjectHideFlags: 0
@@ -1647,22 +1648,6 @@ PrefabInstance:
     - target: {fileID: 5151306710710492028, guid: d4e7e78d340e72a4685e966a62d54f91, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: color.b
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: color.g
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: color.r
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 0}
-      propertyPath: fraction
-      value: red
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2802,19 +2787,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2065354116}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &1327043161391256544
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4254028143525067191}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e10ca5b3df343a944acbcf790b8ab7de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  test: lol
 --- !u!23 &4254028142663964274
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3274,7 +3246,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4254028143525067188}
-  - component: {fileID: 1327043161391256544}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged

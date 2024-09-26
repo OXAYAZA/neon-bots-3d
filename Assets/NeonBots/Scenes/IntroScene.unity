@@ -369,6 +369,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cameraSpawn: {fileID: 1357726219}
   heroSpawn: {fileID: 0}
+  hero: {fileID: 0}
 --- !u!1001 &557522020
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1139,19 +1140,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!114 &1327043159716748091
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4254028142924165484}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e10ca5b3df343a944acbcf790b8ab7de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  test: lol
 --- !u!1 &4254028142924165484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1161,7 +1149,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4254028142924165487}
-  - component: {fileID: 1327043159716748091}
   m_Layer: 0
   m_Name: Map
   m_TagString: Untagged

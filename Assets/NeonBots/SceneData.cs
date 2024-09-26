@@ -7,5 +7,7 @@ namespace NeonBots
         public Transform cameraSpawn;
 
         public Transform heroSpawn;
+
+        public Unit hero;
     }
 }

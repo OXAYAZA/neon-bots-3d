@@ -10,6 +10,9 @@ namespace NeonBots.Screens
         [SerializeField]
         private Button playButton;
 
+        [SerializeField]
+        private Unit heroPrefab;
+
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -28,6 +31,16 @@ namespace NeonBots.Screens
             this.uim.SwitchOverlay(true);
             await MainManager.UnloadScene();
             await MainManager.LoadScene("Level-1");
+
+            var data = GameObject.Find("SceneData").GetComponent<SceneData>();
+
+            var hero = Instantiate(this.heroPrefab, data.heroSpawn.position, data.heroSpawn.rotation);
+            var controller = hero.gameObject.AddComponent<KeyboardMouseController>();
+            controller.Init(hero);
+            var watcher = MainManager.Instance.mainCamera.GetComponent<Watcher>();
+            watcher.target = hero.gameObject;
+            watcher.enabled = true;
+
             this.uim.GetScreen<GameScreen>().Open();
             this.uim.SwitchOverlay(false);
         }

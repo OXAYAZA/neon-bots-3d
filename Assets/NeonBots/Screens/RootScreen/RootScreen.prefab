@@ -200,6 +200,7 @@ MonoBehaviour:
   isBlockBack: 0
   staticOrder: 0
   playButton: {fileID: 6873479778481014935}
+  heroPrefab: {fileID: 4835073651112699245, guid: fa811a4a4a6194f4480ab1fddd8344cd, type: 3}
 --- !u!224 &8392899468965478406 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5668125264478064445, guid: ed98fd86ff20c53499209180f41888e3, type: 3}
