@@ -14,8 +14,6 @@ public class Bullet : Obj
     private new void Start()
     {
         base.Start();
-        this.renderer.material.SetColor("_Color", this.color);
-        this.renderer.material.SetColor("_EmissionColor", this.color);
         this.rigidBody.velocity = this.initialVelocity;
         this.rigidBody.AddForce(this.transform.forward * this.force, ForceMode.Impulse);
     }

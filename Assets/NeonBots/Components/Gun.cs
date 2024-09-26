@@ -37,7 +37,7 @@ public class Gun : MonoBehaviour
             foreach(var socket in this.sockets)
             {
                 var iniTrans = socket.transform;
-                var bullet = Instantiate(this.bulletPrefab, iniTrans.position, iniTrans.rotation);
+                Instantiate(this.bulletPrefab, iniTrans.position, iniTrans.rotation);
             }
 
             if(this.audioSource && this.shotSound) this.audioSource.PlayOneShot(this.shotSound, 0.05f);

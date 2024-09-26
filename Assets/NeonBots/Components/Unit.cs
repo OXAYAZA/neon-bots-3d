@@ -22,13 +22,6 @@ public class Unit : Obj
 
     public List<Gun> guns;
 
-    protected override void Start()
-    {
-        base.Start();
-        this.renderer.material.SetColor("_Color", this.color);
-        this.renderer.material.SetColor("_EmissionColor", this.color);
-    }
-
     private void Update()
     {
         this.movementDirection = Vector3.zero;
