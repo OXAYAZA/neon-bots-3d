@@ -1,0 +1,31 @@
+using NeonBots.Managers;
+using UnityEngine;
+
+public class InputController : MonoBehaviour
+{
+    private Unit unit;
+
+    private InputManager inputManager;
+
+    public void Init(Unit unit)
+    {
+        this.unit = unit;
+        this.inputManager = MainManager.GetManager<InputManager>();
+    }
+
+    private void Update()
+    {
+        if(this.inputManager is null) return;
+
+        if(this.unit)
+        {
+            var movementVector = new Vector3(this.inputManager.Movement.x, 0, this.inputManager.Movement.y);
+            var directionVector = new Vector3(this.inputManager.Direction.x, 0, this.inputManager.Direction.y);
+
+            this.unit.Move(movementVector);
+            this.unit.Rotate(directionVector);
+
+            if(this.inputManager.Shot) this.unit.Shot();
+        }
+    }
+}

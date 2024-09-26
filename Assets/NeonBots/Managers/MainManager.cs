@@ -18,11 +18,13 @@ namespace NeonBots.Managers
 
         public static MainManager Instance { get; private set; }
 
-        public static bool IsQuitting { get; private set; }
-
-        public static bool IsPaused { get; private set; }
-
         public static bool IsReady { get; private set; }
+
+        public static bool AppQuitting { get; private set; }
+
+        public static bool AppPaused { get; private set; }
+
+        public static bool GamePaused { get; private set; }
 
         public static event Action OnReady;
 
@@ -58,21 +60,21 @@ namespace NeonBots.Managers
 
         private void OnDestroy()
         {
-            IsQuitting = true;
+            AppQuitting = true;
             MainCts?.Cancel();
         }
 
         private void OnApplicationQuit()
         {
             Debug.Log("[MainManager] Quit");
-            IsQuitting = true;
+            AppQuitting = true;
             MainCts?.Cancel();
         }
 
         private void OnApplicationPause(bool state)
         {
             Debug.Log($"[MainManager] Pause: {state}");
-            IsPaused = state;
+            AppPaused = state;
         }
 
         private async UniTask Init()
@@ -108,7 +110,7 @@ namespace NeonBots.Managers
         public static T GetManager<T>() where T : Manager
         {
             if(Instance is null) return null;
-            
+
             if(!Instance.managers.TryGetValue(typeof(T), out var manager))
                 throw new InvalidOperationException($"No child manager of type {typeof(T)}.");
 
@@ -132,6 +134,15 @@ namespace NeonBots.Managers
 
             Instance.mainCamera.transform.position = Vector2.zero;
             Instance.mainCamera.transform.rotation = Quaternion.identity;
+        }
+
+        public static void SetGamePauseState(bool isPaused)
+        {
+            if(GamePaused == isPaused) return;
+
+            Time.timeScale = isPaused ? 0 : 1;
+            GamePaused = isPaused;
+            Debug.Log($"[MainManager] Game {(isPaused ? "Paused" : "Resumed")}");
         }
     }
 }

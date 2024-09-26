@@ -35,7 +35,7 @@ namespace NeonBots.Screens
             var data = GameObject.Find("SceneData").GetComponent<SceneData>();
 
             var hero = Instantiate(this.heroPrefab, data.heroSpawn.position, data.heroSpawn.rotation);
-            var controller = hero.gameObject.AddComponent<KeyboardMouseController>();
+            var controller = hero.gameObject.AddComponent<InputController>();
             controller.Init(hero);
             var watcher = MainManager.Instance.mainCamera.GetComponent<Watcher>();
             watcher.target = hero.gameObject;

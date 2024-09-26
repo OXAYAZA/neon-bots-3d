@@ -1,6 +1,6 @@
 ﻿namespace NeonBots.Screens
 {
-    public class GameScreen : UIScreen
+    public class PauseScreen : UIScreen
     {
         
     }
