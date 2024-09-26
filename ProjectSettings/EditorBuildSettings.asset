@@ -11,5 +11,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/NeonBots/Scenes/IntroScene.unity
     guid: caf0dd3b6c4b8494da555448d9f1176e
+  - enabled: 1
+    path: Assets/NeonBots/Scenes/Level-1.unity
+    guid: 6c9f64f8c61761d4f8e1687f6869b1ff
   m_configObjects: {}
   m_UseUCBPForAssetBundles: 0

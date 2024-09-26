@@ -2,7 +2,7 @@ using System.Linq;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BotStupid : MonoBehaviour
+public class BotTurret : MonoBehaviour
 {
     [SerializeField]
     private float visionRadius = 30;
@@ -31,7 +31,6 @@ public class BotStupid : MonoBehaviour
         {
             this.Calculate();
             this.Rotate();
-            this.Move();
             this.Attack();
         }
     }
@@ -60,7 +59,7 @@ public class BotStupid : MonoBehaviour
 
         if(this.unit.guns.Count <= 0) return;
 
-        var bulletVelocity = this.unit.guns[0].bulletPrefab.force / 10;
+        var bulletVelocity = this.unit.guns[0].bulletPrefab.GetComponent<Bullet>().force / 10;
         var timeDistance = this.distance / bulletVelocity;
         var targetPosition = this.target.transform.position;
         var targetVelocity = this.target.GetComponent<Rigidbody>().velocity;
@@ -74,15 +73,9 @@ public class BotStupid : MonoBehaviour
         this.unit.Rotate(this.direction);
     }
 
-    private void Move()
-    {
-        if(this.distance > this.visionRadius * 0.5) this.unit.Move(this.transform.forward);
-        else if(this.distance < this.visionRadius * 0.25) this.unit.Move(-this.transform.forward);
-    }
-
     private void Attack()
     {
-        if(this.distance < this.visionRadius && Vector3.Angle(this.transform.forward, this.direction) < 3f)
+        if(this.distance < this.visionRadius && Vector3.Angle(this.transform.forward, this.direction) < 5f)
             this.unit.Shot();
     }
 
@@ -114,7 +107,6 @@ public class BotStupid : MonoBehaviour
 
             Gizmos.color = Color.gray;
             Gizmos.DrawRay(targetPosition, targetVelocity);
-            Gizmos.DrawRay(this.transform.position, this.gameObject.GetComponent<Rigidbody>().velocity);
 
             Gizmos.color = Color.green;
             Gizmos.DrawWireSphere(aimPoint, 1.5f);

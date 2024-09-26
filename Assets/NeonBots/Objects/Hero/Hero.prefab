@@ -117,10 +117,7 @@ GameObject:
   - component: {fileID: 7702949780251740238}
   - component: {fileID: 8287738535597290525}
   - component: {fileID: 8370010087401492327}
-  - component: {fileID: 79043063323925689}
   - component: {fileID: 4835073651112699245}
-  - component: {fileID: 5131075594919663755}
-  - component: {fileID: 7513573043137725879}
   m_Layer: 0
   m_Name: Hero
   m_TagString: Untagged
@@ -268,20 +265,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &79043063323925689
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4450153581059737250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3c416a00791426abc61a0c39336eabe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: {r: 0, g: 1, b: 0.47058824, a: 1}
-  fraction: green
 --- !u!114 &4835073651112699245
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -294,44 +277,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 855679f841964c19a84cc460b09cc742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
-  body: {fileID: 0}
-  renderer: {fileID: 0}
-  rigidBody: {fileID: 0}
+  color: {r: 0, g: 1, b: 0.47058824, a: 1}
+  fraction: green
+  body: {fileID: 2884466319034364894}
+  renderer: {fileID: 2325656643135463096}
+  rigidBody: {fileID: 8287738535597290525}
   hp: 1000
   acceleration: 300
   torque: 100
---- !u!114 &5131075594919663755
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4450153581059737250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2447624a57f193b4a8ea1dbdb0c04c9a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  bullet: {fileID: 7629808598416385729, guid: b0c6c7eb5b5596f429012f1502410fde, type: 3}
-  shotReload: 0.05
-  shotSound: {fileID: 8300000, guid: 5ab4c2a50a9a8524d95a2952f651d27c, type: 3}
---- !u!114 &7513573043137725879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4450153581059737250}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a38c5853fbcf1124f80dd6ba67ec647e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dieOnCollision: 0
-  existTime: 10
-  deathMaterial: {fileID: 2100000, guid: f4337e72ca178144bbf5dbfef816f554, type: 2}
-  explosionPrefab: {fileID: 1992161513975992594, guid: 4adf42d1fbb1816439e8f567d927cb35, type: 3}
+  guns:
+  - {fileID: 3666600868116849994}
 --- !u!1 &7432381917212730811
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,6 +298,7 @@ GameObject:
   - component: {fileID: 694115580560348791}
   - component: {fileID: 3154797731878011565}
   - component: {fileID: 331074990067312313}
+  - component: {fileID: 3666600868116849994}
   m_Layer: 0
   m_Name: Socket
   m_TagString: Untagged
@@ -415,3 +371,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &3666600868116849994
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7432381917212730811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2447624a57f193b4a8ea1dbdb0c04c9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 7629808598416385735, guid: b0c6c7eb5b5596f429012f1502410fde, type: 3}
+  reloadDuration: 0.5
+  shotSound: {fileID: 8300000, guid: 5ab4c2a50a9a8524d95a2952f651d27c, type: 3}
+  audioSource: {fileID: 8370010087401492327}
+  sockets:
+  - {fileID: 694115580560348791}

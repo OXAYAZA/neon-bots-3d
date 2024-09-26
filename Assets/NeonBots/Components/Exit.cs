@@ -24,21 +24,21 @@ public class Exit : MonoBehaviour
 		else
 			this.chargeValue = this.chargeValue > 0 ? this.chargeValue - Time.deltaTime : 0;
 
-		if ( this.chargeValue >= this.chargedValue )
-			Root.Instance.GoToScene( this.destinationScene );
+		// if ( this.chargeValue >= this.chargedValue )
+		// 	Root.Instance.GoToScene( this.destinationScene );
 
 		this.renderer.material.SetColor( "_EmissionColor", Color.Lerp( this.initialColor, Color.white, this.chargeValue / this.chargedValue ) );
 	}
 
 	private void OnTriggerEnter ( Collider other )
 	{
-		if ( other.gameObject.transform.parent.gameObject == Root.Instance.local.hero )
-			this.activation = true;
+		// if ( other.gameObject.transform.parent.gameObject == Root.Instance.local.hero )
+		// 	this.activation = true;
 	}
 
 	private void OnTriggerExit ( Collider other )
 	{
-		if ( other.gameObject.transform.parent.gameObject == Root.Instance.local.hero )
-			this.activation = false;
+		// if ( other.gameObject.transform.parent.gameObject == Root.Instance.local.hero )
+		// 	this.activation = false;
 	}
 }

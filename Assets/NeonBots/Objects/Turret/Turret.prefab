@@ -470,11 +470,9 @@ GameObject:
   - component: {fileID: 3098345093297310129}
   - component: {fileID: 3098345093297310123}
   - component: {fileID: 3098345093297310122}
-  - component: {fileID: 327606636518647029}
   - component: {fileID: 3098345093297310133}
   - component: {fileID: 3098345093297310132}
   - component: {fileID: 3098345093297310135}
-  - component: {fileID: 3098345093297310134}
   m_Layer: 0
   m_Name: Turret
   m_TagString: Untagged
@@ -626,20 +624,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &327606636518647029
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3098345093297310128}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f3c416a00791426abc61a0c39336eabe, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  color: {r: 1, g: 0, b: 0, a: 1}
-  fraction: red
 --- !u!114 &3098345093297310133
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -652,13 +636,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 855679f841964c19a84cc460b09cc742, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 0}
-  body: {fileID: 0}
-  renderer: {fileID: 0}
-  rigidBody: {fileID: 0}
+  color: {r: 1, g: 0, b: 0, a: 1}
+  fraction: red
+  body: {fileID: 3098345092284107310}
+  renderer: {fileID: 3098345092284107308}
+  rigidBody: {fileID: 3098345093297310123}
   hp: 100
-  acceleration: 500
+  acceleration: 0
   torque: 50
+  guns:
+  - {fileID: 3098345093297310132}
 --- !u!114 &3098345093297310132
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -671,9 +658,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2447624a57f193b4a8ea1dbdb0c04c9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bullet: {fileID: 7629808598416385729, guid: b0c6c7eb5b5596f429012f1502410fde, type: 3}
-  shotReload: 0.05
+  bulletPrefab: {fileID: 7629808598416385735, guid: b0c6c7eb5b5596f429012f1502410fde, type: 3}
+  reloadDuration: 0.5
   shotSound: {fileID: 8300000, guid: 5ab4c2a50a9a8524d95a2952f651d27c, type: 3}
+  audioSource: {fileID: 3098345093297310122}
+  sockets:
+  - {fileID: 3098345092490700402}
+  - {fileID: 3098345091893633287}
 --- !u!114 &3098345093297310135
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -686,23 +677,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a8b01012f6dd4f2c822c57f1cb4c463e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _visionRadius: 30
---- !u!114 &3098345093297310134
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3098345093297310128}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a38c5853fbcf1124f80dd6ba67ec647e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dieOnCollision: 0
-  existTime: 10
-  deathMaterial: {fileID: 2100000, guid: f4337e72ca178144bbf5dbfef816f554, type: 2}
-  explosionPrefab: {fileID: 1992161513975992594, guid: 4adf42d1fbb1816439e8f567d927cb35, type: 3}
+  visionRadius: 30
 --- !u!1 &3098345093361383492
 GameObject:
   m_ObjectHideFlags: 0

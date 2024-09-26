@@ -1,83 +1,84 @@
 using System;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class BotSimp : MonoBehaviour
 {
-	private ObjectData _data;
-	private Unit _unit;
-	private Gun _gun;
-	private GameObject _target;
-	private Vector3 _direction;
-	private double _distance;
+    private Unit unit;
 
-	private void Start()
-	{
-		this._data = this.GetComponent<ObjectData>();
-		this._unit = this.GetComponent<Unit>();
-		this._gun = this.GetComponent<Gun>();
-	}
+    private GameObject target;
 
-	private void Update()
-	{
-		this.Scan();
+    private Vector3 direction;
 
-		if ( this._target )
-		{
-			this.Calculate();
-			this.Rotate();
-			this.Move();
-			this.Attack();
-		}
-	}
+    private double distance;
 
-	private void Scan ()
-	{
-		this._target = null;
-		this._distance = Double.PositiveInfinity;
+    private void Start()
+    {
+        this.unit = this.GetComponent<Unit>();
+    }
 
-		var objects = UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects();
+    private void Update()
+    {
+        this.Scan();
 
-		foreach ( var obj in objects )
-		{
-			var unit = obj.GetComponent<Unit>();
-			var data = obj.GetComponent<ObjectData>();
-			if ( obj != this.gameObject && unit && data && data.fraction != this._data.fraction )
-			{
-				var trs = obj.GetComponent<Transform>();
-				var distance = Math.Sqrt( Math.Pow( trs.position.x - this.transform.position.x, 2 ) + Math.Pow( trs.position.z - this.transform.position.z, 2 ) );
+        if(this.target)
+        {
+            this.Calculate();
+            this.Rotate();
+            this.Move();
+            this.Attack();
+        }
+    }
 
-				if ( distance < this._distance )
-				{
-					this._distance = distance;
-					this._target = obj;
-				}
-			}
-		}
-	}
+    private void Scan()
+    {
+        this.target = null;
+        this.distance = Double.PositiveInfinity;
 
-	private void Calculate ()
-	{
-		this._direction = new Vector3( this._target.transform.position.x - this.transform.position.x, 0, this._target.transform.position.z - this.transform.position.z );
-	}
+        var objects = SceneManager.GetActiveScene().GetRootGameObjects();
 
-	private void Rotate ()
-	{
-		this._unit.Rotate( this._direction );
-	}
+        foreach(var go in objects)
+        {
+            var obj = go.GetComponent<Unit>();
 
-	private void Move ()
-	{
-		if ( this._distance > 10 )
-			this._unit.Move( this.transform.forward );
-		else if ( this._distance < 8 )
-			this._unit.Move( -this.transform.forward );
-		else
-			this._unit.Move( -this.transform.right );
-	}
+            if(go != this.gameObject && obj && obj.fraction != this.unit.fraction)
+            {
+                var trs = go.GetComponent<Transform>();
+                var distance = Math.Sqrt(Math.Pow(trs.position.x - this.transform.position.x, 2) +
+                    Math.Pow(trs.position.z - this.transform.position.z, 2));
 
-	private void Attack ()
-	{
-		if ( this._distance < 12 && this._gun )
-			this._gun.Shot();
-	}
+                if(distance < this.distance)
+                {
+                    this.distance = distance;
+                    this.target = go;
+                }
+            }
+        }
+    }
+
+    private void Calculate()
+    {
+        this.direction = new(
+            this.target.transform.position.x - this.transform.position.x,
+            0,
+            this.target.transform.position.z - this.transform.position.z
+        );
+    }
+
+    private void Rotate()
+    {
+        this.unit.Rotate(this.direction);
+    }
+
+    private void Move()
+    {
+        if(this.distance > 10) this.unit.Move(this.transform.forward);
+        else if(this.distance < 8) this.unit.Move(-this.transform.forward);
+        else this.unit.Move(-this.transform.right);
+    }
+
+    private void Attack()
+    {
+        if(this.distance < 12) this.unit.Shot();
+    }
 }

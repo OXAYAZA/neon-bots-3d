@@ -398,6 +398,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 898871746338834396, guid: ed98fd86ff20c53499209180f41888e3, type: 3}
+      propertyPath: m_SortingOrder
+      value: 99
+      objectReference: {fileID: 0}
+    - target: {fileID: 898871746338834396, guid: ed98fd86ff20c53499209180f41888e3, type: 3}
       propertyPath: m_AdditionalShaderChannelsFlag
       value: 25
       objectReference: {fileID: 0}
@@ -521,6 +525,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   isPopup: 0
   isBlockBack: 0
-  staticOrder: 0
+  staticOrder: 1
   loadingText: {fileID: 3649200065817439285}
   progressBar: {fileID: 4188937177559041633}

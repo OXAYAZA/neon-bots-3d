@@ -1,10 +1,10 @@
 ﻿using NeonBots.Managers;
-using NeonBots.Screens;
+using NeonBots.UI;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace NeonBots.UI
+namespace NeonBots.Screens
 {
     public class DebugScreen : UIScreen
     {

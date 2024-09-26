@@ -1,83 +1,83 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
-public class Unit : RootObject
+public class Unit : Obj
 {
-	public float hp = 100f;
+    [Header("Unit")]
+    public float hp = 100f;
 
-	[SerializeField]
-	private float acceleration = 500f;
+    [SerializeField]
+    private float acceleration = 500f;
 
-	[SerializeField]
-	private float torque = 50f;
+    [SerializeField]
+    private float torque = 50f;
 
-	private Vector3 _movementDirection = Vector3.zero;
-	private Vector3 _rotatingDirection = Vector3.zero;
-	private Vector3 _expectedMovementDirection = Vector3.zero;
-	private Vector3 _expectedRotatingDirection = Vector3.zero;
-	private Death _death;
+    private Vector3 movementDirection = Vector3.zero;
 
-	private new void Start ()
-	{
-		base.Start();
-		this._death = this.gameObject.GetComponent<Death>();
+    private Vector3 rotatingDirection = Vector3.zero;
 
-		if ( this.renderer )
-		{
-			this.renderer.material.SetColor( "_Color", this.data.color );
-			this.renderer.material.SetColor( "_EmissionColor", this.data.color );
-		}
-	}
+    private Vector3 expectedMovementDirection = Vector3.zero;
 
-	private void Update ()
-	{
-		this._movementDirection = Vector3.zero;
-		this._rotatingDirection = Vector3.zero;
+    private Vector3 expectedRotatingDirection = Vector3.zero;
 
-		if ( this._expectedMovementDirection != Vector3.zero )
-		{
-			this._movementDirection = this._expectedMovementDirection;
-			this._expectedMovementDirection = Vector3.zero;
-		}
+    public List<Gun> guns;
 
-		if ( this._expectedRotatingDirection != Vector3.zero )
-		{
-			this._rotatingDirection = this._expectedRotatingDirection;
-			this._expectedRotatingDirection = Vector3.zero;
-		}
+    protected override void Start()
+    {
+        base.Start();
+        this.renderer.material.SetColor("_Color", this.color);
+        this.renderer.material.SetColor("_EmissionColor", this.color);
+    }
 
-		if ( this.hp <= 0 )
-		{
-			if ( this._death )
-				this._death.Die();
-			else
-				Destroy( this.gameObject );
-		}
-	}
+    private void Update()
+    {
+        this.movementDirection = Vector3.zero;
+        this.rotatingDirection = Vector3.zero;
 
-	public void Move ( Vector3 direction )
-	{
-		this._expectedMovementDirection += direction;
+        if(this.expectedMovementDirection != Vector3.zero)
+        {
+            this.movementDirection = this.expectedMovementDirection;
+            this.expectedMovementDirection = Vector3.zero;
+        }
 
-		if ( this._expectedMovementDirection.magnitude > Vector3.one.magnitude )
-			this._expectedMovementDirection.Normalize();
-	}
+        if(this.expectedRotatingDirection != Vector3.zero)
+        {
+            this.rotatingDirection = this.expectedRotatingDirection;
+            this.expectedRotatingDirection = Vector3.zero;
+        }
 
-	public void Rotate ( Vector3 direction )
-	{
-		var angle = Vector3.SignedAngle( this.transform.forward, direction, this.transform.up );
+        if(this.hp <= 0) Destroy(this.gameObject);
+    }
 
-		if ( angle < 0 )
-			this._expectedRotatingDirection -= this.transform.up;
-		else if ( angle > 0 )
-			this._expectedRotatingDirection += this.transform.up;
+    private void FixedUpdate()
+    {
+        this.rigidBody.AddForce(this.movementDirection * this.acceleration, ForceMode.Acceleration);
+        this.rigidBody.AddTorque(this.rotatingDirection * this.torque, ForceMode.Acceleration);
+    }
 
-		if ( this._expectedRotatingDirection.magnitude > Vector3.one.magnitude )
-			this._expectedRotatingDirection.Normalize();
-	}
+    public void Move(Vector3 direction)
+    {
+        this.expectedMovementDirection += direction;
 
-	private void FixedUpdate()
-	{
-		this.rigidBody.AddForce( this._movementDirection * this.acceleration, ForceMode.Acceleration );
-		this.rigidBody.AddTorque( this._rotatingDirection * this.torque, ForceMode.Acceleration );
-	}
+        if(this.expectedMovementDirection.magnitude > Vector3.one.magnitude)
+            this.expectedMovementDirection.Normalize();
+    }
+
+    public void Rotate(Vector3 direction)
+    {
+        var angle = Vector3.SignedAngle(this.transform.forward, direction, this.transform.up);
+
+        if(angle < 0)
+            this.expectedRotatingDirection -= this.transform.up;
+        else if(angle > 0)
+            this.expectedRotatingDirection += this.transform.up;
+
+        if(this.expectedRotatingDirection.magnitude > Vector3.one.magnitude)
+            this.expectedRotatingDirection.Normalize();
+    }
+
+    public void Shot()
+    {
+        foreach(var gun in this.guns) gun.Shot();
+    }
 }

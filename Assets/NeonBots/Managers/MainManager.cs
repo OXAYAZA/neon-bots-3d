@@ -12,6 +12,8 @@ namespace NeonBots.Managers
 {
     public class MainManager : MonoBehaviour
     {
+        public static Scene MainScene { get; private set; }
+
         public Camera mainCamera;
 
         public static MainManager Instance { get; private set; }
@@ -34,6 +36,7 @@ namespace NeonBots.Managers
                 throw new InvalidOperationException("[MainManager] Should be only one instance of MainManager.");
 
             Instance = this;
+            MainScene = SceneManager.GetActiveScene();
         }
 
         private void Start()
@@ -115,10 +118,20 @@ namespace NeonBots.Managers
         public static async UniTask LoadScene(string name)
         {
             await SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
+            SceneManager.SetActiveScene(SceneManager.GetSceneByName(name));
 
             var data = GameObject.Find("SceneData").GetComponent<SceneData>();
             Instance.mainCamera.transform.position = data.cameraSpawn.position;
             Instance.mainCamera.transform.rotation = data.cameraSpawn.rotation;
+        }
+
+        public static async UniTask UnloadScene()
+        {
+            await SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().name);
+            SceneManager.SetActiveScene(MainScene);
+
+            Instance.mainCamera.transform.position = Vector2.zero;
+            Instance.mainCamera.transform.rotation = Quaternion.identity;
         }
     }
 }
