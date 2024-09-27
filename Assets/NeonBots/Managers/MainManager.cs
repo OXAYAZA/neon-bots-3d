@@ -99,7 +99,9 @@ namespace NeonBots.Managers
             localConfig.Init();
             uiManager.GetScreen<DebugScreen>().Switch(localConfig.Get<bool>("console"));
 
-            await LoadScene("IntroScene");
+            var sceneData = await LoadScene("Level-0");
+            Instance.mainCamera.transform.position = sceneData.cameraSpawn.position;
+            Instance.mainCamera.transform.rotation = sceneData.cameraSpawn.rotation;
 
             await UniTask.Delay(10, cancellationToken: MainCts.Token);
 
@@ -121,23 +123,17 @@ namespace NeonBots.Managers
             return (T)manager;
         }
 
-        public static async UniTask LoadScene(string name)
+        public static async UniTask<SceneData> LoadScene(string name)
         {
             await SceneManager.LoadSceneAsync(name, LoadSceneMode.Additive);
             SceneManager.SetActiveScene(SceneManager.GetSceneByName(name));
-
-            var data = GameObject.Find("SceneData").GetComponent<SceneData>();
-            Instance.mainCamera.transform.position = data.cameraSpawn.position;
-            Instance.mainCamera.transform.rotation = data.cameraSpawn.rotation;
+            return GameObject.Find("SceneData").GetComponent<SceneData>();
         }
 
         public static async UniTask UnloadScene()
         {
             await SceneManager.UnloadSceneAsync(SceneManager.GetActiveScene().name);
             SceneManager.SetActiveScene(MainScene);
-
-            Instance.mainCamera.transform.position = Vector2.zero;
-            Instance.mainCamera.transform.rotation = Quaternion.identity;
         }
 
         public static void SetGamePauseState(bool isPaused)

@@ -8,6 +8,9 @@ public class Watcher : MonoBehaviour
 
     private void Update()
     {
-        if(this.target) this.transform.position = this.target.transform.position + this.offset;
+        if(this.target == default) return;
+
+        this.transform.position = this.target.transform.position + this.offset;
+        this.transform.LookAt(this.target.transform);
     }
 }

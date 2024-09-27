@@ -1,44 +1,62 @@
+using Cysharp.Threading.Tasks;
+using NeonBots.Components;
+using NeonBots.Managers;
 using UnityEngine;
 
 public class Exit : MonoBehaviour
 {
-	[SerializeField]
-	private string destinationScene;
+    private static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
-	private new Renderer renderer;
-	private Color initialColor;
-	private bool activation = false;
-	private float chargedValue = 5;
-	private float chargeValue = 0;
+    private const float ExitCharge = 5f;
 
-	private void Start()
-	{
-		this.renderer = this.gameObject.GetComponent<Renderer>();
-		this.initialColor = this.renderer.material.GetColor( "_EmissionColor" );
-	}
+    [SerializeField]
+    private string destinationScene;
 
-	private void Update()
-	{
-		if ( this.activation )
-			this.chargeValue = this.chargeValue < this.chargedValue ? this.chargeValue + Time.deltaTime : this.chargedValue;
-		else
-			this.chargeValue = this.chargeValue > 0 ? this.chargeValue - Time.deltaTime : 0;
+    private new Renderer renderer;
 
-		// if ( this.chargeValue >= this.chargedValue )
-		// 	Root.Instance.GoToScene( this.destinationScene );
+    private Color initialColor;
 
-		this.renderer.material.SetColor( "_EmissionColor", Color.Lerp( this.initialColor, Color.white, this.chargeValue / this.chargedValue ) );
-	}
+    private bool active;
 
-	private void OnTriggerEnter ( Collider other )
-	{
-		// if ( other.gameObject.transform.parent.gameObject == Root.Instance.local.hero )
-		// 	this.activation = true;
-	}
+    private float charge;
 
-	private void OnTriggerExit ( Collider other )
-	{
-		// if ( other.gameObject.transform.parent.gameObject == Root.Instance.local.hero )
-		// 	this.activation = false;
-	}
+    private void Start()
+    {
+        this.renderer = this.gameObject.GetComponent<Renderer>();
+        this.initialColor = this.renderer.material.GetColor(EmissionColor);
+    }
+
+    private void Update()
+    {
+        if(this.active)
+            this.charge = this.charge < ExitCharge ? this.charge + Time.deltaTime : ExitCharge;
+        else
+            this.charge = this.charge > 0 ? this.charge - Time.deltaTime : 0;
+
+        this.renderer.material.SetColor(EmissionColor,
+            Color.Lerp(this.initialColor, Color.white, this.charge / ExitCharge));
+
+        if(this.charge >= ExitCharge) this.ToNextLevel().Forget();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.TryGetComponent<ObjectLinks>(out var links) &&
+           links.TryGetValue("unit", out var obj) && ((Unit)obj).fraction == "green") this.active = true;
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if(other.TryGetComponent<ObjectLinks>(out var links) &&
+           links.TryGetValue("unit", out var obj) && ((Unit)obj).fraction == "green") this.active = false;
+    }
+
+    private async UniTask ToNextLevel()
+    {
+        await MainManager.UnloadScene();
+        var sceneData = await MainManager.LoadScene("Level-1");
+        var storage = MainManager.GetManager<ObjectStorage>();
+        var hero = storage.Get("hero") as GameObject;
+        hero!.transform.position = sceneData.heroSpawn.position;
+    }
 }

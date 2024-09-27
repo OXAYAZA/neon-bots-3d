@@ -30,14 +30,14 @@ namespace NeonBots.Screens
         {
             this.uim.SwitchOverlay(true);
             await MainManager.UnloadScene();
-            await MainManager.LoadScene("Level-1");
-
-            var data = GameObject.Find("SceneData").GetComponent<SceneData>();
-
-            var hero = Instantiate(this.heroPrefab, data.heroSpawn.position, data.heroSpawn.rotation);
-            var controller = hero.gameObject.AddComponent<InputController>();
-            controller.Init(hero);
+            var sceneData = await MainManager.LoadScene("Level-1");
+            var storage = MainManager.GetManager<ObjectStorage>();
             var watcher = MainManager.Instance.mainCamera.GetComponent<Watcher>();
+            var hero = Instantiate(this.heroPrefab, sceneData.heroSpawn.position, sceneData.heroSpawn.rotation);
+            var controller = hero.gameObject.AddComponent<InputController>();
+
+            storage.Add("hero", hero.gameObject);
+            controller.Init();
             watcher.target = hero.gameObject;
             watcher.enabled = true;
 

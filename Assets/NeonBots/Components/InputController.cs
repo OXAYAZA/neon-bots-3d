@@ -7,9 +7,12 @@ public class InputController : MonoBehaviour
 
     private InputManager inputManager;
 
-    public void Init(Unit unit)
+    public void Init(Unit unit = default)
     {
-        this.unit = unit;
+        this.unit = unit == default ? this.GetComponent<Unit>() : unit;
+
+        if(this.unit == default) Debug.LogError($"[{this.name}][{nameof(InputController)}] Init failed.");
+
         this.inputManager = MainManager.GetManager<InputManager>();
     }
 
