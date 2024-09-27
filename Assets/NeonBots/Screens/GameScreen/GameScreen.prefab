@@ -778,6 +778,7 @@ MonoBehaviour:
   isPopup: 0
   isBlockBack: 1
   staticOrder: 0
+  touchControl: {fileID: 222830815622703576}
 --- !u!224 &7045291355454361937 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 5668125264478064445, guid: ed98fd86ff20c53499209180f41888e3, type: 3}

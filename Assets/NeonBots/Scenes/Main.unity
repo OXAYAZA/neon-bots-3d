@@ -392,8 +392,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   status: 3
-  chatDebug: 0
-  showTouches: 0
 --- !u!114 &1112913068
 MonoBehaviour:
   m_ObjectHideFlags: 0

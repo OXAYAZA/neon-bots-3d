@@ -12,11 +12,13 @@ namespace NeonBots.UI
 
         private DebugScreen debugScreen;
 
-        private DebugManager debugManager;
+        private LocalConfig localConfig;
 
         private RectTransform rt;
 
         private List<RectTransform> touchInstances;
+
+        private bool State => this.localConfig.Get<bool>("show_touches");
         
         private void OnEnable()
         {
@@ -27,30 +29,34 @@ namespace NeonBots.UI
         private void OnDisable()
         {
             MainManager.OnReady -= this.OnMainReady;
-            if(this.debugManager is not null) this.debugManager.OnShowTouchesChange += this.Switch;
+            this.localConfig.OnLocalValueChanged -= this.Switch;
         }
 
         private void OnMainReady()
         {
             MainManager.OnReady -= this.OnMainReady;
-            this.debugManager ??= MainManager.GetManager<DebugManager>();
+            this.localConfig ??= MainManager.GetManager<LocalConfig>();
             this.debugScreen ??= MainManager.GetManager<UIManager>().GetScreen<DebugScreen>();
             this.rt ??= this.debugScreen.GetComponent<RectTransform>();
             this.touchInstances ??= new();
-            this.Switch(this.debugManager.showTouches);
-            this.debugManager.OnShowTouchesChange += this.Switch;
+            this.Switch();
+            this.localConfig.OnLocalValueChanged += this.Switch;
         }
 
-        private void Switch(bool state)
+        private void Switch()
         {
-            if(!state)
-                foreach(var inst in this.touchInstances)
-                    inst.gameObject.SetActive(false);
+            if(this.State) return;
+            foreach(var inst in this.touchInstances) inst.gameObject.SetActive(false);
+        }
+
+        private void Switch(string name)
+        {
+            if(name == "show_touches") this.Switch();
         }
 
         private void Update()
         {
-            if(!MainManager.IsReady || !this.debugManager.showTouches || Input.touchCount <= 0) return;
+            if(!MainManager.IsReady || !this.State || Input.touchCount <= 0) return;
 
             for(var i = 0; i < Input.touchCount; i++)
             {

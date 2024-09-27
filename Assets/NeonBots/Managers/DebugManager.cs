@@ -23,14 +23,6 @@ namespace NeonBots.Managers
 
         public event Action<LogType> OnStatusChange;
 
-        public bool chatDebug;
-
-        public event Action<bool> OnChatDebugChange;
-
-        public bool showTouches;
-
-        public event Action<bool> OnShowTouchesChange;
-
         private void Awake()
         {
             Application.logMessageReceived += this.AddLog;
@@ -67,18 +59,6 @@ namespace NeonBots.Managers
                     }
                     break;
             }
-        }
-
-        public void SwitchChatDebug(bool state)
-        {
-            this.chatDebug = state;
-            this.OnChatDebugChange?.Invoke(state);
-        }
-
-        public void SwitchShowTouches(bool state)
-        {
-            this.showTouches = state;
-            this.OnShowTouchesChange?.Invoke(state);
         }
     }
 }

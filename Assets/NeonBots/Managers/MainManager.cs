@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
 using NeonBots.Screens;
-using NeonBots.UI;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -89,11 +88,16 @@ namespace NeonBots.Managers
             var loadingScreen = uiManager.GetScreen<LoadingScreen>();
             var progressBar = loadingScreen.progressBar;
 
+            if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+            {
+                localConfig.Set("touch_control", true);
+            }
+
             loadingScreen.Switch();
             loadingScreen.SetText("Loading...");
             progressBar.Animate(0.8f, 30f, MainCts.Token).Forget();
             localConfig.Init();
-            uiManager.GetScreen<DebugScreen>().Switch(localConfig.Get<bool>("console_enabled"));
+            uiManager.GetScreen<DebugScreen>().Switch(localConfig.Get<bool>("console"));
 
             await LoadScene("IntroScene");
 

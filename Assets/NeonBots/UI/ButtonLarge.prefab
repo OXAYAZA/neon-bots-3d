@@ -290,7 +290,7 @@ MonoBehaviour:
     size: {x: 0.5, y: 0.5}
     angle: 0
   border:
-    color: {r: 0.76862746, g: 0.48235294, b: 1, a: 1}
+    color: {r: 0.48235297, g: 1, b: 0.9954427, a: 1}
     gradient:
       type: 0
       resolution: 256
