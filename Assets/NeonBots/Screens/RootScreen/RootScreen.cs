@@ -34,6 +34,7 @@ namespace NeonBots.Screens
             var storage = MainManager.GetManager<ObjectStorage>();
             var watcher = MainManager.Instance.mainCamera.GetComponent<Watcher>();
             var hero = Instantiate(this.heroPrefab, sceneData.heroSpawn.position, sceneData.heroSpawn.rotation);
+            hero.ResetValues();
             var controller = hero.gameObject.AddComponent<InputController>();
 
             storage.Add("hero", hero.gameObject);

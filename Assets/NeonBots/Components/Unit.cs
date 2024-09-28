@@ -4,6 +4,8 @@ using UnityEngine;
 public class Unit : Obj
 {
     [Header("Unit")]
+    public float maxHp = 100f;
+
     public float hp = 100f;
 
     [SerializeField]
@@ -46,6 +48,11 @@ public class Unit : Obj
     {
         this.rigidBody.AddForce(this.movementDirection * this.acceleration, ForceMode.Acceleration);
         this.rigidBody.AddTorque(this.rotatingDirection * this.torque, ForceMode.Acceleration);
+    }
+
+    public void ResetValues()
+    {
+        this.hp = this.maxHp;
     }
 
     public void Move(Vector3 direction)
