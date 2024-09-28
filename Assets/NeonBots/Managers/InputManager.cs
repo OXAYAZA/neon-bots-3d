@@ -56,6 +56,7 @@ namespace NeonBots.Managers
         private void OnReady()
         {
             this.localConfig = MainManager.GetManager<LocalConfig>();
+            this.WorldCursor.gameObject.SetActive(!this.TouchControl);
         }
 
         private void Update()
