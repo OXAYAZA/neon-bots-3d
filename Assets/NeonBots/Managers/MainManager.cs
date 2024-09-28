@@ -88,16 +88,16 @@ namespace NeonBots.Managers
             var loadingScreen = uiManager.GetScreen<LoadingScreen>();
             var progressBar = loadingScreen.progressBar;
 
-            if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
-            {
-                localConfig.Set("touch_control", true);
-            }
-
             loadingScreen.Switch();
             loadingScreen.SetText("Loading...");
             progressBar.Animate(0.8f, 30f, MainCts.Token).Forget();
             localConfig.Init();
             uiManager.GetScreen<DebugScreen>().Switch(localConfig.Get<bool>("console"));
+
+            if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+            {
+                localConfig.Set("touch_control", true);
+            }
 
             var sceneData = await LoadScene("Level-0");
             Instance.mainCamera.transform.position = sceneData.cameraSpawn.position;

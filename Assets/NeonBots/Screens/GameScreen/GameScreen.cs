@@ -1,10 +1,14 @@
 ﻿using NeonBots.Managers;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace NeonBots.Screens
 {
     public class GameScreen : UIScreen
     {
+        [SerializeField]
+        private Button pauseButton;
+
         [SerializeField]
         private GameObject touchControl;
 
@@ -13,20 +17,29 @@ namespace NeonBots.Screens
         protected override void OnEnable()
         {
             base.OnEnable();
+            MainManager.SetGamePauseState(false);
             this.localConfig = MainManager.GetManager<LocalConfig>();
             this.Refresh();
             this.localConfig.OnLocalValueChanged += this.Refresh;
+            this.pauseButton.onClick.AddListener(this.Back);
         }
 
         private void OnDisable()
         {
             this.localConfig.OnLocalValueChanged -= this.Refresh;
+            this.pauseButton.onClick.RemoveListener(this.Back);
         }
 
         private void Refresh(string name = null)
         {
             if(name is null or "touch_control")
                 this.touchControl.SetActive(this.localConfig.Get<bool>("touch_control"));
+        }
+
+        public override void Back()
+        {
+            MainManager.SetGamePauseState(true);
+            this.uim.GetScreen<PauseScreen>().Open();
         }
     }
 }

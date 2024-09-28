@@ -19,7 +19,7 @@ namespace NeonBots.Managers
 
         public void Remove(string name)
         {
-            if(!this.storage.TryGetValue(name, out var obj)) return;
+            if(!this.storage.Remove(name, out var obj)) return;
             Destroy(obj);
         }
     }
