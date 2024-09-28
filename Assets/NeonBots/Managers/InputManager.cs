@@ -56,7 +56,6 @@ namespace NeonBots.Managers
         private void OnReady()
         {
             this.localConfig = MainManager.GetManager<LocalConfig>();
-            this.WorldCursor.gameObject.SetActive(!this.TouchControl);
         }
 
         private void Update()
@@ -65,7 +64,10 @@ namespace NeonBots.Managers
             this.resultDirection = Vector2.zero;
             this.resultShot = false;
 
-            if(this.TouchControl)
+            var touchControl = this.TouchControl;
+            this.WorldCursor.gameObject.SetActive(!touchControl);
+
+            if(touchControl)
             {
                 this.resultMovement = this.tmpMovement;
                 this.resultDirection = this.tmpDirection;
