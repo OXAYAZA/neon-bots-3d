@@ -4,6 +4,9 @@ namespace NeonBots.Managers
 {
     public class InputManager : Manager
     {
+        [field: SerializeField]
+        public Transform WorldCursor { get; private set; }
+
         private LocalConfig localConfig;
 
         private bool TouchControl => MainManager.IsReady && this.localConfig != default &&
@@ -81,19 +84,36 @@ namespace NeonBots.Managers
 
                 if(Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space)) this.resultShot = true;
 
-                // TODO: Cursor control.
-                // if(this.camera)
-                // {
-                //     this._cursorPos = this.cameraController.cursor;
-                //
-                //     if(this._cursorPos != this.camera.transform.position)
-                //     {
-                //         var direction = new Vector3(this._cursorPos.x - this.hero.transform.position.x, 0,
-                //             this._cursorPos.z - this.hero.transform.position.z);
-                //         this.hero.Rotate(direction);
-                //     }
-                // }
+                this.RefreshWorldCursor();
             }
+        }
+
+        private void RefreshWorldCursor()
+        {
+            this.WorldCursor.gameObject.SetActive(true);
+
+            var camera = MainManager.Instance.mainCamera;
+
+            if(!Physics.Raycast(camera.transform.position, camera.transform.forward, out var hit, 200,
+                   1 << 7))
+            {
+                this.WorldCursor.gameObject.SetActive(false);
+                return;
+            }
+
+            var ray = camera.ScreenPointToRay(Input.mousePosition);
+
+            var center = hit.point;
+
+            if(!Physics.Raycast(ray.origin, ray.direction, out hit, 200, 1 << 7))
+            {
+                this.WorldCursor.gameObject.SetActive(false);
+                return;
+            }
+
+            this.WorldCursor.position = hit.point;
+            var worldDirection = hit.point - center;
+            this.resultDirection = new(worldDirection.x, worldDirection.z);
         }
     }
 }
