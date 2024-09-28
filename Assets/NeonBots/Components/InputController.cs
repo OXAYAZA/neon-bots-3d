@@ -28,7 +28,7 @@ public class InputController : MonoBehaviour
             this.unit.Move(movementVector);
             this.unit.Rotate(directionVector);
 
-            if(this.inputManager.Shot) this.unit.Shot();
+            if(this.inputManager.MainAction) this.unit.Shot();
         }
     }
 }

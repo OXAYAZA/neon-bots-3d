@@ -17,13 +17,13 @@ namespace NeonBots.UI
         {
             base.RefreshValue(eventData);
             this.inputManager.Direction = this.value;
-            this.inputManager.Shot = true;
+            this.inputManager.MainAction = true;
         }
 
         protected override void ResetPosition()
         {
             base.ResetPosition();
-            this.inputManager.Shot = false;
+            this.inputManager.MainAction = false;
         }
     }
 }

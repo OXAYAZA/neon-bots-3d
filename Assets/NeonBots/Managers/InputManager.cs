@@ -32,14 +32,34 @@ namespace NeonBots.Managers
             set => this.tmpDirection = value;
         }
 
-        private bool resultShot;
+        private bool resultMainAction;
 
-        private bool tmpShot;
+        private bool tmpMainAction;
 
-        public bool Shot
+        public bool MainAction
         {
-            get => this.resultShot;
-            set => this.tmpShot = value;
+            get => this.resultMainAction;
+            set => this.tmpMainAction = value;
+        }
+
+        private bool resultSecondaryAction;
+
+        private bool tmpSecondaryAction;
+
+        public bool SecondaryAction
+        {
+            get => this.resultSecondaryAction;
+            set => this.tmpSecondaryAction = value;
+        }
+
+        private bool resultTertiaryAction;
+
+        private bool tmpTertiaryAction;
+
+        public bool TertiaryAction
+        {
+            get => this.resultTertiaryAction;
+            set => this.tmpTertiaryAction = value;
         }
 
         private void OnEnable()
@@ -62,7 +82,9 @@ namespace NeonBots.Managers
         {
             this.resultMovement = Vector2.zero;
             this.resultDirection = Vector2.zero;
-            this.resultShot = false;
+            this.resultMainAction = false;
+            this.resultSecondaryAction = false;
+            this.resultTertiaryAction = false;
 
             var touchControl = this.TouchControl;
             this.WorldCursor.gameObject.SetActive(!touchControl);
@@ -71,7 +93,9 @@ namespace NeonBots.Managers
             {
                 this.resultMovement = this.tmpMovement;
                 this.resultDirection = this.tmpDirection;
-                this.resultShot = this.tmpShot;
+                this.resultMainAction = this.tmpMainAction;
+                this.resultSecondaryAction = this.tmpSecondaryAction;
+                this.resultTertiaryAction = this.tmpTertiaryAction;
             }
             else
             {
@@ -85,7 +109,9 @@ namespace NeonBots.Managers
                 if(Input.GetKey(KeyCode.UpArrow)) this.resultDirection += Vector2.up;
                 if(Input.GetKey(KeyCode.DownArrow)) this.resultDirection += Vector2.down;
 
-                if(Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space)) this.resultShot = true;
+                if(Input.GetMouseButton(0)) this.resultMainAction = true;
+                if(Input.GetMouseButton(1)) this.resultSecondaryAction = true;
+                if(Input.GetMouseButton(3)) this.resultTertiaryAction = true;
 
                 this.RefreshWorldCursor();
             }
