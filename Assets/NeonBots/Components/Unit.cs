@@ -28,6 +28,8 @@ namespace NeonBots.Components
 
         public List<ItemSocket> secondarySockets;
 
+        protected override void Start() => this.SetColor();
+
         private void Update()
         {
             this.movementDirection = Vector3.zero;

@@ -31,6 +31,12 @@ namespace NeonBots.Components
                 this.unit.Rotate(directionVector);
 
                 if(this.inputManager.MainAction) this.unit.Shot();
+
+                foreach(var socket in this.unit.primarySockets)
+                    if(socket.rotatable) socket.transform.LookAt(this.inputManager.WorldCursor);
+
+                foreach(var socket in this.unit.secondarySockets)
+                    if(socket.rotatable) socket.transform.LookAt(this.inputManager.WorldCursor);
             }
         }
     }

@@ -5,7 +5,8 @@ namespace NeonBots.Components
 {
     public class Spawner : Unit
     {
-        [Header("Spawner")][SerializeField]
+        [Header("Spawner")]
+        [SerializeField]
         private Obj spawnedObject;
 
         [SerializeField]
@@ -18,6 +19,7 @@ namespace NeonBots.Components
         protected override void Start()
         {
             base.Start();
+            this.SetColor();
             this.triggers = new();
             this.spawnTimer = this.spawnPeriod;
         }
