@@ -1,4 +1,5 @@
 ﻿using Cysharp.Threading.Tasks;
+using NeonBots.Components;
 using NeonBots.Managers;
 using UnityEngine;
 using UnityEngine.UI;

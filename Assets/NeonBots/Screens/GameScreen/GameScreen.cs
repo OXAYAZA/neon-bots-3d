@@ -1,4 +1,5 @@
-﻿using NeonBots.Managers;
+﻿using NeonBots.Components;
+using NeonBots.Managers;
 using NeonBots.UI;
 using UnityEngine;
 using UnityEngine.UI;

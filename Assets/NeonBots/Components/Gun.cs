@@ -1,47 +1,50 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Gun : MonoBehaviour
+namespace NeonBots.Components
 {
-    public Bullet bulletPrefab;
-
-    [SerializeField]
-    private float reloadDuration = 0.5f;
-
-    [SerializeField]
-    private AudioClip shotSound;
-
-    [SerializeField]
-    private AudioSource audioSource;
-
-    [SerializeField]
-    private List<Transform> sockets;
-
-    private float reloadTime;
-
-    private void Update()
+    public class Gun : Item
     {
-        this.Reload();
-    }
+        public Bullet projectilePrefab;
 
-    private void Reload()
-    {
-        if(this.reloadTime > 0) this.reloadTime -= Time.deltaTime;
-        else if(this.reloadTime < 0) this.reloadTime = 0;
-    }
+        [SerializeField]
+        private float reloadDuration = 0.5f;
 
-    public void Shot()
-    {
-        if(this.bulletPrefab != null && this.reloadTime <= 0)
+        [SerializeField]
+        private AudioClip shotSound;
+
+        [SerializeField]
+        private AudioSource audioSource;
+
+        [SerializeField]
+        private List<Transform> sockets;
+
+        private float reloadTime;
+
+        private void Update()
         {
-            foreach(var socket in this.sockets)
-            {
-                var iniTrans = socket.transform;
-                Instantiate(this.bulletPrefab, iniTrans.position, iniTrans.rotation);
-            }
+            this.Reload();
+        }
 
-            if(this.audioSource && this.shotSound) this.audioSource.PlayOneShot(this.shotSound, 0.05f);
-            this.reloadTime = this.reloadDuration;
+        private void Reload()
+        {
+            if(this.reloadTime > 0) this.reloadTime -= Time.deltaTime;
+            else if(this.reloadTime < 0) this.reloadTime = 0;
+        }
+
+        public override void Use()
+        {
+            if(this.projectilePrefab != default && this.reloadTime <= 0)
+            {
+                foreach(var socket in this.sockets)
+                {
+                    var iniTrans = socket.transform;
+                    Instantiate(this.projectilePrefab, iniTrans.position, iniTrans.rotation);
+                }
+
+                if(this.audioSource && this.shotSound) this.audioSource.PlayOneShot(this.shotSound, 0.05f);
+                this.reloadTime = this.reloadDuration;
+            }
         }
     }
 }

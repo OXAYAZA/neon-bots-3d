@@ -1,67 +1,69 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Spawner : Unit
+namespace NeonBots.Components
 {
-    [Header("Spawner")]
-    [SerializeField]
-    private Obj spawnedObject;
-
-    [SerializeField]
-    private float spawnPeriod = 5f;
-
-    private float spawnTimer;
-
-    private List<GameObject> triggers;
-
-    protected override void Start()
+    public class Spawner : Unit
     {
-        base.Start();
-        this.triggers = new();
-        this.spawnTimer = this.spawnPeriod;
-    }
+        [Header("Spawner")][SerializeField]
+        private Obj spawnedObject;
 
-    private void SpawnObject()
-    {
-        var initialTransform = this.transform;
-        var obj = Instantiate(this.spawnedObject, initialTransform.position, initialTransform.rotation);
+        [SerializeField]
+        private float spawnPeriod = 5f;
 
-        obj.fraction = this.fraction;
-        obj.color = this.color;
-    }
+        private float spawnTimer;
 
-    private void Update()
-    {
-        if(this.spawnTimer <= 0)
+        private List<GameObject> triggers;
+
+        protected override void Start()
         {
-            if(this.triggers.Count <= 0) this.SpawnObject();
+            base.Start();
+            this.triggers = new();
             this.spawnTimer = this.spawnPeriod;
         }
-        else
+
+        private void SpawnObject()
         {
-            this.spawnTimer -= Time.deltaTime;
+            var initialTransform = this.transform;
+            var obj = Instantiate(this.spawnedObject, initialTransform.position, initialTransform.rotation);
+
+            obj.fraction = this.fraction;
+            obj.color = this.color;
         }
 
-        if(this.triggers.Count != 0)
+        private void Update()
         {
-            var busyColor = new Color(1, 1, 1, 0.5f);
-            this.renderer.material.SetColor("_Color", busyColor);
-            this.renderer.material.SetColor("_EmissionColor", busyColor);
+            if(this.spawnTimer <= 0)
+            {
+                if(this.triggers.Count <= 0) this.SpawnObject();
+                this.spawnTimer = this.spawnPeriod;
+            }
+            else
+            {
+                this.spawnTimer -= Time.deltaTime;
+            }
+
+            if(this.triggers.Count != 0)
+            {
+                var busyColor = new Color(1, 1, 1, 0.5f);
+                this.renderer.material.SetColor("_Color", busyColor);
+                this.renderer.material.SetColor("_EmissionColor", busyColor);
+            }
+            else
+            {
+                this.renderer.material.SetColor("_Color", this.color);
+                this.renderer.material.SetColor("_EmissionColor", this.color);
+            }
         }
-        else
+
+        private void OnTriggerEnter(Collider other)
         {
-            this.renderer.material.SetColor("_Color", this.color);
-            this.renderer.material.SetColor("_EmissionColor", this.color);
+            if(other.gameObject.layer == 3) this.triggers.Add(other.gameObject);
         }
-    }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if(other.gameObject.layer == 3) this.triggers.Add(other.gameObject);
-    }
-
-    private void OnTriggerExit(Collider other)
-    {
-        this.triggers.Remove(other.gameObject);
+        private void OnTriggerExit(Collider other)
+        {
+            this.triggers.Remove(other.gameObject);
+        }
     }
 }
