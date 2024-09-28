@@ -4,6 +4,11 @@ namespace NeonBots.Managers
 {
     public class InputManager : Manager
     {
+        private LocalConfig localConfig;
+
+        private bool TouchControl => MainManager.IsReady && this.localConfig != default &&
+            this.localConfig.Get<bool>("touch_control");
+
         private Vector2 resultMovement;
 
         private Vector2 tmpMovement;
@@ -34,40 +39,61 @@ namespace NeonBots.Managers
             set => this.tmpShot = value;
         }
 
+        private void OnEnable()
+        {
+            if(MainManager.IsReady) this.OnReady();
+            else MainManager.OnReady += this.OnReady;
+        }
+
+        private void OnDisable()
+        {
+            MainManager.OnReady -= this.OnReady;
+        }
+
+        private void OnReady()
+        {
+            this.localConfig = MainManager.GetManager<LocalConfig>();
+        }
+
         private void Update()
         {
             this.resultMovement = Vector2.zero;
             this.resultDirection = Vector2.zero;
             this.resultShot = false;
 
-            this.resultMovement = this.tmpMovement;
-            this.resultDirection = this.tmpDirection;
-            this.resultShot = this.tmpShot;
+            if(this.TouchControl)
+            {
+                this.resultMovement = this.tmpMovement;
+                this.resultDirection = this.tmpDirection;
+                this.resultShot = this.tmpShot;
+            }
+            else
+            {
+                if(Input.GetKey(KeyCode.A)) this.resultMovement += Vector2.left;
+                if(Input.GetKey(KeyCode.D)) this.resultMovement += Vector2.right;
+                if(Input.GetKey(KeyCode.S)) this.resultMovement += Vector2.down;
+                if(Input.GetKey(KeyCode.W)) this.resultMovement += Vector2.up;
 
-            if(Input.GetKey(KeyCode.A)) this.resultMovement += Vector2.left;
-            if(Input.GetKey(KeyCode.D)) this.resultMovement += Vector2.right;
-            if(Input.GetKey(KeyCode.S)) this.resultMovement += Vector2.down;
-            if(Input.GetKey(KeyCode.W)) this.resultMovement += Vector2.up;
+                if(Input.GetKey(KeyCode.LeftArrow)) this.resultDirection += Vector2.left;
+                if(Input.GetKey(KeyCode.RightArrow)) this.resultDirection += Vector2.right;
+                if(Input.GetKey(KeyCode.UpArrow)) this.resultDirection += Vector2.up;
+                if(Input.GetKey(KeyCode.DownArrow)) this.resultDirection += Vector2.down;
 
-            if(Input.GetKey(KeyCode.LeftArrow)) this.resultDirection += Vector2.left;
-            if(Input.GetKey(KeyCode.RightArrow)) this.resultDirection += Vector2.right;
-            if(Input.GetKey(KeyCode.UpArrow)) this.resultDirection += Vector2.up;
-            if(Input.GetKey(KeyCode.DownArrow)) this.resultDirection += Vector2.down;
+                if(Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space)) this.resultShot = true;
 
-            if(Input.GetMouseButton(0) || Input.GetKey(KeyCode.Space)) this.resultShot = true;
-
-            // TODO: Cursor control.
-            // if(this.camera)
-            // {
-            //     this._cursorPos = this.cameraController.cursor;
-            //
-            //     if(this._cursorPos != this.camera.transform.position)
-            //     {
-            //         var direction = new Vector3(this._cursorPos.x - this.hero.transform.position.x, 0,
-            //             this._cursorPos.z - this.hero.transform.position.z);
-            //         this.hero.Rotate(direction);
-            //     }
-            // }
+                // TODO: Cursor control.
+                // if(this.camera)
+                // {
+                //     this._cursorPos = this.cameraController.cursor;
+                //
+                //     if(this._cursorPos != this.camera.transform.position)
+                //     {
+                //         var direction = new Vector3(this._cursorPos.x - this.hero.transform.position.x, 0,
+                //             this._cursorPos.z - this.hero.transform.position.z);
+                //         this.hero.Rotate(direction);
+                //     }
+                // }
+            }
         }
     }
 }
