@@ -42,7 +42,7 @@ namespace NeonBots.Screens
         {
             this.hero ??= ((GameObject)MainManager.GetManager<ObjectStorage>().Get("hero"))?.GetComponent<Unit>();
             if(this.hero == default) return;
-            this.hpBar.maxValue = this.hero.maxHp;
+            this.hpBar.maxValue = this.hero.baseHp;
             this.hpBar.Value = this.hero.hp;
         }
 

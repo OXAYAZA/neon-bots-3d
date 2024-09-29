@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace NeonBots.Components
 {
-    public class InputController : MonoBehaviour
+    public class InputController : Controller
     {
         private Unit unit;
 
@@ -30,13 +30,13 @@ namespace NeonBots.Components
                 this.unit.Move(movementVector);
                 this.unit.Rotate(directionVector);
 
-                if(this.inputManager.MainAction) this.unit.Shot();
-
                 foreach(var socket in this.unit.primarySockets)
                     if(socket.rotatable) socket.transform.LookAt(this.inputManager.WorldCursor);
 
                 foreach(var socket in this.unit.secondarySockets)
                     if(socket.rotatable) socket.transform.LookAt(this.inputManager.WorldCursor);
+
+                if(this.inputManager.MainAction) this.unit.Shot();
             }
         }
     }

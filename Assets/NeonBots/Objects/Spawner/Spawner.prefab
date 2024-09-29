@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 427619455730812014}
   - component: {fileID: 4427985348126316713}
   - component: {fileID: 5587402549102206504}
-  - component: {fileID: 8891287057092320493}
-  m_Layer: 0
+  - component: {fileID: 3801434316313842702}
+  m_Layer: 3
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -62,7 +62,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: bb607d497c9935f4db4eb417dcf2c2ef, type: 2}
+  - {fileID: 2100000, guid: fde6855c965ef3641a4dea287829236e, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &8891287057092320493
+--- !u!135 &3801434316313842702
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -94,12 +94,12 @@ SphereCollider:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 256
   m_ExcludeLayers:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 5151306710710492028}
   - component: {fileID: 6394745656489632249}
   - component: {fileID: 5151306710710492024}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -158,14 +158,14 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 1791
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
   m_Constraints: 126
-  m_CollisionDetection: 0
+  m_CollisionDetection: 1
 --- !u!114 &5151306710710492024
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -181,11 +181,19 @@ MonoBehaviour:
   color: {r: 1, g: 0, b: 0, a: 1}
   fraction: red
   body: {fileID: 1222173748849985848}
-  renderer: {fileID: 5587402549102206504}
   rigidBody: {fileID: 6394745656489632249}
+  renderers:
+  - {fileID: 5587402549102206504}
+  baseHp: 100
   hp: 100
-  acceleration: 0
-  torque: 0
-  guns: []
-  spawnedObject: {fileID: 8627264540357195451, guid: 678cd9db940736941afbbe6b67410f2b, type: 3}
-  spawnPeriod: 5
+  baseSpeed: 3
+  primarySockets: []
+  secondarySockets: []
+  spawnedObject: {fileID: 8324628740504926646, guid: a83ff86dc52989944887bf1449e4f829, type: 3}
+  spawnPeriod: 1
+  restrictedRadius: 4
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 8
+  disabledColor: {r: 0.8, g: 0.8, b: 0.8, a: 0.5}
+  spawnCollider: {fileID: 3801434316313842702}

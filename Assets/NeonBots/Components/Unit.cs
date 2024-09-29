@@ -6,80 +6,54 @@ namespace NeonBots.Components
     public class Unit : Obj
     {
         [Header("Unit")]
-        public float maxHp = 100f;
+        public float baseHp = 100f;
 
         public float hp = 100f;
 
         [SerializeField]
-        private float acceleration = 500f;
+        private float baseSpeed = 3f;
 
-        [SerializeField]
-        private float torque = 50f;
+        private Vector3 moveDirection = Vector3.zero;
 
-        private Vector3 movementDirection = Vector3.zero;
-
-        private Vector3 rotatingDirection = Vector3.zero;
-
-        private Vector3 expectedMovementDirection = Vector3.zero;
-
-        private Vector3 expectedRotatingDirection = Vector3.zero;
+        private Vector3 lookDirection;
 
         public List<ItemSocket> primarySockets;
 
         public List<ItemSocket> secondarySockets;
 
-        protected override void Start() => this.SetColor();
-
-        private void Update()
+        protected override void Start()
         {
-            this.movementDirection = Vector3.zero;
-            this.rotatingDirection = Vector3.zero;
+            this.lookDirection = this.transform.forward;
+            this.SetColor(this.color);
+        }
 
-            if(this.expectedMovementDirection != Vector3.zero)
-            {
-                this.movementDirection = this.expectedMovementDirection;
-                this.expectedMovementDirection = Vector3.zero;
-            }
-
-            if(this.expectedRotatingDirection != Vector3.zero)
-            {
-                this.rotatingDirection = this.expectedRotatingDirection;
-                this.expectedRotatingDirection = Vector3.zero;
-            }
-
+        protected virtual void Update()
+        {
             if(this.hp <= 0) Destroy(this.gameObject);
         }
 
         private void FixedUpdate()
         {
-            this.rigidBody.AddForce(this.movementDirection * this.acceleration, ForceMode.Acceleration);
-            this.rigidBody.AddTorque(this.rotatingDirection * this.torque, ForceMode.Acceleration);
+            var velocityXZ = Vector3.ProjectOnPlane(this.rigidBody.velocity, Vector3.up).magnitude;
+            var targetAccel = (this.baseSpeed - velocityXZ) / Time.deltaTime;
+            this.rigidBody.AddForce(this.moveDirection * targetAccel, ForceMode.Acceleration);
+            this.transform.rotation = Quaternion.LookRotation(this.lookDirection, Vector3.up);
         }
 
         public void ResetValues()
         {
-            this.hp = this.maxHp;
+            this.hp = this.baseHp;
         }
 
         public void Move(Vector3 direction)
         {
-            this.expectedMovementDirection += direction;
-
-            if(this.expectedMovementDirection.magnitude > Vector3.one.magnitude)
-                this.expectedMovementDirection.Normalize();
+            this.moveDirection = direction;
         }
 
         public void Rotate(Vector3 direction)
         {
-            var angle = Vector3.SignedAngle(this.transform.forward, direction, this.transform.up);
-
-            if(angle < 0)
-                this.expectedRotatingDirection -= this.transform.up;
-            else if(angle > 0)
-                this.expectedRotatingDirection += this.transform.up;
-
-            if(this.expectedRotatingDirection.magnitude > Vector3.one.magnitude)
-                this.expectedRotatingDirection.Normalize();
+            if(direction == Vector3.zero) return;
+            this.lookDirection = direction;
         }
 
         public void Shot()

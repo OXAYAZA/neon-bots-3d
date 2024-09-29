@@ -11,9 +11,6 @@ namespace NeonBots.Screens
         [SerializeField]
         private Button playButton;
 
-        [SerializeField]
-        private Unit heroPrefab;
-
         protected override void OnEnable()
         {
             base.OnEnable();
@@ -34,8 +31,14 @@ namespace NeonBots.Screens
             var sceneData = await MainManager.LoadScene("Level-1");
             var storage = MainManager.GetManager<ObjectStorage>();
             var watcher = MainManager.Instance.mainCamera.GetComponent<Watcher>();
-            var hero = Instantiate(this.heroPrefab, sceneData.heroSpawn.position, sceneData.heroSpawn.rotation);
+            var hero = Instantiate(MainManager.Instance.heroPrefab, sceneData.heroSpawn.position,
+                sceneData.heroSpawn.rotation);
+            hero.fraction = "green";
+            hero.color = Color.green;
+            hero.baseHp = 1000f;
+            hero.hp = 1000f;
             hero.ResetValues();
+            Destroy(hero.GetComponent<Controller>());
             var controller = hero.gameObject.AddComponent<InputController>();
 
             storage.Add("hero", hero.gameObject);

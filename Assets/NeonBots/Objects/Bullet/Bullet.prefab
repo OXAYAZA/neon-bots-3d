@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 8948782915899030535}
   - component: {fileID: 8964372543702354928}
   - component: {fileID: 3629340157876706604}
-  - component: {fileID: 4405328444925307390}
-  m_Layer: 0
+  - component: {fileID: 2818243824258691418}
+  m_Layer: 8
   m_Name: Body
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -84,7 +84,7 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &4405328444925307390
+--- !u!135 &2818243824258691418
 SphereCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -103,7 +103,7 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
+  m_Radius: 0.49999997
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &7629808598416385729
 GameObject:
@@ -116,7 +116,7 @@ GameObject:
   - component: {fileID: 7629808598416385738}
   - component: {fileID: 7629808598416385733}
   - component: {fileID: 7629808598416385735}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Bullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -147,7 +147,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7629808598416385729}
   serializedVersion: 4
-  m_Mass: 10
+  m_Mass: 1
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -164,7 +164,7 @@ Rigidbody:
   m_UseGravity: 0
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 84
+  m_Constraints: 0
   m_CollisionDetection: 1
 --- !u!114 &7629808598416385735
 MonoBehaviour:
@@ -181,9 +181,9 @@ MonoBehaviour:
   color: {r: 1, g: 1, b: 1, a: 1}
   fraction: 
   body: {fileID: 5869032166558060374}
-  renderer: {fileID: 3629340157876706604}
   rigidBody: {fileID: 7629808598416385733}
-  force: 400
-  initialVelocity: {x: 0, y: 0, z: 0}
+  renderers: []
+  impulse: 25
   lifeTime: 1
   damage: 1
+  explosionPrefab: {fileID: 3653341551923276740, guid: e14412c45e3e9ca4ca22b1b5c05871c7, type: 3}

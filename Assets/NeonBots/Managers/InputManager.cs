@@ -7,6 +7,9 @@ namespace NeonBots.Managers
         [field: SerializeField]
         public Transform WorldCursor { get; private set; }
 
+        [SerializeField]
+        private LayerMask cursorLayers;
+
         private LocalConfig localConfig;
 
         private bool TouchControl => MainManager.IsReady && this.localConfig != default &&
@@ -124,7 +127,7 @@ namespace NeonBots.Managers
             var camera = MainManager.Instance.mainCamera;
 
             if(!Physics.Raycast(camera.transform.position, camera.transform.forward, out var hit, 200,
-                   1 << 7))
+                   this.cursorLayers))
             {
                 this.WorldCursor.gameObject.SetActive(false);
                 return;
@@ -134,7 +137,7 @@ namespace NeonBots.Managers
 
             var center = hit.point;
 
-            if(!Physics.Raycast(ray.origin, ray.direction, out hit, 200, 1 << 7))
+            if(!Physics.Raycast(ray.origin, ray.direction, out hit, 200, this.cursorLayers))
             {
                 this.WorldCursor.gameObject.SetActive(false);
                 return;

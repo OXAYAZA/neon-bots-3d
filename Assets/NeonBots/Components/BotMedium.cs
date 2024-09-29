@@ -1,13 +1,14 @@
-using System.Linq;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace NeonBots.Components
 {
-    public class BotStupid : MonoBehaviour
+    public class BotMedium : Controller
     {
         [SerializeField]
-        private float visionRadius = 30;
+        private float range = 30;
+
+        [SerializeField]
+        private LayerMask layerMask;
 
         private Unit unit;
 
@@ -15,7 +16,9 @@ namespace NeonBots.Components
 
         private Vector3 direction;
 
-        private float distance;
+        private Vector3 aimPoint;
+
+        private double distance;
 
         private void Start()
         {
@@ -24,36 +27,46 @@ namespace NeonBots.Components
 
         private void Update()
         {
-            if(!this.target)
+            if(this.target == default)
+            {
                 this.Scan();
+            }
             else
-                this.Tracking();
-
-            if(this.target)
             {
                 this.Calculate();
-                this.Rotate();
                 this.Move();
                 this.Attack();
+                this.Tracking();
             }
         }
 
         private void Scan()
         {
-            var targetObjects = this.ScopeCheck();
+            this.target = null;
+            this.distance = double.PositiveInfinity;
 
-            foreach(var targetObject in targetObjects)
+            var objects = new Collider[10];
+            Physics.OverlapSphereNonAlloc(this.transform.position, this.range, objects, this.layerMask);
+
+            foreach(var hitCollider in objects)
             {
-                var target = targetObject.GetComponent<Obj>();
-                if(target && target.fraction != this.unit.fraction) this.target = targetObject;
+                if(hitCollider == default || !hitCollider.TryGetComponent<ObjectLink>(out var link) ||
+                   link.target == this.unit) continue;
+
+                var target = (Unit)link.target;
+
+                if(target.fraction == this.unit.fraction) continue;
+
+                this.target = target.gameObject;
+                break;
             }
         }
 
         private void Tracking()
         {
-            var targetObjects = this.ScopeCheck();
-            var inRange = targetObjects.Find(item => item == this.target);
-            if(!inRange || !this.target.GetComponent<Unit>()) this.target = null;
+            if((float)this.distance < this.range) return;
+            this.target = null;
+            this.distance = double.PositiveInfinity;
         }
 
         private void Calculate()
@@ -67,50 +80,41 @@ namespace NeonBots.Components
             if(primaryItem == default && primaryItem.GetType() != typeof(Gun)) return;
 
             var primaryGun = (Gun)primaryItem;
-            var bulletVelocity = primaryGun.projectilePrefab.force / 10;
-            var timeDistance = this.distance / bulletVelocity;
+            var bulletVelocity = primaryGun.projectilePrefab.impulse;
+            var timeDistance = (float)this.distance / bulletVelocity;
             var targetPosition = this.target.transform.position;
             var targetVelocity = this.target.GetComponent<Rigidbody>().velocity;
-            var aimPoint = targetPosition + targetVelocity * timeDistance;
+            this.aimPoint = targetPosition + targetVelocity * timeDistance;
 
-            this.direction = aimPoint - this.transform.position;
-        }
-
-        private void Rotate()
-        {
-            this.unit.Rotate(this.direction);
+            this.direction = this.aimPoint - this.transform.position;
         }
 
         private void Move()
         {
-            if(this.distance > this.visionRadius * 0.5) this.unit.Move(this.transform.forward);
-            else if(this.distance < this.visionRadius * 0.25) this.unit.Move(-this.transform.forward);
+            foreach(var socket in this.unit.primarySockets)
+                if(socket.rotatable) socket.transform.LookAt(this.aimPoint);
+
+            foreach(var socket in this.unit.secondarySockets)
+                if(socket.rotatable) socket.transform.LookAt(this.aimPoint);
+
+            this.unit.Rotate(new(
+                this.target.transform.position.x - this.transform.position.x,
+                0,
+                this.target.transform.position.z - this.transform.position.z
+            ));
+
+            if(this.distance > this.range * 0.5) this.unit.Move(this.transform.forward);
+            else if(this.distance < this.range * 0.25) this.unit.Move(-this.transform.forward);
         }
 
-        private void Attack()
-        {
-            if(this.distance < this.visionRadius && Vector3.Angle(this.transform.forward, this.direction) < 3f)
-                this.unit.Shot();
-        }
-
-        private List<GameObject> ScopeCheck()
-        {
-            // Getting of all colliders that overlapping sphere
-            return Physics.OverlapSphere(this.transform.position, this.visionRadius, 1 << 3)
-                // Filtering out colliders that are related to current game object
-                .Where(hitCollider => hitCollider.gameObject.transform.parent != this.transform)
-                // Getting colliders game objects
-                .Select(hitCollider => hitCollider.gameObject.transform.parent.gameObject)
-                // Converting the result to List
-                .ToList();
-        }
+        private void Attack() => this.unit.Shot();
 
         private void OnDrawGizmos()
         {
             if(this.target)
             {
                 var bulletVelocity = 40f;
-                var timeDistance = this.distance / bulletVelocity;
+                var timeDistance = (float)this.distance / bulletVelocity;
                 var targetPosition = this.target.transform.position;
                 var targetVelocity = this.target.GetComponent<Rigidbody>().velocity;
                 var aimPoint = targetPosition + targetVelocity * timeDistance;

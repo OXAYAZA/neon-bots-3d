@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 public class Obj : MonoBehaviour
 {
@@ -12,15 +13,27 @@ public class Obj : MonoBehaviour
 
     public GameObject body;
 
-    public new Renderer renderer;
-
     public Rigidbody rigidBody;
+
+    public List<Renderer> renderers;
 
     protected virtual void Start() { }
 
-    protected virtual void SetColor()
+    protected virtual void SetColor(Color color)
     {
-        this.renderer.material.SetColor(BaseColor, this.color);
-        this.renderer.material.SetColor(EmissionColor, this.color);
+        foreach(var renderer in this.renderers)
+        {
+            renderer.material.SetColor(BaseColor, color);
+            renderer.material.SetColor(EmissionColor, color);
+        }
+    }
+
+    protected virtual void SetColor(Color baseColor, Color emissionColor)
+    {
+        foreach(var renderer in this.renderers)
+        {
+            renderer.material.SetColor(BaseColor, baseColor);
+            renderer.material.SetColor(EmissionColor, emissionColor);
+        }
     }
 }

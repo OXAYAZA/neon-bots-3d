@@ -1,11 +1,15 @@
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace NeonBots.Components
 {
     public class Gun : Item
     {
+        public Unit owner;
+
         public Bullet projectilePrefab;
+
+        [SerializeField]
+        private ParticleSystem flame;
 
         [SerializeField]
         private float reloadDuration = 0.5f;
@@ -17,7 +21,7 @@ namespace NeonBots.Components
         private AudioSource audioSource;
 
         [SerializeField]
-        private List<Transform> sockets;
+        private Transform socket;
 
         private float reloadTime;
 
@@ -36,12 +40,11 @@ namespace NeonBots.Components
         {
             if(this.projectilePrefab != default && this.reloadTime <= 0)
             {
-                foreach(var socket in this.sockets)
-                {
-                    var iniTrans = socket.transform;
-                    Instantiate(this.projectilePrefab, iniTrans.position, iniTrans.rotation);
-                }
+                var projectile = Instantiate(this.projectilePrefab,
+                    this.socket.transform.position, this.socket.transform.rotation);
+                projectile.Init(this.owner);
 
+                if(this.flame != default) this.flame.Play();
                 if(this.audioSource && this.shotSound) this.audioSource.PlayOneShot(this.shotSound, 0.05f);
                 this.reloadTime = this.reloadDuration;
             }
