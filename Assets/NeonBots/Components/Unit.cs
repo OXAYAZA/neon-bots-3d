@@ -60,5 +60,10 @@ namespace NeonBots.Components
         {
             foreach(var item in this.primarySockets) item.Use();
         }
+
+        protected override void SetColor(Color emissionColor)
+        {
+            foreach(var renderer in this.renderers) renderer.material.SetColor(EmissionColor, emissionColor);
+        }
     }
 }
