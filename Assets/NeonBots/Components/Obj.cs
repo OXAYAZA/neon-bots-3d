@@ -17,6 +17,8 @@ public class Obj : MonoBehaviour
 
     public List<Renderer> renderers;
 
+    public List<Collider> colliders;
+
     protected virtual void Start() { }
 
     protected virtual void SetColor(Color color)

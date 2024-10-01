@@ -132,6 +132,8 @@ MonoBehaviour:
   rigidBody: {fileID: 2546031221397199686}
   renderers:
   - {fileID: 8250740522194462243}
+  colliders:
+  - {fileID: 3365774206316504295}
   baseHp: 50
   hp: 50
   baseSpeed: 10

@@ -5,7 +5,7 @@ namespace NeonBots.Components
     public class Projectile : Obj
     {
         [Header("Projectile")]
-        public float impulse;
+        public float impulse = 25f;
 
         public float lifeTime = 1f;
 
@@ -20,6 +20,11 @@ namespace NeonBots.Components
         {
             base.Start();
             this.rigidBody.AddForce(this.transform.forward * this.impulse, ForceMode.Impulse);
+
+            if(this.owner != default)
+                foreach(var pCollider in this.colliders)
+                    foreach(var oCollider in this.owner.colliders)
+                        Physics.IgnoreCollision(pCollider, oCollider, true);
         }
 
         private void Update()
@@ -31,7 +36,7 @@ namespace NeonBots.Components
         private void OnCollisionEnter(Collision other)
         {
             var unit = other.gameObject.GetComponent<Unit>();
-            if(unit is not null && unit != this.owner) unit.hp -= this.damage;
+            if(unit is not null) unit.hp -= this.damage;
 
             var projectile = other.gameObject.GetComponent<Projectile>();
             if(projectile is not null && projectile.owner == this.owner) return;

@@ -183,6 +183,8 @@ MonoBehaviour:
   body: {fileID: 5869032166558060374}
   rigidBody: {fileID: 7629808598416385733}
   renderers: []
+  colliders:
+  - {fileID: 2818243824258691418}
   impulse: 25
   lifeTime: 2
   damage: 10

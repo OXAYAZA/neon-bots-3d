@@ -225,6 +225,8 @@ MonoBehaviour:
   rigidBody: {fileID: 3098345093297310123}
   renderers:
   - {fileID: 3112223336182363641}
+  colliders:
+  - {fileID: 2630511237213868089}
   baseHp: 100
   hp: 100
   baseSpeed: 3
@@ -261,7 +263,7 @@ GameObject:
   - component: {fileID: 2630511237213868089}
   - component: {fileID: 363065927051557601}
   m_Layer: 3
-  m_Name: Cylinder
+  m_Name: Collider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
