@@ -358,7 +358,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1037877876}
-  heroPrefab: {fileID: 8324628740504926646, guid: 79eb7a3c4d0287e41b0039a6b99ab969, type: 3}
+  heroPrefab: {fileID: 8324628740504926646, guid: 5c1dc3d3b35d2b449aaf5053b277ab78, type: 3}
 --- !u!4 &1112913064
 Transform:
   m_ObjectHideFlags: 0

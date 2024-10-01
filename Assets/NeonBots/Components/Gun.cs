@@ -6,13 +6,16 @@ namespace NeonBots.Components
     {
         public Unit owner;
 
-        public Bullet projectilePrefab;
+        public Projectile projectilePrefab;
 
         [SerializeField]
         private ParticleSystem flame;
 
         [SerializeField]
         private float reloadDuration = 0.5f;
+
+        [SerializeField]
+        private float shotImpulse = 25f;
 
         [SerializeField]
         private AudioClip shotSound;
@@ -42,7 +45,7 @@ namespace NeonBots.Components
             {
                 var projectile = Instantiate(this.projectilePrefab,
                     this.socket.transform.position, this.socket.transform.rotation);
-                projectile.Init(this.owner);
+                projectile.Init(this.owner, this.shotImpulse);
 
                 if(this.flame != default) this.flame.Play();
                 if(this.audioSource && this.shotSound) this.audioSource.PlayOneShot(this.shotSound, 0.05f);
