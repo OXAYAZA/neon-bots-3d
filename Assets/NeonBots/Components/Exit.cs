@@ -41,14 +41,14 @@ public class Exit : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.TryGetComponent<ObjectLinks>(out var links) &&
-           links.TryGetValue("unit", out var obj) && ((Unit)obj).fraction == "green") this.active = true;
+        if(other.TryGetComponent<ObjectLink>(out var link) &&
+           link.target != default && ((Unit)link.target).fraction == "green") this.active = true;
     }
 
     private void OnTriggerExit(Collider other)
     {
-        if(other.TryGetComponent<ObjectLinks>(out var links) &&
-           links.TryGetValue("unit", out var obj) && ((Unit)obj).fraction == "green") this.active = false;
+        if(other.TryGetComponent<ObjectLink>(out var link) &&
+           link.target != default && ((Unit)link.target).fraction == "green") this.active = false;
     }
 
     private async UniTask ToNextLevel()
