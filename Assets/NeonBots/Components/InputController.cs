@@ -24,8 +24,8 @@ namespace NeonBots.Components
 
             if(this.unit)
             {
-                var movementVector = new Vector3(this.inputManager.Movement.x, 0, this.inputManager.Movement.y);
-                var directionVector = new Vector3(this.inputManager.Direction.x, 0, this.inputManager.Direction.y);
+                var movementVector = new Vector3(this.inputManager.Movement.x, 0f, this.inputManager.Movement.y);
+                var directionVector = new Vector3(this.inputManager.Direction.x, 0f, this.inputManager.Direction.y);
 
                 this.unit.Move(movementVector);
                 this.unit.Rotate(directionVector);

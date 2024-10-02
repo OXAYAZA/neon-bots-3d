@@ -30,7 +30,7 @@ namespace NeonBots.Components
         protected override void Start()
         {
             base.Start();
-            this.SetColor(this.color);
+            this.SetColor(this.color, this.color);
             this.spawnTimer = this.spawnPeriod;
         }
 
@@ -55,7 +55,7 @@ namespace NeonBots.Components
             }
 
             this.spawnCollider.enabled = true;
-            this.SetColor(this.color);
+            this.SetColor(this.color, this.color);
 
             if(this.spawnTimer <= 0)
             {

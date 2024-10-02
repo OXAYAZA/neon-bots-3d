@@ -5,7 +5,7 @@ namespace NeonBots.Components
     public class BotEasy : Controller
     {
         [SerializeField]
-        private float range = 20f;
+        private float range = 30f;
 
         [SerializeField]
         private LayerMask layerMask;
@@ -26,16 +26,24 @@ namespace NeonBots.Components
         private void Update()
         {
             this.Scan();
-            if(!this.target) return;
-            this.Calculate();
-            this.Move();
-            this.Attack();
+
+            if(!this.target)
+            {
+                this.unit.Move(Vector3.zero);
+            }
+            else
+            {
+                this.Calculate();
+                this.Move();
+                this.Attack();
+            }
         }
 
         private void Scan()
         {
             this.target = null;
             this.distance = double.PositiveInfinity;
+            this.direction = Vector3.zero;
 
             var objects = new Collider[10];
             Physics.OverlapSphereNonAlloc(this.transform.position, this.range, objects, this.layerMask);

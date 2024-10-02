@@ -13,6 +13,9 @@ namespace NeonBots.Components
         [SerializeField]
         private float baseSpeed = 3f;
 
+        [SerializeField]
+        private float horizontalDrag = 20f;
+
         private Vector3 moveDirection = Vector3.zero;
 
         private Vector3 lookDirection;
@@ -38,6 +41,9 @@ namespace NeonBots.Components
             var targetAccel = (this.baseSpeed - velocityXZ) / Time.deltaTime;
             this.rigidBody.AddForce(this.moveDirection * targetAccel, ForceMode.Acceleration);
             this.transform.rotation = Quaternion.LookRotation(this.lookDirection, Vector3.up);
+
+            var velocityProj = Vector3.ProjectOnPlane(this.rigidBody.velocity, Vector3.up);
+            this.rigidBody.AddForce(-velocityProj.normalized * this.horizontalDrag, ForceMode.Acceleration);
         }
 
         public void ResetValues()
@@ -64,6 +70,27 @@ namespace NeonBots.Components
         protected override void SetColor(Color emissionColor)
         {
             foreach(var renderer in this.renderers) renderer.material.SetColor(EmissionColor, emissionColor);
+        }
+
+        private void OnDrawGizmos()
+        {
+            var initialColor = Gizmos.color;
+            var position = this.transform.position;
+
+            // Move direction
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawRay(position, this.moveDirection.normalized * 3f);
+
+            // Velocity vector
+            Gizmos.color = Color.yellow;
+            Gizmos.DrawRay(position, this.rigidBody.velocity);
+
+            // Horizontal drag direction
+            var velocityProj = Vector3.ProjectOnPlane(this.rigidBody.velocity, Vector3.up);
+            Gizmos.color = Color.red;
+            Gizmos.DrawRay(position, -velocityProj.normalized * 3f);
+
+            Gizmos.color = initialColor;
         }
     }
 }

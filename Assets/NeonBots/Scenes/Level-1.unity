@@ -858,7 +858,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 100
+  m_Intensity: 40
   m_Range: 100
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -1802,7 +1802,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3098345093297310133, guid: 9893d82c88eccb840ba8920be75e817f, type: 3}
       propertyPath: fraction
-      value: orange
+      value: red
       objectReference: {fileID: 0}
     - target: {fileID: 4125823031386893133, guid: 9893d82c88eccb840ba8920be75e817f, type: 3}
       propertyPath: m_Name
@@ -2043,7 +2043,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.67031884, b: 0, a: 1}
-  m_Intensity: 100
+  m_Intensity: 40
   m_Range: 100
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -2437,7 +2437,7 @@ Light:
   m_Type: 2
   m_Shape: 0
   m_Color: {r: 1, g: 0.06511342, b: 0, a: 1}
-  m_Intensity: 100
+  m_Intensity: 40
   m_Range: 100
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208

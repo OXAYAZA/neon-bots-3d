@@ -96,8 +96,8 @@ Rigidbody:
   m_GameObject: {fileID: 466788636551637209}
   serializedVersion: 4
   m_Mass: 40
-  m_Drag: 5
-  m_AngularDrag: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -136,7 +136,8 @@ MonoBehaviour:
   - {fileID: 3365774206316504295}
   baseHp: 50
   hp: 50
-  baseSpeed: 10
+  baseSpeed: 20
+  horizontalDrag: 20
   primarySockets:
   - {fileID: 2304845146741839085}
   - {fileID: 8175950042171481723}
@@ -154,12 +155,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 594af82ee53d4588ae591e656770957c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hoverAlt: 2
-  takeoffAccel: 100
   rBody: {fileID: 2546031221397199686}
   layerMask:
     serializedVersion: 2
     m_Bits: 128
+  maxHoverAlt: 3
+  minHoverAlt: 2
+  maxForce: 30
+  minForce: 9.81
 --- !u!114 &7168898142978756317
 MonoBehaviour:
   m_ObjectHideFlags: 0
