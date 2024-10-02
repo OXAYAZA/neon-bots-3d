@@ -9,6 +9,8 @@ namespace NeonBots.Components
 
         private InputManager inputManager;
 
+        private LocalConfig localConfig;
+
         public void Init(Unit unit = default)
         {
             this.unit = unit == default ? this.GetComponent<Unit>() : unit;
@@ -16,11 +18,12 @@ namespace NeonBots.Components
             if(this.unit == default) Debug.LogError($"[{this.name}][{nameof(InputController)}] Init failed.");
 
             this.inputManager = MainManager.GetManager<InputManager>();
+            this.localConfig = MainManager.GetManager<LocalConfig>();
         }
 
         private void Update()
         {
-            if(this.inputManager is null) return;
+            if(this.inputManager is null || MainManager.GamePaused) return;
 
             if(this.unit)
             {
@@ -30,11 +33,22 @@ namespace NeonBots.Components
                 this.unit.Move(movementVector);
                 this.unit.Rotate(directionVector);
 
-                foreach(var socket in this.unit.primarySockets)
-                    if(socket.rotatable) socket.transform.LookAt(this.inputManager.WorldCursor);
+                if(!this.localConfig.Get<bool>("touch_control"))
+                {
+                    foreach(var socket in this.unit.primarySockets)
+                        if(socket.rotatable) socket.transform.LookAt(this.inputManager.WorldCursor);
 
-                foreach(var socket in this.unit.secondarySockets)
-                    if(socket.rotatable) socket.transform.LookAt(this.inputManager.WorldCursor);
+                    foreach(var socket in this.unit.secondarySockets)
+                        if(socket.rotatable) socket.transform.LookAt(this.inputManager.WorldCursor);
+                }
+                else
+                {
+                    foreach(var socket in this.unit.primarySockets)
+                        if(socket.rotatable) socket.transform.localRotation = Quaternion.identity;
+
+                    foreach(var socket in this.unit.secondarySockets)
+                        if(socket.rotatable) socket.transform.localRotation = Quaternion.identity;
+                }
 
                 if(this.inputManager.MainAction) this.unit.Shot();
             }
