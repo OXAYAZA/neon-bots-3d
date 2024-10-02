@@ -5,55 +5,48 @@ namespace NeonBots.Components
     public class Hover : MonoBehaviour
     {
         [SerializeField]
-        private Rigidbody rBody;
+        private Rigidbody rigidBody;
 
         [SerializeField]
         private LayerMask layerMask;
 
         [SerializeField]
-        private float maxHoverAlt = 3f;
+        private float hoverAlt = 3f;
 
         [SerializeField]
-        private float minHoverAlt = 2f;
+        private float strength = 4000f;
 
         [SerializeField]
-        private float maxForce = 20f;
+        private float dampening = 10000f;
 
-        [SerializeField]
-        private float minForce = 9.81f;
+        private float lastAlt;
 
         private void FixedUpdate()
         {
             var ray = new Ray(this.transform.position, Vector3.down);
 
-            var altitude = Physics.Raycast(ray, out var rayHit, this.maxHoverAlt, this.layerMask)
-                ? rayHit.distance : this.maxHoverAlt + 1f;
-            var coeff = altitude > this.minHoverAlt ? 0f : (this.minHoverAlt - altitude) / this.minHoverAlt;
-            var force = 0f;
-
-            if(altitude < this.maxHoverAlt && altitude > this.minHoverAlt && this.rBody.velocity.y < 0f)
-                force = this.minForce;
-
-            if(altitude < this.minHoverAlt)
-                force = (this.maxForce - this.minForce) * coeff + this.minForce;
-
-            this.rBody.AddForce(Vector3.up * force, ForceMode.Acceleration);
+            if(Physics.Raycast(ray, out var rayHit, this.hoverAlt, this.layerMask))
+            {
+                var alt = rayHit.distance;
+                var force = this.strength * (this.hoverAlt - alt) + this.dampening * (this.lastAlt - alt);
+                force = Mathf.Max(0f, force);
+                this.lastAlt = alt;
+                this.rigidBody.AddForceAtPosition(this.transform.up * force, this.transform.position);
+            }
+            else
+            {
+                this.lastAlt = this.hoverAlt * 1.1f;
+            }
         }
 
         private void OnDrawGizmos()
         {
             var initialColor = Gizmos.color;
-
             var position = this.transform.position;
-            var hoverDiff = this.maxHoverAlt - this.minHoverAlt;
-            var minHoverPos = position - new Vector3(0f, this.minHoverAlt, 0f);
-            var maxHoverPos = minHoverPos - new Vector3(0f, hoverDiff, 0f);
+            var hoverPos = position - new Vector3(0f, this.hoverAlt, 0f);
 
             Gizmos.color = Color.cyan;
-            Gizmos.DrawLine(position, minHoverPos);
-
-            Gizmos.color = Color.red;
-            Gizmos.DrawLine(minHoverPos, maxHoverPos);
+            Gizmos.DrawLine(position, hoverPos);
 
             Gizmos.color = initialColor;
         }

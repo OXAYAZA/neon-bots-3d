@@ -136,7 +136,7 @@ MonoBehaviour:
   baseHp: 50
   hp: 50
   baseSpeed: 20
-  horizontalDrag: 20
+  horizontalDrag: 200
   primarySockets:
   - {fileID: 2304845146741839085}
   - {fileID: 8175950042171481723}
@@ -153,14 +153,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 594af82ee53d4588ae591e656770957c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rBody: {fileID: 2546031221397199686}
+  rigidBody: {fileID: 2546031221397199686}
   layerMask:
     serializedVersion: 2
     m_Bits: 128
-  maxHoverAlt: 3
-  minHoverAlt: 2
-  maxForce: 20
-  minForce: 9.81
+  hoverAlt: 3
+  strength: 4000
+  dampening: 10000
 --- !u!114 &7168898142978756317
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -229,8 +229,8 @@ MonoBehaviour:
   - {fileID: 2630511237213868089}
   baseHp: 100
   hp: 100
-  baseSpeed: 3
-  horizontalDrag: 20
+  baseSpeed: 0
+  horizontalDrag: 200
   primarySockets:
   - {fileID: 4990463008874287749}
   secondarySockets: []

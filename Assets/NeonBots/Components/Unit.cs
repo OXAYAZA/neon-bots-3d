@@ -14,7 +14,7 @@ namespace NeonBots.Components
         private float baseSpeed = 3f;
 
         [SerializeField]
-        private float horizontalDrag = 20f;
+        private float horizontalDrag = 200f;
 
         private Vector3 moveDirection = Vector3.zero;
 
