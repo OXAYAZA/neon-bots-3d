@@ -26,7 +26,7 @@ namespace NeonBots.Screens
         protected override void Awake()
         {
             this.debug = MainManager.GetManager<DebugManager>();
-            this.UpdateStatus(this.debug.status);
+            this.UpdateStatus(this.debug.Status);
 
             foreach(var log in this.debug.logs) this.AddLog(log);
 

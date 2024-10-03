@@ -17,21 +17,15 @@ namespace NeonBots.Managers
 
         public List<Log> logs = new();
 
-        public event Action<Log> OnLogAdd;
+        public LogType Status { get; private set; } = LogType.Log;
 
-        public LogType status = LogType.Log;
+        public event Action<Log> OnLogAdd;
 
         public event Action<LogType> OnStatusChange;
 
-        private void Awake()
-        {
-            Application.logMessageReceived += this.AddLog;
-        }
+        private void Awake() => Application.logMessageReceived += this.AddLog;
 
-        private void OnDestroy()
-        {
-            Application.logMessageReceived -= this.AddLog;
-        }
+        private void OnDestroy() => Application.logMessageReceived -= this.AddLog;
 
         private void AddLog(string text, string stackTrace, LogType type)
         {
@@ -43,19 +37,19 @@ namespace NeonBots.Managers
             switch(type)
             {
                 case LogType.Warning:
-                    if(this.status is LogType.Log)
+                    if(this.Status is LogType.Log)
                     {
-                        this.status = LogType.Warning;
-                        this.OnStatusChange?.Invoke(this.status);
+                        this.Status = LogType.Warning;
+                        this.OnStatusChange?.Invoke(this.Status);
                     }
                     break;
                 case LogType.Error:
                 case LogType.Assert:
                 case LogType.Exception:
-                    if(this.status is LogType.Log or LogType.Warning)
+                    if(this.Status is LogType.Log or LogType.Warning)
                     {
-                        this.status = LogType.Error;
-                        this.OnStatusChange?.Invoke(this.status);
+                        this.Status = LogType.Error;
+                        this.OnStatusChange?.Invoke(this.Status);
                     }
                     break;
             }

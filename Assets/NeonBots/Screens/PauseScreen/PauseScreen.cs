@@ -37,8 +37,8 @@ namespace NeonBots.Screens
             await MainManager.UnloadScene();
             this.uim.GetScreen<RootScreen>().GoTo();
             var sceneData = await MainManager.LoadScene("Level-0");
-            MainManager.Instance.mainCamera.transform.position = sceneData.cameraSpawn.position;
-            MainManager.Instance.mainCamera.transform.rotation = sceneData.cameraSpawn.rotation;
+            MainManager.Camera.transform.position = sceneData.cameraSpawn.position;
+            MainManager.Camera.transform.rotation = sceneData.cameraSpawn.rotation;
             var storage = MainManager.GetManager<ObjectStorage>();
             storage.Remove("hero");
         }

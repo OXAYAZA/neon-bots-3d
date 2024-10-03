@@ -1,14 +1,12 @@
-﻿using UnityEngine;
+﻿using NeonBots.Components;
+using UnityEngine;
 
 namespace NeonBots.Managers
 {
     public class InputManager : Manager
     {
         [field: SerializeField]
-        public Transform WorldCursor { get; private set; }
-
-        [SerializeField]
-        private LayerMask cursorLayers;
+        public WorldCursor WorldCursor { get; private set; }
 
         private LocalConfig localConfig;
 
@@ -89,10 +87,7 @@ namespace NeonBots.Managers
             this.resultSecondaryAction = false;
             this.resultTertiaryAction = false;
 
-            var touchControl = this.TouchControl;
-            this.WorldCursor.gameObject.SetActive(!touchControl);
-
-            if(touchControl)
+            if(this.TouchControl)
             {
                 this.resultMovement = this.tmpMovement;
                 this.resultDirection = this.tmpDirection;
@@ -116,36 +111,8 @@ namespace NeonBots.Managers
                 if(Input.GetMouseButton(1)) this.resultSecondaryAction = true;
                 if(Input.GetMouseButton(3)) this.resultTertiaryAction = true;
 
-                this.RefreshWorldCursor();
+                this.resultDirection = new(this.WorldCursor.Direction.x, this.WorldCursor.Direction.z);
             }
-        }
-
-        private void RefreshWorldCursor()
-        {
-            this.WorldCursor.gameObject.SetActive(true);
-
-            var camera = MainManager.Instance.mainCamera;
-
-            if(!Physics.Raycast(camera.transform.position, camera.transform.forward, out var hit, 200,
-                   this.cursorLayers))
-            {
-                this.WorldCursor.gameObject.SetActive(false);
-                return;
-            }
-
-            var ray = camera.ScreenPointToRay(Input.mousePosition);
-
-            var center = hit.point;
-
-            if(!Physics.Raycast(ray.origin, ray.direction, out hit, 200, this.cursorLayers))
-            {
-                this.WorldCursor.gameObject.SetActive(false);
-                return;
-            }
-
-            this.WorldCursor.position = hit.point;
-            var worldDirection = hit.point - center;
-            this.resultDirection = new(worldDirection.x, worldDirection.z);
         }
     }
 }

@@ -36,10 +36,10 @@ namespace NeonBots.Components
                 if(!this.localConfig.Get<bool>("touch_control"))
                 {
                     foreach(var socket in this.unit.primarySockets)
-                        if(socket.rotatable) socket.transform.LookAt(this.inputManager.WorldCursor);
+                        if(socket.rotatable) socket.transform.LookAt(this.inputManager.WorldCursor.Position);
 
                     foreach(var socket in this.unit.secondarySockets)
-                        if(socket.rotatable) socket.transform.LookAt(this.inputManager.WorldCursor);
+                        if(socket.rotatable) socket.transform.LookAt(this.inputManager.WorldCursor.Position);
                 }
                 else
                 {

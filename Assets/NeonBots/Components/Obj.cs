@@ -11,8 +11,6 @@ public class Obj : MonoBehaviour
 
     public string fraction;
 
-    public GameObject body;
-
     public Rigidbody rigidBody;
 
     public List<Renderer> renderers;

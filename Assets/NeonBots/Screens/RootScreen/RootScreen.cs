@@ -30,8 +30,8 @@ namespace NeonBots.Screens
             await MainManager.UnloadScene();
             var sceneData = await MainManager.LoadScene("Level-1");
             var storage = MainManager.GetManager<ObjectStorage>();
-            var watcher = MainManager.Instance.mainCamera.GetComponent<Watcher>();
-            var hero = Instantiate(MainManager.Instance.heroPrefab, sceneData.heroSpawn.position,
+            var watcher = MainManager.Camera.GetComponent<Watcher>();
+            var hero = Instantiate(MainManager.HeroPrefab, sceneData.heroSpawn.position,
                 sceneData.heroSpawn.rotation);
             hero.fraction = "green";
             hero.color = Color.green;

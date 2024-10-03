@@ -14,11 +14,17 @@ namespace NeonBots.Managers
     {
         public static Scene MainScene { get; private set; }
 
-        public Camera mainCamera;
-        
-        public Unit heroPrefab;
+        [SerializeField]
+        private Camera mainCamera;
 
-        public static MainManager Instance { get; private set; }
+        public static Camera Camera => instance.mainCamera;
+
+        [SerializeField]
+        private Unit heroPrefab;
+
+        public static Unit HeroPrefab => instance.heroPrefab;
+
+        private static MainManager instance;
 
         public static bool IsReady { get; private set; }
 
@@ -36,10 +42,10 @@ namespace NeonBots.Managers
 
         private void Awake()
         {
-            if(Instance is not null)
+            if(instance is not null)
                 throw new InvalidOperationException("[MainManager] Should be only one instance of MainManager.");
 
-            Instance = this;
+            instance = this;
             MainScene = SceneManager.GetActiveScene();
         }
 
@@ -103,8 +109,8 @@ namespace NeonBots.Managers
             }
 
             var sceneData = await LoadScene("Level-0");
-            Instance.mainCamera.transform.position = sceneData.cameraSpawn.position;
-            Instance.mainCamera.transform.rotation = sceneData.cameraSpawn.rotation;
+            Camera.transform.position = sceneData.cameraSpawn.position;
+            Camera.transform.rotation = sceneData.cameraSpawn.rotation;
 
             await UniTask.Delay(10, cancellationToken: MainCts.Token);
 
@@ -118,9 +124,9 @@ namespace NeonBots.Managers
 
         public static T GetManager<T>() where T : Manager
         {
-            if(Instance is null) return null;
+            if(instance is null) return null;
 
-            if(!Instance.managers.TryGetValue(typeof(T), out var manager))
+            if(!instance.managers.TryGetValue(typeof(T), out var manager))
                 throw new InvalidOperationException($"No child manager of type {typeof(T)}.");
 
             return (T)manager;
