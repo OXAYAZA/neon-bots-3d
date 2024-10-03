@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3172128962000501948}
   - component: {fileID: 4479265860646669567}
   - component: {fileID: 8013633521007154492}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 4956273295058919374}
   - component: {fileID: 3349275393548198285}
   - component: {fileID: 2516086660466083648}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: UIScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2821898098556625001}
   - component: {fileID: 8192828011960798514}
   - component: {fileID: 3649200065817439285}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: LoadingText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 9093951890456044172}
   - component: {fileID: 6440129417093135650}
   - component: {fileID: 4188937177559041633}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: ProgressBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 2773620959699115441}
   - component: {fileID: 3104587577812069449}
   - component: {fileID: 5524848032730887218}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -335,7 +335,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4427910466477288028}
   - component: {fileID: 5402976228897964688}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: col
   m_TagString: Untagged
   m_Icon: {fileID: 0}

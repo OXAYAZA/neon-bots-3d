@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4734748176764111376}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: TouchControl
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -48,7 +48,7 @@ GameObject:
   - component: {fileID: 2038989940855476294}
   - component: {fileID: 6316855961385321561}
   - component: {fileID: 5123765715971491099}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Value
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 760855440967468226}
   - component: {fileID: 3854802988983192555}
   - component: {fileID: 7478121983473337468}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -259,7 +259,7 @@ GameObject:
   - component: {fileID: 3340200387014045635}
   - component: {fileID: 4787322363807925259}
   - component: {fileID: 4864718513907303746}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -334,7 +334,7 @@ GameObject:
   - component: {fileID: 6309906178745759291}
   - component: {fileID: 8780529081572480598}
   - component: {fileID: 1703365953263167581}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Data
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -471,7 +471,7 @@ GameObject:
   - component: {fileID: 5693189946387786982}
   - component: {fileID: 7957783202712385848}
   - component: {fileID: 8658026950924278653}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: AreaMovement
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -563,7 +563,7 @@ GameObject:
   - component: {fileID: 2983166627770353624}
   - component: {fileID: 4816066923914561906}
   - component: {fileID: 4297152630267537885}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Bar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -638,7 +638,7 @@ GameObject:
   - component: {fileID: 8699150175000451316}
   - component: {fileID: 8278064723846314257}
   - component: {fileID: 7509552372655281554}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -714,7 +714,7 @@ GameObject:
   - component: {fileID: 3482105354564627795}
   - component: {fileID: 9144507409027999524}
   - component: {fileID: 3860481574137802606}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: AreaDirection
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -806,7 +806,7 @@ GameObject:
   - component: {fileID: 666466995277479272}
   - component: {fileID: 7408093455922291419}
   - component: {fileID: 6939398661098582348}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: GameObject
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -883,7 +883,7 @@ GameObject:
   - component: {fileID: 199508610095283069}
   - component: {fileID: 2529737887889966688}
   - component: {fileID: 3428593975889863953}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: HpBar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -993,7 +993,7 @@ GameObject:
   - component: {fileID: 1250323552826812630}
   - component: {fileID: 8553848017237655428}
   - component: {fileID: 6012024332915150756}
-  m_Layer: 0
+  m_Layer: 5
   m_Name: Data
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1360,6 +1360,10 @@ PrefabInstance:
     - target: {fileID: 3202341047394718539, guid: 4fc179eb539368b47b7a72387596c3dd, type: 3}
       propertyPath: m_Name
       value: PauseButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 3202341047394718539, guid: 4fc179eb539368b47b7a72387596c3dd, type: 3}
+      propertyPath: m_Layer
+      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
