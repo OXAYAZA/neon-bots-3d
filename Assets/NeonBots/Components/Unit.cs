@@ -15,13 +15,18 @@ namespace NeonBots.Components
         [SerializeField]
         private float horizontalDrag = 200f;
 
+        [SerializeField]
+        private ParticleSystem explosionPrefab;
+
+        [Space]
+        public List<ItemSocket> primarySockets;
+
+        [Space]
+        public List<ItemSocket> secondarySockets;
+
         private Vector3 moveDirection = Vector3.zero;
 
         private Vector3 lookDirection;
-
-        public List<ItemSocket> primarySockets;
-
-        public List<ItemSocket> secondarySockets;
 
         protected override void Start()
         {
@@ -31,7 +36,7 @@ namespace NeonBots.Components
 
         protected virtual void Update()
         {
-            if(this.hp <= 0) Destroy(this.gameObject);
+            if(this.hp <= 0) this.Death();
         }
 
         private void FixedUpdate()
@@ -90,6 +95,19 @@ namespace NeonBots.Components
             Gizmos.DrawRay(position, -velocityProj.normalized * 3f);
 
             Gizmos.color = initialColor;
+        }
+
+        private void Death()
+        {
+            Destroy(this.gameObject);
+
+            if(this.explosionPrefab != default)
+            {
+                var trm = this.transform;
+                var explosion = Instantiate(this.explosionPrefab, trm.position, trm.rotation);
+                var main = explosion.main;
+                main.startColor = this.color;
+            }
         }
     }
 }

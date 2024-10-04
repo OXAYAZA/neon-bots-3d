@@ -231,6 +231,7 @@ MonoBehaviour:
   hp: 100
   baseSpeed: 0
   horizontalDrag: 200
+  explosionPrefab: {fileID: 3392596989443484499, guid: 32c317976c8b60e4f849b993c28a4723, type: 3}
   primarySockets:
   - {fileID: 4990463008874287749}
   secondarySockets: []

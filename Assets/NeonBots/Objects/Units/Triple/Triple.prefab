@@ -128,7 +128,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0, b: 0, a: 1}
   fraction: red
-  body: {fileID: 4325671381983497972}
   rigidBody: {fileID: 2546031221397199686}
   renderers:
   - {fileID: 8250740522194462243}
@@ -138,6 +137,7 @@ MonoBehaviour:
   hp: 50
   baseSpeed: 20
   horizontalDrag: 200
+  explosionPrefab: {fileID: 3392596989443484499, guid: d3e44abb7351b79419598bcd45331510, type: 3}
   primarySockets:
   - {fileID: 2304845146741839085}
   - {fileID: 8175950042171481723}
@@ -174,7 +174,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9795f4edc18f1b944bc9a888a5015418, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 30
+  scanRange: 30
+  scanNumber: 20
+  shotRange: 30
   layerMask:
     serializedVersion: 2
     m_Bits: 8
