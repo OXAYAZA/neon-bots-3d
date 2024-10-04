@@ -1,6 +1,4 @@
 ﻿using System;
-using NeonBots.Managers;
-using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
@@ -14,38 +12,16 @@ namespace NeonBots.UI
         [SerializeField]
         private RectTransform handle;
 
-        [SerializeField]
-        private TMP_Text data;
-
         [NonSerialized]
         public Vector2 value = Vector2.zero;
 
-        private UIManager uiManager;
+        protected virtual void OnEnable() => this.ResetPosition();
 
-        protected virtual void OnEnable()
-        {
-            this.uiManager = MainManager.GetManager<UIManager>();
-            this.ResetPosition();
-            this.RefreshData();
-        }
+        public void OnPointerDown(PointerEventData eventData) => this.RefreshValue(eventData);
 
-        public void OnPointerDown(PointerEventData eventData)
-        {
-            this.RefreshValue(eventData);
-            this.RefreshData();
-        }
+        public void OnDrag(PointerEventData eventData) => this.RefreshValue(eventData);
 
-        public void OnDrag(PointerEventData eventData)
-        {
-            this.RefreshValue(eventData);
-            this.RefreshData();
-        }
-
-        public void OnPointerUp(PointerEventData eventData)
-        {
-            this.ResetPosition();
-            this.RefreshData();
-        }
+        public void OnPointerUp(PointerEventData eventData) => this.ResetPosition();
 
         // Area and handle pivot must be 0.5 0.5
         // Handle anchors must be 0.5 0.5
@@ -54,10 +30,7 @@ namespace NeonBots.UI
             if(!RectTransformUtility.ScreenPointToLocalPointInRectangle(this.area, eventData.position,
                 eventData.pressEventCamera, out var position)) return;
             var areaHalfSize = this.area.sizeDelta / 2;
-            position = new(
-                Mathf.Clamp(position.x, -areaHalfSize.x, areaHalfSize.x),
-                Mathf.Clamp(position.y, -areaHalfSize.y, areaHalfSize.y)
-            );
+            position = Vector2.ClampMagnitude(position, areaHalfSize.x);
             this.handle.anchoredPosition = position;
             this.value = position / areaHalfSize;
         }
@@ -67,8 +40,5 @@ namespace NeonBots.UI
             this.value = Vector2.zero;
             this.handle.anchoredPosition = Vector2.zero;
         }
-
-        private void RefreshData() =>
-            this.data.text = $"X: {this.value.x} Y: {this.value.y}\nM: {this.value.magnitude}";
     }
 }
