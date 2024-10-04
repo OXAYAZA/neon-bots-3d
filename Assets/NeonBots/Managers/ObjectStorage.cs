@@ -31,6 +31,12 @@ namespace NeonBots.Managers
             return obj != default;
         }
 
+        public bool TryGet<T>(string name, out T obj) where T : Object
+        {
+            obj = (T)this.storage.FirstOrDefault(item => item.key == name)?.val;
+            return obj != default;
+        }
+
         public bool TryGetItem(string name, out Item item)
         {
             item = this.storage.FirstOrDefault(item => item.key == name);
