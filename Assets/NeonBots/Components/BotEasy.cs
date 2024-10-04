@@ -2,16 +2,8 @@ using UnityEngine;
 
 namespace NeonBots.Components
 {
-    public class BotEasy : Controller
+    public class BotEasy : Bot
     {
-        [SerializeField]
-        private float range = 30f;
-
-        [SerializeField]
-        private LayerMask layerMask;
-
-        private Unit unit;
-
         private GameObject target;
 
         private Vector3 direction;
@@ -45,8 +37,8 @@ namespace NeonBots.Components
             this.distance = double.PositiveInfinity;
             this.direction = Vector3.zero;
 
-            var objects = new Collider[10];
-            Physics.OverlapSphereNonAlloc(this.transform.position, this.range, objects, this.layerMask);
+            var objects = new Collider[this.scanNumber];
+            Physics.OverlapSphereNonAlloc(this.transform.position, this.scanRange, objects, this.layerMask);
 
             foreach(var hitCollider in objects)
             {
@@ -88,6 +80,9 @@ namespace NeonBots.Components
             else this.unit.Move(-this.transform.right);
         }
 
-        private void Attack() => this.unit.Shot();
+        private void Attack()
+        {
+            if(this.distance < this.shotRange) this.unit.Shot();
+        }
     }
 }

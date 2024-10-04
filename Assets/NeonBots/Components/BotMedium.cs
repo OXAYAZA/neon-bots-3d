@@ -2,16 +2,8 @@ using UnityEngine;
 
 namespace NeonBots.Components
 {
-    public class BotMedium : Controller
+    public class BotMedium : Bot
     {
-        [SerializeField]
-        private float range = 30;
-
-        [SerializeField]
-        private LayerMask layerMask;
-
-        private Unit unit;
-
         private GameObject target;
 
         private Vector3 direction;
@@ -45,8 +37,8 @@ namespace NeonBots.Components
             this.target = null;
             this.distance = double.PositiveInfinity;
 
-            var objects = new Collider[10];
-            Physics.OverlapSphereNonAlloc(this.transform.position, this.range, objects, this.layerMask);
+            var objects = new Collider[this.scanNumber];
+            Physics.OverlapSphereNonAlloc(this.transform.position, this.scanRange, objects, this.layerMask);
 
             foreach(var hitCollider in objects)
             {
@@ -64,7 +56,7 @@ namespace NeonBots.Components
 
         private void Tracking()
         {
-            if((float)this.distance < this.range) return;
+            if((float)this.distance < this.scanRange) return;
             this.target = null;
             this.distance = double.PositiveInfinity;
         }
@@ -103,11 +95,14 @@ namespace NeonBots.Components
                 this.target.transform.position.z - this.transform.position.z
             ));
 
-            if(this.distance > this.range * 0.5) this.unit.Move(this.transform.forward);
-            else if(this.distance < this.range * 0.25) this.unit.Move(-this.transform.forward);
+            if(this.distance > this.shotRange * 0.5) this.unit.Move(this.transform.forward);
+            else if(this.distance < this.shotRange * 0.25) this.unit.Move(-this.transform.forward);
         }
 
-        private void Attack() => this.unit.Shot();
+        private void Attack()
+        {
+            if(this.distance < this.shotRange) this.unit.Shot();
+        }
 
         private void OnDrawGizmos()
         {

@@ -152,6 +152,14 @@ PrefabInstance:
       propertyPath: fraction
       value: purple
       objectReference: {fileID: 0}
+    - target: {fileID: 5151306710710492024, guid: d4e7e78d340e72a4685e966a62d54f91, type: 3}
+      propertyPath: mods.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5151306710710492024, guid: d4e7e78d340e72a4685e966a62d54f91, type: 3}
+      propertyPath: mods.Array.data[0].value
+      value: 100
+      objectReference: {fileID: 0}
     - target: {fileID: 5151306710710492025, guid: d4e7e78d340e72a4685e966a62d54f91, type: 3}
       propertyPath: m_Name
       value: Spawner
@@ -481,6 +489,14 @@ PrefabInstance:
     - target: {fileID: 5151306710710492024, guid: d4e7e78d340e72a4685e966a62d54f91, type: 3}
       propertyPath: fraction
       value: orange
+      objectReference: {fileID: 0}
+    - target: {fileID: 5151306710710492024, guid: d4e7e78d340e72a4685e966a62d54f91, type: 3}
+      propertyPath: mods.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5151306710710492024, guid: d4e7e78d340e72a4685e966a62d54f91, type: 3}
+      propertyPath: mods.Array.data[0].value
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 5151306710710492025, guid: d4e7e78d340e72a4685e966a62d54f91, type: 3}
       propertyPath: m_Name

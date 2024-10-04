@@ -10,8 +10,7 @@ namespace NeonBots.Components
 
         public float hp = 100f;
 
-        [SerializeField]
-        private float baseSpeed = 3f;
+        public float baseSpeed = 3f;
 
         [SerializeField]
         private float horizontalDrag = 200f;

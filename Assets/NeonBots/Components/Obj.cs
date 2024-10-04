@@ -7,6 +7,7 @@ public class Obj : MonoBehaviour
 
     protected static readonly int EmissionColor = Shader.PropertyToID("_EmissionColor");
 
+    [Header("Obj")]
     public Color color = new(200, 200, 200);
 
     public string fraction;
