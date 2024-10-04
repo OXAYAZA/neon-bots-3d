@@ -59,6 +59,7 @@ GameObject:
   - component: {fileID: 3098345093297310123}
   - component: {fileID: 3098345093297310122}
   - component: {fileID: 3098345093297310133}
+  - component: {fileID: 5729416793365848515}
   - component: {fileID: 856606706056899281}
   m_Layer: 3
   m_Name: Turret
@@ -92,7 +93,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3098345093297310128}
   serializedVersion: 4
-  m_Mass: 40
+  m_Mass: 200
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -106,10 +107,10 @@ Rigidbody:
     m_Bits: 0
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
-  m_UseGravity: 0
+  m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 94
+  m_Constraints: 90
   m_CollisionDetection: 1
 --- !u!82 &3098345093297310122
 AudioSource:
@@ -221,7 +222,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   color: {r: 1, g: 0.49803922, b: 0, a: 1}
   fraction: red
-  body: {fileID: 3368203317030251514}
   rigidBody: {fileID: 3098345093297310123}
   renderers:
   - {fileID: 3112223336182363641}
@@ -234,6 +234,25 @@ MonoBehaviour:
   primarySockets:
   - {fileID: 4990463008874287749}
   secondarySockets: []
+--- !u!114 &5729416793365848515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3098345093297310128}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594af82ee53d4588ae591e656770957c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidBody: {fileID: 3098345093297310123}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  hoverAlt: 3
+  strength: 4000
+  dampening: 10000
 --- !u!114 &856606706056899281
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -246,7 +265,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9795f4edc18f1b944bc9a888a5015418, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  range: 30
+  scanRange: 30
+  scanNumber: 20
+  shotRange: 30
   layerMask:
     serializedVersion: 2
     m_Bits: 8
