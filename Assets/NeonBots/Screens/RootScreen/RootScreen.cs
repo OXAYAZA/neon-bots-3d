@@ -1,5 +1,4 @@
 ﻿using Cysharp.Threading.Tasks;
-using NeonBots.Components;
 using NeonBots.Managers;
 using UnityEngine;
 using UnityEngine.UI;
@@ -29,23 +28,7 @@ namespace NeonBots.Screens
             this.uim.SwitchOverlay(true);
             await MainManager.UnloadScene();
             var sceneData = await MainManager.LoadScene("Level-1");
-            var storage = MainManager.GetManager<ObjectStorage>();
-            var watcher = MainManager.Camera.GetComponent<Watcher>();
-            var hero = Instantiate(MainManager.HeroPrefab, sceneData.heroSpawn.position,
-                sceneData.heroSpawn.rotation);
-            hero.fraction = "green";
-            hero.color = Color.green;
-            hero.baseHp = 1000f;
-            hero.hp = 1000f;
-            hero.ResetValues();
-            Destroy(hero.GetComponent<Controller>());
-            var controller = hero.gameObject.AddComponent<InputController>();
-
-            storage.Add("hero", hero.gameObject);
-            controller.Init();
-            watcher.target = hero.gameObject;
-            watcher.enabled = true;
-
+            MainManager.GetManager<GameManager>().Init(sceneData);
             this.uim.GetScreen<GameScreen>().Open();
             this.uim.SwitchOverlay(false);
         }

@@ -17,7 +17,7 @@ namespace NeonBots.Screens
         [SerializeField]
         private Bar hpBar;
 
-        private Unit hero;
+        private Unit Hero => MainManager.GetManager<GameManager>()?.Hero;
 
         private LocalConfig localConfig;
 
@@ -33,23 +33,15 @@ namespace NeonBots.Screens
 
         private void OnDisable()
         {
-            this.hero = default;
             this.localConfig.OnLocalValueChanged -= this.Refresh;
             this.pauseButton.onClick.RemoveListener(this.Back);
         }
 
         private void Update()
         {
-            if(this.hero == default)
-            {
-                if(MainManager.GetManager<ObjectStorage>().TryGet<GameObject>("hero", out var heroObject))
-                    this.hero = heroObject.GetComponent<Unit>();
-                else
-                    return;
-            }
-
-            this.hpBar.maxValue = this.hero.baseHp;
-            this.hpBar.Value = this.hero.hp;
+            if(this.Hero == default) return;
+            this.hpBar.maxValue = this.Hero.baseHp;
+            this.hpBar.Value = this.Hero.hp;
         }
 
         private void Refresh(string name = null)

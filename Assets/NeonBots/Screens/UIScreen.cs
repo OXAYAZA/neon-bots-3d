@@ -8,6 +8,7 @@ namespace NeonBots.Screens
     [DisallowMultipleComponent, RequireComponent(typeof(RectTransform), typeof(Canvas), typeof(CanvasScaler))]
     public class UIScreen : MonoBehaviour, IScreen
     {
+        [Header("UI Screen")]
         public bool isPopup;
 
         public bool isBlockBack;
@@ -40,6 +41,8 @@ namespace NeonBots.Screens
         }
 
         public virtual void Open() => MainManager.GetManager<UIManager>().Open(this);
+
+        public virtual void Close() => MainManager.GetManager<UIManager>().Close(this);
 
         public virtual void GoTo() => MainManager.GetManager<UIManager>().GoTo(this);
 

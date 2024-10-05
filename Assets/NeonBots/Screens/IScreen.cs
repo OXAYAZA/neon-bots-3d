@@ -8,6 +8,8 @@ namespace NeonBots.Screens
 
         public void Open();
 
+        public void Close();
+
         public void GoTo();
 
         public void Back();

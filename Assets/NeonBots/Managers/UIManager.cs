@@ -88,6 +88,13 @@ namespace NeonBots.Managers
             screen.Switch();
         }
 
+        public void Close(IScreen screen)
+        {
+            var pathItem = this.path.FirstOrDefault(item => item.screen == screen);
+            if(pathItem != default) this.path.Remove(pathItem);
+            screen.Switch(false);
+        }
+
         public void Back(bool force)
         {
             if(this.path.Count <= 1) return;

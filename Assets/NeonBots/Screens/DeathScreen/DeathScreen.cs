@@ -5,28 +5,24 @@ using UnityEngine.UI;
 
 namespace NeonBots.Screens
 {
-    public class PauseScreen : UIScreen
+    public class DeathScreen : UIScreen
     {
+        [Header("Death Screen")]
         [SerializeField]
-        private Button pauseButton;
-
-        [SerializeField]
-        private Button resumeButton;
+        private Button restartButton;
 
         [SerializeField]
         private Button exitButton;
 
         protected override void OnEnable()
         {
-            this.pauseButton.onClick.AddListener(this.Back);
-            this.resumeButton.onClick.AddListener(this.Back);
+            this.restartButton.onClick.AddListener(this.OnRestart);
             this.exitButton.onClick.AddListener(this.OnExit);
         }
 
         private void OnDisable()
         {
-            this.pauseButton.onClick.RemoveListener(this.Back);
-            this.resumeButton.onClick.RemoveListener(this.Back);
+            this.restartButton.onClick.RemoveListener(this.OnRestart);
             this.exitButton.onClick.RemoveListener(this.OnExit);
         }
 
@@ -39,7 +35,19 @@ namespace NeonBots.Screens
             var sceneData = await MainManager.LoadScene("Level-0");
             MainManager.Camera.transform.position = sceneData.cameraSpawn.position;
             MainManager.Camera.transform.rotation = sceneData.cameraSpawn.rotation;
-            MainManager.GetManager<GameManager>().Dissolve();
+        }
+
+        private void OnRestart() => this.Restart().Forget();
+
+        private async UniTask Restart()
+        {
+            this.uim.SwitchOverlay(true);
+            this.Close();
+            await MainManager.UnloadScene();
+            var sceneData = await MainManager.LoadScene("Level-1");
+            MainManager.GetManager<GameManager>().Init(sceneData);
+            this.uim.GetScreen<GameScreen>().Open();
+            this.uim.SwitchOverlay(false);
         }
     }
 }

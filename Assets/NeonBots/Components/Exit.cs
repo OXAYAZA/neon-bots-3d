@@ -56,9 +56,10 @@ public class Exit : MonoBehaviour
 
     private async UniTask ToNextLevel()
     {
-        var storage = MainManager.GetManager<ObjectStorage>();
+        var gameManager = MainManager.GetManager<GameManager>();
+        var hero = gameManager.Hero?.gameObject;
 
-        if(!storage.TryGet<GameObject>("hero", out var hero)) return;
+        if(hero == default) return;
 
         hero.SetActive(false);
         await MainManager.UnloadScene();
