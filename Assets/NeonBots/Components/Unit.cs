@@ -71,9 +71,10 @@ namespace NeonBots.Components
             foreach(var item in this.primarySockets) item.Use();
         }
 
-        protected override void SetColor(Color emissionColor)
+        protected override void SetColor(Color color)
         {
-            foreach(var renderer in this.renderers) renderer.material.SetColor(EmissionColor, emissionColor);
+            if(this.mapFigure != default) this.mapFigure.color = color;
+            foreach(var renderer in this.renderers) renderer.material.SetColor(EmissionColor, color);
         }
 
         private void OnDrawGizmos()

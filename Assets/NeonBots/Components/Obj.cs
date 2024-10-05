@@ -14,6 +14,8 @@ public class Obj : MonoBehaviour
 
     public Rigidbody rigidBody;
 
+    public SpriteRenderer mapFigure;
+
     public List<Renderer> renderers;
 
     public List<Collider> colliders;
@@ -22,6 +24,8 @@ public class Obj : MonoBehaviour
 
     protected virtual void SetColor(Color color)
     {
+        if(this.mapFigure != default) this.mapFigure.color = color;
+
         foreach(var renderer in this.renderers)
         {
             renderer.material.SetColor(BaseColor, color);
@@ -31,6 +35,8 @@ public class Obj : MonoBehaviour
 
     protected virtual void SetColor(Color baseColor, Color emissionColor)
     {
+        if(this.mapFigure != default) this.mapFigure.color = baseColor;
+
         foreach(var renderer in this.renderers)
         {
             renderer.material.SetColor(BaseColor, baseColor);
