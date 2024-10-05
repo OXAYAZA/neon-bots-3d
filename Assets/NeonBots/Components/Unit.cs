@@ -13,7 +13,7 @@ namespace NeonBots.Components
         public float baseSpeed = 3f;
 
         [SerializeField]
-        private float horizontalDrag = 200f;
+        private float horizontalDrag = 0.02f;
 
         [SerializeField]
         private ParticleSystem explosionPrefab;
@@ -28,6 +28,8 @@ namespace NeonBots.Components
 
         private Vector3 lookDirection;
 
+        private Vector3 dragForce;
+
         protected override void Start()
         {
             this.lookDirection = this.transform.forward;
@@ -41,13 +43,14 @@ namespace NeonBots.Components
 
         private void FixedUpdate()
         {
-            var velocityXZ = Vector3.ProjectOnPlane(this.rigidBody.velocity, Vector3.up).magnitude;
-            var targetAccel = (this.baseSpeed - velocityXZ) / Time.deltaTime;
+            var horVelocity = Vector3.ProjectOnPlane(this.rigidBody.velocity, Vector3.up);
+            var horVelocityLength = horVelocity.magnitude;
+            var targetAccel = (this.baseSpeed - horVelocityLength) / Time.deltaTime;
             this.rigidBody.AddForce(this.moveDirection * targetAccel, ForceMode.Acceleration);
             this.transform.rotation = Quaternion.LookRotation(this.lookDirection, Vector3.up);
 
-            var velocityProj = Vector3.ProjectOnPlane(this.rigidBody.velocity, Vector3.up);
-            this.rigidBody.AddForce(-velocityProj.normalized * this.horizontalDrag, ForceMode.Acceleration);
+            this.dragForce = horVelocity * (-this.horizontalDrag * horVelocityLength);
+            this.rigidBody.AddForce(this.dragForce, ForceMode.VelocityChange);
         }
 
         public void ResetValues()
@@ -91,9 +94,8 @@ namespace NeonBots.Components
             Gizmos.DrawRay(position, this.rigidBody.velocity);
 
             // Horizontal drag direction
-            var velocityProj = Vector3.ProjectOnPlane(this.rigidBody.velocity, Vector3.up);
             Gizmos.color = Color.red;
-            Gizmos.DrawRay(position, -velocityProj.normalized * 3f);
+            Gizmos.DrawRay(position, this.dragForce);
 
             Gizmos.color = initialColor;
         }
