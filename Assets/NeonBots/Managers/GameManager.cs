@@ -34,8 +34,8 @@ namespace NeonBots.Managers
 
             this.Hero.fraction = "green";
             this.Hero.color = Color.green;
-            // this.Hero.baseHp = 1000f;
-            // this.Hero.ResetValues();
+            this.Hero.baseHp = 1000f;
+            this.Hero.ResetValues();
 
             Destroy(this.Hero.GetComponent<Controller>());
             var controller = this.Hero.gameObject.AddComponent<InputController>();
