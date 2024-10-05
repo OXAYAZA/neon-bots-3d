@@ -54,9 +54,6 @@ namespace NeonBots.Managers
             // Set target framerate to reduce app lags
             Application.targetFrameRate = 60;
 
-            // Disable multitouch
-            Input.multiTouchEnabled = false;
-
             this.Init().Forget();
         }
 

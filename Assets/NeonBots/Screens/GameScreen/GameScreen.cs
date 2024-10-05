@@ -40,8 +40,14 @@ namespace NeonBots.Screens
 
         private void Update()
         {
-            this.hero ??= ((GameObject)MainManager.GetManager<ObjectStorage>().Get("hero"))?.GetComponent<Unit>();
-            if(this.hero == default) return;
+            if(this.hero == default)
+            {
+                if(MainManager.GetManager<ObjectStorage>().TryGet<GameObject>("hero", out var heroObject))
+                    this.hero = heroObject.GetComponent<Unit>();
+                else
+                    return;
+            }
+
             this.hpBar.maxValue = this.hero.baseHp;
             this.hpBar.Value = this.hero.hp;
         }

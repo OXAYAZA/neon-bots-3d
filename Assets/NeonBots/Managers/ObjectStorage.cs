@@ -5,6 +5,7 @@ using Object = UnityEngine.Object;
 
 namespace NeonBots.Managers
 {
+    // TODO: Clear items without value?
     public class ObjectStorage : Manager
     {
         [Serializable]
