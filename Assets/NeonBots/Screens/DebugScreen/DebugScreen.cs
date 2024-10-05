@@ -1,4 +1,5 @@
-﻿using NeonBots.Managers;
+﻿using Cysharp.Threading.Tasks;
+using NeonBots.Managers;
 using NeonBots.UI;
 using TMPro;
 using UnityEngine;
@@ -14,6 +15,9 @@ namespace NeonBots.Screens
 
         [SerializeField]
         private Logs logs;
+
+        [SerializeField]
+        private DebugNotification notification;
 
         [SerializeField]
         private Button switchButton;
@@ -67,7 +71,7 @@ namespace NeonBots.Screens
         private void AddLog(DebugManager.Log log)
         {
             this.logs.Add(log);
-            if(log.type is LogType.Error or LogType.Exception) this.OpenWindow();
+            if(log.type is LogType.Error or LogType.Exception) this.notification.Show(log.text).Forget();
         }
     }
 }
