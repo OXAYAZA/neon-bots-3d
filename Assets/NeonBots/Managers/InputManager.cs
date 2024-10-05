@@ -90,7 +90,7 @@ namespace NeonBots.Managers
             if(this.TouchControl)
             {
                 this.resultMovement = this.tmpMovement;
-                this.resultDirection = this.tmpDirection;
+                this.resultDirection = this.tmpDirection == Vector2.zero ? this.resultMovement : this.tmpDirection;
                 this.resultMainAction = this.tmpMainAction;
                 this.resultSecondaryAction = this.tmpSecondaryAction;
                 this.resultTertiaryAction = this.tmpTertiaryAction;

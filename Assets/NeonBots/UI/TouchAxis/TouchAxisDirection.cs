@@ -23,6 +23,7 @@ namespace NeonBots.UI
         protected override void ResetPosition()
         {
             base.ResetPosition();
+            this.inputManager.Direction = this.value;
             this.inputManager.MainAction = false;
         }
     }
