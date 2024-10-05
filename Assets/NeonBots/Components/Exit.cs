@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Cysharp.Threading.Tasks;
 using NeonBots.Components;
 using NeonBots.Managers;
@@ -16,19 +18,20 @@ public class Exit : MonoBehaviour
 
     private Color initialColor;
 
-    private bool active;
-
     private float charge;
+
+    private List<Unit> units;
 
     private void Start()
     {
         this.renderer = this.gameObject.GetComponent<Renderer>();
         this.initialColor = this.renderer.material.GetColor(EmissionColor);
+        this.units = new();
     }
 
     private void Update()
     {
-        if(this.active)
+        if(this.units.Count > 0 && this.units.FirstOrDefault(item => item.fraction == "green") != default)
             this.charge = this.charge < ExitCharge ? this.charge + Time.deltaTime : ExitCharge;
         else
             this.charge = this.charge > 0 ? this.charge - Time.deltaTime : 0;
@@ -39,24 +42,23 @@ public class Exit : MonoBehaviour
         if(this.charge >= ExitCharge) this.ToNextLevel().Forget();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider collider)
     {
-        if(other.TryGetComponent<ObjectLink>(out var link) &&
-           link.target != default && ((Unit)link.target).fraction == "green") this.active = true;
+        if(collider.TryGetComponent<ObjectLink>(out var link) && link.target != default)
+            this.units.Add((Unit)link.target);
     }
 
-    private void OnTriggerExit(Collider other)
+    private void OnTriggerExit(Collider collider)
     {
-        if(other.TryGetComponent<ObjectLink>(out var link) &&
-           link.target != default && ((Unit)link.target).fraction == "green") this.active = false;
+        if(collider.TryGetComponent<ObjectLink>(out var link) && link.target != default)
+            this.units.Remove((Unit)link.target);
     }
 
     private async UniTask ToNextLevel()
     {
         var storage = MainManager.GetManager<ObjectStorage>();
 
-        if(!storage.TryGet<GameObject>("hero", out var hero))
-            throw new("No hero when exiting from level");
+        if(!storage.TryGet<GameObject>("hero", out var hero)) return;
 
         hero.SetActive(false);
         await MainManager.UnloadScene();
