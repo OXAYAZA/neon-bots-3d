@@ -582,9 +582,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <Hero>k__BackingField: {fileID: 0}
   heroPrefabs:
-  - {fileID: 8324628740504926646, guid: a83ff86dc52989944887bf1449e4f829, type: 3}
-  - {fileID: 8324628740504926646, guid: 5c1dc3d3b35d2b449aaf5053b277ab78, type: 3}
-  - {fileID: 8324628740504926646, guid: 79eb7a3c4d0287e41b0039a6b99ab969, type: 3}
+  - {fileID: 6946115276814455348, guid: a19813c97e393b1429d560c0f5f23fbb, type: 3}
 --- !u!1 &1223381665
 GameObject:
   m_ObjectHideFlags: 0
