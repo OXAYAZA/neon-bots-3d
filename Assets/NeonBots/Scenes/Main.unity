@@ -580,7 +580,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9f81669629dc4bacb0481eee9cff43cc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Hero>k__BackingField: {fileID: 0}
+  heroColor: {r: 0, g: 1, b: 0, a: 1}
   heroPrefabs:
   - {fileID: 6946115276814455348, guid: a19813c97e393b1429d560c0f5f23fbb, type: 3}
 --- !u!1 &1223381665

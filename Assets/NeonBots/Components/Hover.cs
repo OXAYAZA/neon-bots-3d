@@ -11,6 +11,9 @@ namespace NeonBots.Components
         private LayerMask layerMask;
 
         [SerializeField]
+        private Vector3 position;
+
+        [SerializeField]
         private float hoverAlt = 3f;
 
         [SerializeField]
@@ -23,7 +26,8 @@ namespace NeonBots.Components
 
         private void FixedUpdate()
         {
-            var ray = new Ray(this.transform.position, Vector3.down);
+            var position = this.transform.position + this.transform.rotation * this.position;
+            var ray = new Ray(position, Vector3.down);
 
             if(Physics.Raycast(ray, out var rayHit, this.hoverAlt, this.layerMask))
             {
@@ -31,7 +35,7 @@ namespace NeonBots.Components
                 var force = this.strength * (this.hoverAlt - alt) + this.dampening * (this.lastAlt - alt);
                 force = Mathf.Max(0f, force);
                 this.lastAlt = alt;
-                this.rigidBody.AddForceAtPosition(this.transform.up * force, this.transform.position);
+                this.rigidBody.AddForceAtPosition(this.transform.up * force, position);
             }
             else
             {
@@ -42,10 +46,11 @@ namespace NeonBots.Components
         private void OnDrawGizmos()
         {
             var initialColor = Gizmos.color;
-            var position = this.transform.position;
+            var position = this.transform.position + this.transform.rotation * this.position;
             var hoverPos = position - new Vector3(0f, this.hoverAlt, 0f);
 
-            Gizmos.color = Color.cyan;
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawWireCube(position, Vector3.one * 0.2f);
             Gizmos.DrawLine(position, hoverPos);
 
             Gizmos.color = initialColor;

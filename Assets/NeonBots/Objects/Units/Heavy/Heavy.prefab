@@ -216,6 +216,9 @@ GameObject:
   - component: {fileID: 6946115276814455348}
   - component: {fileID: 677845153359660031}
   - component: {fileID: 3993812473207722345}
+  - component: {fileID: 8079152587735789286}
+  - component: {fileID: 4397664046521724615}
+  - component: {fileID: 265547527394836057}
   m_Layer: 3
   m_Name: Heavy
   m_TagString: Untagged
@@ -265,7 +268,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 1
 --- !u!114 &6946115276814455348
 MonoBehaviour:
@@ -288,7 +291,7 @@ MonoBehaviour:
   colliders: []
   baseHp: 1000
   hp: 1000
-  baseSpeed: 10
+  baseSpeed: 30
   horizontalDrag: 0.02
   explosionPrefab: {fileID: 0}
   primarySockets: []
@@ -327,6 +330,67 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 128
+  position: {x: 4, y: 0, z: 4}
+  hoverAlt: 4
+  strength: 4000
+  dampening: 10000
+--- !u!114 &8079152587735789286
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073359479079886889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594af82ee53d4588ae591e656770957c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidBody: {fileID: 4174674272500361767}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  position: {x: -4, y: 0, z: 4}
+  hoverAlt: 4
+  strength: 4000
+  dampening: 10000
+--- !u!114 &4397664046521724615
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073359479079886889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594af82ee53d4588ae591e656770957c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidBody: {fileID: 4174674272500361767}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  position: {x: -4, y: 0, z: -4}
+  hoverAlt: 4
+  strength: 4000
+  dampening: 10000
+--- !u!114 &265547527394836057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073359479079886889}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 594af82ee53d4588ae591e656770957c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rigidBody: {fileID: 4174674272500361767}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 128
+  position: {x: 4, y: 0, z: -4}
   hoverAlt: 4
   strength: 4000
   dampening: 10000

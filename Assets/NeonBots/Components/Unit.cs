@@ -56,6 +56,7 @@ namespace NeonBots.Components
         public void ResetValues()
         {
             this.hp = this.baseHp;
+            this.SetColor(this.color);
         }
 
         public void Move(Vector3 direction)

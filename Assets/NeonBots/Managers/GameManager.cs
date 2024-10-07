@@ -7,11 +7,13 @@ namespace NeonBots.Managers
 {
     public class GameManager : Manager
     {
-        [field: SerializeField]
-        public Unit Hero { get; private set; }
+        [SerializeField]
+        private Color heroColor = Color.green;
 
         [SerializeField]
         private List<Unit> heroPrefabs;
+
+        public Unit Hero { get; private set; }
 
         private void Update()
         {
@@ -33,7 +35,7 @@ namespace NeonBots.Managers
             DontDestroyOnLoad(this.Hero.gameObject);
 
             this.Hero.fraction = "green";
-            this.Hero.color = Color.green;
+            this.Hero.color = this.heroColor;
             this.Hero.baseHp = 1000f;
             this.Hero.ResetValues();
 
@@ -53,6 +55,14 @@ namespace NeonBots.Managers
             if(this.Hero != default) Destroy(this.Hero.gameObject);
             this.IsReady = false;
             this.Hero = default;
+        }
+
+        [ContextMenu("Refresh hero")]
+        private void RefreshHero()
+        {
+            if(this.Hero == default) return;
+            this.Hero.color = this.heroColor;
+            this.Hero.ResetValues();
         }
     }
 }
