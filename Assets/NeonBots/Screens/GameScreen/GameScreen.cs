@@ -31,8 +31,9 @@ namespace NeonBots.Screens
             this.pauseButton.onClick.AddListener(this.Back);
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             this.localConfig.OnLocalValueChanged -= this.Refresh;
             this.pauseButton.onClick.RemoveListener(this.Back);
         }

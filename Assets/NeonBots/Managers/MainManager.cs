@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using NeonBots.Components;
 using NeonBots.Screens;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -18,11 +17,6 @@ namespace NeonBots.Managers
         private Camera mainCamera;
 
         public static Camera Camera => instance.mainCamera;
-
-        [SerializeField]
-        private Unit heroPrefab;
-
-        public static Unit HeroPrefab => instance.heroPrefab;
 
         private static MainManager instance;
 

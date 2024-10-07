@@ -16,12 +16,14 @@ namespace NeonBots.Screens
 
         protected override void OnEnable()
         {
+            base.OnEnable();
             this.restartButton.onClick.AddListener(this.OnRestart);
             this.exitButton.onClick.AddListener(this.OnExit);
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             this.restartButton.onClick.RemoveListener(this.OnRestart);
             this.exitButton.onClick.RemoveListener(this.OnExit);
         }

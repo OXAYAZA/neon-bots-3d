@@ -71,3 +71,7 @@ crashlytics-build.properties
 # Blender backup files
 *.blend1
 *.blend1.meta
+
+# NPM packages
+*/node_modules/
+**/package-lock.json

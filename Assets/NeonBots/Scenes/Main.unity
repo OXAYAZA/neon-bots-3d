@@ -500,7 +500,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCamera: {fileID: 1037877876}
-  heroPrefab: {fileID: 8324628740504926646, guid: 5c1dc3d3b35d2b449aaf5053b277ab78, type: 3}
 --- !u!4 &1112913064
 Transform:
   m_ObjectHideFlags: 0
@@ -528,7 +527,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa82755f8a4c42548fe540328bb99cd8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  baseResolution: {x: 800, y: 360}
+  baseSize: 360
   rootObject: {fileID: 1672833691}
   overlay: {fileID: 4752435398063743207}
 --- !u!114 &1112913066
@@ -582,7 +581,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heroColor: {r: 0, g: 1, b: 0, a: 1}
   heroPrefabs:
-  - {fileID: 6946115276814455348, guid: a19813c97e393b1429d560c0f5f23fbb, type: 3}
+  - {fileID: 8324628740504926646, guid: a83ff86dc52989944887bf1449e4f829, type: 3}
+  - {fileID: 8324628740504926646, guid: 5c1dc3d3b35d2b449aaf5053b277ab78, type: 3}
 --- !u!1 &1223381665
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,10 +894,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: RootScreen
       objectReference: {fileID: 0}
-    - target: {fileID: 5547172372501358921, guid: c3f4dacb6e9cd454e907fef30f6f5ec6, type: 3}
-      propertyPath: m_Layer
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 8392899468965478406, guid: c3f4dacb6e9cd454e907fef30f6f5ec6, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1003,10 +999,6 @@ PrefabInstance:
     - target: {fileID: 6433380323336239134, guid: 9aef4674fb44d194885995fa188a372f, type: 3}
       propertyPath: m_Name
       value: GameScreen
-      objectReference: {fileID: 0}
-    - target: {fileID: 6433380323336239134, guid: 9aef4674fb44d194885995fa188a372f, type: 3}
-      propertyPath: m_Layer
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 7045291355454361937, guid: 9aef4674fb44d194885995fa188a372f, type: 3}
       propertyPath: m_Pivot.x
@@ -1224,10 +1216,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: PauseScreen
       objectReference: {fileID: 0}
-    - target: {fileID: 5814709596694539345, guid: 1902a9d04189e104aaecad801559a362, type: 3}
-      propertyPath: m_Layer
-      value: 5
-      objectReference: {fileID: 0}
     - target: {fileID: 7508606595291743518, guid: 1902a9d04189e104aaecad801559a362, type: 3}
       propertyPath: m_Pivot.x
       value: 0
@@ -1329,10 +1317,6 @@ PrefabInstance:
     - target: {fileID: 1681009982774744223, guid: e07eac58287eb4b4399be5e22d779d24, type: 3}
       propertyPath: m_Name
       value: DebugScreen
-      objectReference: {fileID: 0}
-    - target: {fileID: 1681009982774744223, guid: e07eac58287eb4b4399be5e22d779d24, type: 3}
-      propertyPath: m_Layer
-      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 3447003951938010576, guid: e07eac58287eb4b4399be5e22d779d24, type: 3}
       propertyPath: m_Pivot.x
@@ -1523,10 +1507,6 @@ PrefabInstance:
     - target: {fileID: 8964170760611573595, guid: ae7d2d7dfe078154db4891332c57320d, type: 3}
       propertyPath: m_Name
       value: LoadingScreen
-      objectReference: {fileID: 0}
-    - target: {fileID: 8964170760611573595, guid: ae7d2d7dfe078154db4891332c57320d, type: 3}
-      propertyPath: m_Layer
-      value: 5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

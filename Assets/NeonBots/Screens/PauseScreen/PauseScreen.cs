@@ -16,15 +16,21 @@ namespace NeonBots.Screens
         [SerializeField]
         private Button exitButton;
 
+        [SerializeField]
+        private GameObject fullscreenButton;
+
         protected override void OnEnable()
         {
+            base.OnEnable();
             this.pauseButton.onClick.AddListener(this.Back);
             this.resumeButton.onClick.AddListener(this.Back);
             this.exitButton.onClick.AddListener(this.OnExit);
+            this.fullscreenButton.SetActive(Application.platform == RuntimePlatform.WebGLPlayer);
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnDisable();
             this.pauseButton.onClick.RemoveListener(this.Back);
             this.resumeButton.onClick.RemoveListener(this.Back);
             this.exitButton.onClick.RemoveListener(this.OnExit);

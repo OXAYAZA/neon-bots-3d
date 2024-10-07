@@ -21,7 +21,7 @@ namespace NeonBots.Managers
             }
         }
 
-        public Vector2 baseResolution = new(360, 800);
+        public int baseSize = 360;
 
         public GameObject rootObject;
 
@@ -38,6 +38,10 @@ namespace NeonBots.Managers
 
         private Dictionary<Type, UIScreen> screens;
 
+        private Vector2 screenSize = Vector2.zero;
+
+        public event Action OnResize;
+
         private void Awake()
         {
             this.screens = new();
@@ -48,7 +52,22 @@ namespace NeonBots.Managers
             foreach(var screen in this.rootObject.GetComponentsInChildren<UIScreen>(true))
                 this.screens.Add(screen.GetType(), screen);
 
-            this.ScaleFactor = Screen.width / this.baseResolution.x;
+            this.screenSize = new(Screen.width, Screen.height);
+            this.Resize();
+        }
+
+        private void Update()
+        {
+            var screenSize = new Vector2(Screen.width, Screen.height);
+            if(this.screenSize == screenSize) return;
+            this.screenSize = screenSize;
+            this.Resize();
+            this.OnResize?.Invoke();
+        }
+
+        private void Resize()
+        {
+            this.ScaleFactor = (float)(Screen.width > Screen.height ? Screen.height : Screen.width) / this.baseSize;
             this.ScaledSize = new Vector2(Screen.width, Screen.height) / this.ScaleFactor;
             var scaledSafePosition = Screen.safeArea.position / this.ScaleFactor;
             var scaledSafeSize = Screen.safeArea.size / this.ScaleFactor;
