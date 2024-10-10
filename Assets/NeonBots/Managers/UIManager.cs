@@ -23,6 +23,8 @@ namespace NeonBots.Managers
 
         public int baseSize = 360;
 
+        public int maxSize = 800;
+
         public GameObject rootObject;
 
         [SerializeField]
@@ -67,7 +69,12 @@ namespace NeonBots.Managers
 
         private void Resize()
         {
-            this.ScaleFactor = (float)(Screen.width > Screen.height ? Screen.height : Screen.width) / this.baseSize;
+            var side = (float)(Screen.width > Screen.height ? Screen.height : Screen.width);
+            this.ScaleFactor = side < this.baseSize
+                ? side / this.baseSize
+                : side > this.maxSize
+                    ? side / this.maxSize
+                    : 1f;
             this.ScaledSize = new Vector2(Screen.width, Screen.height) / this.ScaleFactor;
             var scaledSafePosition = Screen.safeArea.position / this.ScaleFactor;
             var scaledSafeSize = Screen.safeArea.size / this.ScaleFactor;

@@ -31,6 +31,7 @@ namespace NeonBots.Screens
 
         protected virtual void OnEnable()
         {
+            this.OnResize();
             this.uim.OnResize += this.OnResize;
             if(!this.staticOrder) this.Canvas.sortingOrder = this.uim.path.Count - 1;
         }

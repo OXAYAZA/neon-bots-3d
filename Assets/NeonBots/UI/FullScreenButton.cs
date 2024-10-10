@@ -21,7 +21,9 @@ namespace NeonBots.UI
 
         private static void OnClick()
         {
-#if UNITY_WEBGL && !UNITY_EDITOR
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+            Screen.fullScreen = !Screen.fullScreen;
+#elif UNITY_WEBGL && !UNITY_EDITOR
             External.Fullscreen();
 #else
             Debug.Log("Fullscreen, nothing happens in editor.");

@@ -17,7 +17,8 @@ namespace NeonBots.Screens
         {
             base.OnEnable();
             this.playButton.onClick.AddListener(this.OnPlayClick);
-            this.fullscreenButton.SetActive(Application.platform == RuntimePlatform.WebGLPlayer);
+            this.fullscreenButton.SetActive(
+                Application.platform is RuntimePlatform.WebGLPlayer or RuntimePlatform.WindowsPlayer);
         }
 
         protected override void OnDisable()

@@ -528,6 +528,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   baseSize: 360
+  maxSize: 800
   rootObject: {fileID: 1672833691}
   overlay: {fileID: 4752435398063743207}
 --- !u!114 &1112913066
