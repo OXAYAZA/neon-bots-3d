@@ -11,6 +11,7 @@ namespace NeonBots.Editor
         [SerializeField]
         private Vector2Int resolution = new(512, 512);
 
+#if UNITY_EDITOR
         [ContextMenu("Render Image")]
         public void Render()
         {
@@ -34,8 +35,9 @@ namespace NeonBots.Editor
                 AssetDatabase.CreateFolder("Assets", "RenderedImages");
 
             var bytes = image.EncodeToPNG();
-            var fullPath = $"Assets/RenderedImages/{DateTime.Now.ToUniversalTime():yyyy-MM-dd-HH-mm-ss-fff}.png";
+            var fullPath = $"Assets/RenderedImages/{DateTime.Now:yyyy-MM-dd-HH-mm-ss-fff}.png";
             File.WriteAllBytes(fullPath, bytes);
         }
+#endif
     }
 }

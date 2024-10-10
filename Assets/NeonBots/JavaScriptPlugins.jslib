@@ -1,15 +1,9 @@
 ﻿mergeInto(LibraryManager.library, {
   Fullscreen: function() {
-    let canvas = document.querySelector("canvas");
+    fullscreen();
+  },
 
-    if(document.fullscreenEnabled) {
-      if(!document.fullscreenElement) {
-        canvas.requestFullscreen();
-      } else if(document.exitFullscreen) {
-        document.exitFullscreen();
-      }
-    } else {
-      console.log("Fullscreen is not supported");
-    }
+  ShowPopup: function(msg, type) {
+    showPopup(UTF8ToString(msg), UTF8ToString(type));
   }
 });

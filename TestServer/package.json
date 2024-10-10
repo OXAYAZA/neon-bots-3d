@@ -1,14 +1,15 @@
 {
-  "name": "server",
+  "name": "neon-bots-server",
   "version": "1.0.0",
-  "description": "WebGL game server",
+  "description": "Neon Bots WebGL game server",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "server": "node server.js"
   },
   "author": "OXAYAZA",
   "license": "ISC",
   "dependencies": {
-    "oxyz-express": "^1.0.5"
+    "oxyz-express": "1.0.5"
   }
 }

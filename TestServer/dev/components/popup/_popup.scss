@@ -1,0 +1,54 @@
+.scroll-blocked {
+  overflow: hidden;
+}
+
+.popup {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: rgba(black, .95);
+  overflow: auto;
+}
+
+.popup-close {
+  appearance: none;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  font-size: 30px;
+  border: none;
+  transition: .2s;
+  background: transparent;
+  color: white;
+
+  &:hover {
+    cursor: pointer;
+    color: $main-color;
+  }
+}
+
+.popup-body {
+  padding: 15px;
+  border-radius: 15px;
+  border: 2px solid $main-color;
+  background: #111213;
+  overflow: auto;
+
+  &.error {
+    border-color: $error-color;
+    color: $error-color;
+  }
+
+  &.warning {
+    border-color: $warning-color;
+    color: $warning-color;
+  }
+}
