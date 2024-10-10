@@ -34,12 +34,15 @@ public class Exit : MonoBehaviour
         if(this.units.Count > 0 && this.units.FirstOrDefault(item => item.fraction == "green") != default)
             this.charge = this.charge < ExitCharge ? this.charge + Time.deltaTime : ExitCharge;
         else
-            this.charge = this.charge > 0 ? this.charge - Time.deltaTime : 0;
+            this.charge = this.charge > 0f ? this.charge - Time.deltaTime : 0f;
 
         this.renderer.material.SetColor(EmissionColor,
             Color.Lerp(this.initialColor, Color.white, this.charge / ExitCharge));
 
-        if(this.charge >= ExitCharge) this.ToNextLevel().Forget();
+        if(this.charge < ExitCharge) return;
+
+        this.ToNextLevel().Forget();
+        this.charge = 0f;
     }
 
     private void OnTriggerEnter(Collider collider)
