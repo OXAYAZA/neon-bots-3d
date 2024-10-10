@@ -94,7 +94,9 @@ namespace NeonBots.Managers
             localConfig.Init();
             uiManager.GetScreen<DebugScreen>().Switch(localConfig.Get<bool>("console"));
 
-            if(Application.platform == RuntimePlatform.Android || Application.platform == RuntimePlatform.IPhonePlayer)
+            if(Application.platform == RuntimePlatform.Android ||
+               Application.platform == RuntimePlatform.IPhonePlayer ||
+               (Application.platform == RuntimePlatform.WebGLPlayer && External.IsMobile()))
             {
                 localConfig.Set("touch_control", true);
             }
