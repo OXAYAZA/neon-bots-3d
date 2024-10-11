@@ -30,10 +30,14 @@ namespace NeonBots.Screens
 
         private void Refresh()
         {
-            var text = $"Screen size: {Screen.width}x{Screen.height}\n" +
-            $"DPI: {Screen.dpi}\n" +
-            $"Base size: {this.uiManager.baseSize}\n" +
-            $"Scale: {this.uiManager.ScaleFactor}";
+            var size = new Vector2(Screen.width, Screen.height);
+            var text = $"Screen size: {size.x}x{size.y};\n" +
+                $"Base size: {this.uiManager.baseSize};\n" +
+                $"Max size: {this.uiManager.maxSize};\n" +
+                $"DPI: {Screen.dpi};\n" +
+                $"Base DPI: {this.uiManager.baseDpi};\n" +
+                $"Scale factor: {this.uiManager.ScaleFactor};\n" +
+                $"Scaled size: {this.uiManager.ScaledSize.x}x{this.uiManager.ScaledSize.y};\n";
             this.text.text = text;
         }
     }

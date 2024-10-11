@@ -21,6 +21,8 @@ namespace NeonBots.Managers
             }
         }
 
+        public int baseDpi = 96;
+
         public int baseSize = 360;
 
         public int maxSize = 800;
@@ -69,13 +71,18 @@ namespace NeonBots.Managers
 
         private void Resize()
         {
-            var side = (float)(Screen.width > Screen.height ? Screen.height : Screen.width);
-            this.ScaleFactor = side < this.baseSize
+            var size = new Vector2(Screen.width, Screen.height);
+            var dpiFactor = Screen.dpi / this.baseDpi;
+            var dpiSize = size / dpiFactor;
+            var side = Mathf.Min(dpiSize.x, dpiSize.y);
+            var sideFactor = side < this.baseSize
                 ? side / this.baseSize
                 : side > this.maxSize
                     ? side / this.maxSize
                     : 1f;
-            this.ScaledSize = new Vector2(Screen.width, Screen.height) / this.ScaleFactor;
+
+            this.ScaleFactor = dpiFactor * sideFactor;
+            this.ScaledSize = size / this.ScaleFactor;
             var scaledSafePosition = Screen.safeArea.position / this.ScaleFactor;
             var scaledSafeSize = Screen.safeArea.size / this.ScaleFactor;
             this.ScaledSafeArea = new(scaledSafePosition.x, scaledSafePosition.y, scaledSafeSize.x, scaledSafeSize.y);
