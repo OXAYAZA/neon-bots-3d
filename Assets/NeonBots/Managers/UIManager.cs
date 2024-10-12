@@ -42,7 +42,9 @@ namespace NeonBots.Managers
 
         private Dictionary<Type, UIScreen> screens;
 
-        private Vector2 screenSize = Vector2.zero;
+        private Vector2 resolution;
+
+        private bool fullscreen;
 
         public event Action OnResize;
 
@@ -56,20 +58,22 @@ namespace NeonBots.Managers
             foreach(var screen in this.rootObject.GetComponentsInChildren<UIScreen>(true))
                 this.screens.Add(screen.GetType(), screen);
 
-            this.screenSize = new(Screen.width, Screen.height);
+            this.resolution = new(Screen.width, Screen.height);
+            this.fullscreen = Screen.fullScreen;
             this.Resize();
         }
 
         private void Update()
         {
-            var screenSize = new Vector2(Screen.width, Screen.height);
-            if(this.screenSize == screenSize) return;
-            this.screenSize = screenSize;
+            var resolution = new Vector2(Screen.width, Screen.height);
+            if(this.resolution == resolution && this.fullscreen == Screen.fullScreen) return;
+            this.resolution = resolution;
+            this.fullscreen = Screen.fullScreen;
             this.Resize();
             this.OnResize?.Invoke();
         }
 
-        private void Resize()
+        public void Resize()
         {
             var size = new Vector2(Screen.width, Screen.height);
             var dpiFactor = Screen.dpi / this.baseDpi;

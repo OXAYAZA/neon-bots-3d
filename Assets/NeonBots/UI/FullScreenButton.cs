@@ -22,7 +22,15 @@ namespace NeonBots.UI
         private static void OnClick()
         {
 #if UNITY_STANDALONE_WIN && !UNITY_EDITOR
-            Screen.fullScreen = !Screen.fullScreen;
+            if(Screen.fullScreen)
+            {
+                Screen.fullScreen = false;
+            }
+            else
+            {
+                var resolution = Screen.currentResolution;
+                Screen.SetResolution(resolution.width, resolution.height, true);
+            }
 #elif UNITY_WEBGL && !UNITY_EDITOR
             External.Fullscreen();
 #else

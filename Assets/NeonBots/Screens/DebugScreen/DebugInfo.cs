@@ -28,6 +28,8 @@ namespace NeonBots.Screens
             this.uiManager.OnResize -= this.Refresh;
         }
 
+        private void Update() => this.Refresh();
+
         private void Refresh()
         {
             var size = new Vector2(Screen.width, Screen.height);

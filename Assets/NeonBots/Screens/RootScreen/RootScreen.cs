@@ -7,8 +7,15 @@ namespace NeonBots.Screens
 {
     public class RootScreen : UIScreen
     {
+        [Header("Root Screen")]
         [SerializeField]
         private Button playButton;
+
+        [SerializeField]
+        private Button optionsButton;
+
+        [SerializeField]
+        private Button exitButton;
 
         [SerializeField]
         private GameObject fullscreenButton;
@@ -17,14 +24,20 @@ namespace NeonBots.Screens
         {
             base.OnEnable();
             this.playButton.onClick.AddListener(this.OnPlayClick);
-            this.fullscreenButton.SetActive(
-                Application.platform is RuntimePlatform.WebGLPlayer or RuntimePlatform.WindowsPlayer);
+            this.optionsButton.onClick.AddListener(this.uim.GetScreen<OptionsScreen>().Open);
+            this.exitButton.onClick.AddListener(this.Exit);
+#if !UNITY_EDITOR
+            this.exitButton.gameObject.SetActive(Application.platform is RuntimePlatform.WindowsPlayer);
+            this.fullscreenButton.SetActive(Application.platform is RuntimePlatform.WebGLPlayer);
+#endif
         }
 
         protected override void OnDisable()
         {
             base.OnDisable();
             this.playButton.onClick.RemoveListener(this.OnPlayClick);
+            this.optionsButton.onClick.RemoveListener(this.uim.GetScreen<OptionsScreen>().Open);
+            this.exitButton.onClick.RemoveListener(this.Exit);
         }
 
         private void OnPlayClick() => this.Play().Forget();
@@ -38,5 +51,7 @@ namespace NeonBots.Screens
             this.uim.GetScreen<GameScreen>().Open();
             this.uim.SwitchOverlay(false);
         }
+
+        private void Exit() => Application.Quit();
     }
 }

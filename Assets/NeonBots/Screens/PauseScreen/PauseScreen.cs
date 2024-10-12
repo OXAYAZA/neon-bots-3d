@@ -7,6 +7,7 @@ namespace NeonBots.Screens
 {
     public class PauseScreen : UIScreen
     {
+        [Header("Pause Screen")]
         [SerializeField]
         private Button pauseButton;
 
@@ -17,6 +18,9 @@ namespace NeonBots.Screens
         private Button exitButton;
 
         [SerializeField]
+        private Button optionsButton;
+
+        [SerializeField]
         private GameObject fullscreenButton;
 
         protected override void OnEnable()
@@ -25,7 +29,10 @@ namespace NeonBots.Screens
             this.pauseButton.onClick.AddListener(this.Back);
             this.resumeButton.onClick.AddListener(this.Back);
             this.exitButton.onClick.AddListener(this.OnExit);
-            this.fullscreenButton.SetActive(Application.platform == RuntimePlatform.WebGLPlayer);
+            this.optionsButton.onClick.AddListener(this.uim.GetScreen<OptionsScreen>().Open);
+#if !UNITY_EDITOR
+            this.fullscreenButton.SetActive(Application.platform is RuntimePlatform.WebGLPlayer);
+#endif
         }
 
         protected override void OnDisable()
@@ -34,6 +41,7 @@ namespace NeonBots.Screens
             this.pauseButton.onClick.RemoveListener(this.Back);
             this.resumeButton.onClick.RemoveListener(this.Back);
             this.exitButton.onClick.RemoveListener(this.OnExit);
+            this.optionsButton.onClick.RemoveListener(this.uim.GetScreen<OptionsScreen>().Open);
         }
 
         private void OnExit() => this.Exit().Forget();
