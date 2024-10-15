@@ -261,7 +261,7 @@ GameObject:
   - component: {fileID: 6121168235677559851}
   - component: {fileID: 4174674272500361767}
   - component: {fileID: 6946115276814455348}
-  - component: {fileID: 837042555735625775}
+  - component: {fileID: -5669224135115012224}
   - component: {fileID: 3993812473207722345}
   - component: {fileID: 8079152587735789286}
   - component: {fileID: 4397664046521724615}
@@ -345,10 +345,10 @@ MonoBehaviour:
   hp: 1000
   baseSpeed: 30
   horizontalDrag: 0.02
-  explosionPrefab: {fileID: 0}
+  explosionPrefab: {fileID: 3392596989443484499, guid: 7a78819951ea2124598aee5d9be6ec5f, type: 3}
   primarySockets: []
   secondarySockets: []
---- !u!114 &837042555735625775
+--- !u!114 &-5669224135115012224
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -357,15 +357,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 2073359479079886889}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f521ed8da6a44a13b43ecf584d31542a, type: 3}
+  m_Script: {fileID: 11500000, guid: 9795f4edc18f1b944bc9a888a5015418, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   scanRange: 50
   scanNumber: 20
-  shotRange: 50
+  shotRange: 40
   layerMask:
     serializedVersion: 2
     m_Bits: 8
+  battleDistanceMin: 10
+  battleDistanceMax: 20
 --- !u!114 &3993812473207722345
 MonoBehaviour:
   m_ObjectHideFlags: 0

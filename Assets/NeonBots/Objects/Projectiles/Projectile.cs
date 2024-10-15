@@ -13,6 +13,8 @@ namespace NeonBots.Components
 
         protected Unit owner;
 
+        protected float time;
+
         [SerializeField]
         private GameObject explosionPrefab;
 
@@ -27,10 +29,10 @@ namespace NeonBots.Components
                         Physics.IgnoreCollision(pCollider, oCollider, true);
         }
 
-        private void Update()
+        protected virtual void Update()
         {
-            this.lifeTime -= Time.deltaTime;
-            if(this.lifeTime <= 0) this.Death();
+            this.time += Time.deltaTime;
+            if(this.time > this.lifeTime) this.Death();
         }
 
         protected virtual void OnCollisionEnter(Collision other)

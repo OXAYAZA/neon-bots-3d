@@ -8,13 +8,16 @@ namespace NeonBots.Components
     {
         public Unit owner;
 
-        public Projectile projectilePrefab;
+        public Rocket projectilePrefab;
 
         [SerializeField]
         private float reloadDuration = 0.2f;
 
         [SerializeField]
         private float shotImpulse = 10f;
+
+        [SerializeField]
+        private Transform socketsHinge;
 
         [SerializeField]
         private List<RocketSocket> sockets;
@@ -80,12 +83,14 @@ namespace NeonBots.Components
             if(this.target == default)
             {
                 this.transform.localRotation = Quaternion.identity;
+                this.socketsHinge.localRotation = Quaternion.identity;
             }
             else
             {
                 var horizontalDirection = this.direction;
                 horizontalDirection.y = 0f;
                 this.transform.rotation = Quaternion.LookRotation(horizontalDirection);
+                this.socketsHinge.localRotation = Quaternion.Euler(-30f, 0f, 0f);
             }
         }
 
@@ -105,7 +110,7 @@ namespace NeonBots.Components
 
             if(readySocket == default) return;
 
-            readySocket.Fire(this.owner, this.projectilePrefab, this.shotImpulse);
+            readySocket.Fire(this.owner, this.target, this.projectilePrefab, this.shotImpulse);
             this.reloadTime = this.reloadDuration;
         }
 

@@ -6,7 +6,7 @@ namespace NeonBots.Components
     public class RocketSocket : MonoBehaviour
     {
         [SerializeField]
-        private ParticleSystem flame;
+        private ParticleSystem exhaust;
 
         [SerializeField]
         private AudioClip shotSound;
@@ -29,12 +29,12 @@ namespace NeonBots.Components
             this.isReady = this.reloadTime <= 0;
         }
 
-        public void Fire(Unit owner, Projectile projectilePrefab, float shotImpulse)
+        public void Fire(Unit owner, Unit target, Rocket projectilePrefab, float shotImpulse)
         {
             if(projectilePrefab == default || !this.isReady) return;
             var projectile = Instantiate(projectilePrefab, this.transform.position, this.transform.rotation);
-            projectile.Init(owner, shotImpulse);
-            if(this.flame != default) this.flame.Play();
+            projectile.Init(owner, target, shotImpulse);
+            if(this.exhaust != default) this.exhaust.Play();
             if(this.audioSource && this.shotSound) this.audioSource.PlayOneShot(this.shotSound, 0.05f);
             this.reloadTime = this.reloadDuration;
             this.isReady = false;

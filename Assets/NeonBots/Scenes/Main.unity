@@ -582,9 +582,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroColor: {r: 0, g: 1, b: 0, a: 1}
-  heroHp: 1000000
+  heroHp: 1000
   heroPrefabs:
-  - {fileID: 6946115276814455348, guid: a19813c97e393b1429d560c0f5f23fbb, type: 3}
+  - {fileID: 8324628740504926646, guid: 5c1dc3d3b35d2b449aaf5053b277ab78, type: 3}
 --- !u!1 &1223381665
 GameObject:
   m_ObjectHideFlags: 0
