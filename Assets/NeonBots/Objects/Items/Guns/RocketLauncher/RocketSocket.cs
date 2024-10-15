@@ -26,7 +26,7 @@ namespace NeonBots.Components
         {
             if(this.reloadTime > 0) this.reloadTime -= Time.deltaTime;
             else if(this.reloadTime < 0) this.reloadTime = 0;
-            this.isReady = this.reloadTime < 0;
+            this.isReady = this.reloadTime <= 0;
         }
 
         public void Fire(Unit owner, Projectile projectilePrefab, float shotImpulse)
