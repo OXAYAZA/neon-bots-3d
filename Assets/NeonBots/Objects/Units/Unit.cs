@@ -70,9 +70,14 @@ namespace NeonBots.Components
             this.lookDirection = direction;
         }
 
-        public void Shot()
+        public void UsePrimary()
         {
             foreach(var item in this.primarySockets) item.Use();
+        }
+
+        public void UseSecondary()
+        {
+            foreach(var item in this.secondarySockets) item.Use();
         }
 
         protected override void SetColor(Color color)

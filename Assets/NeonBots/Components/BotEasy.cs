@@ -4,6 +4,13 @@ namespace NeonBots.Components
 {
     public class BotEasy : Bot
     {
+        [Header("Bot Easy")]
+        [SerializeField]
+        private float battleDistanceMin = 8f;
+
+        [SerializeField]
+        private float battleDistanceMax = 10f;
+
         private GameObject target;
 
         private Vector3 direction;
@@ -75,14 +82,14 @@ namespace NeonBots.Components
 
             this.unit.Rotate(this.direction);
 
-            if(this.distance > 10) this.unit.Move(this.transform.forward);
-            else if(this.distance < 8) this.unit.Move(-this.transform.forward);
+            if(this.distance > this.battleDistanceMax) this.unit.Move(this.transform.forward);
+            else if(this.distance < this.battleDistanceMin) this.unit.Move(-this.transform.forward);
             else this.unit.Move(-this.transform.right);
         }
 
         private void Attack()
         {
-            if(this.distance < this.shotRange) this.unit.Shot();
+            if(this.distance < this.shotRange) this.unit.UsePrimary();
         }
     }
 }

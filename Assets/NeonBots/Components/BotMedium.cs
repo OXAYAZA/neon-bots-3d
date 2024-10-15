@@ -1,10 +1,11 @@
+using System.Linq;
 using UnityEngine;
 
 namespace NeonBots.Components
 {
     public class BotMedium : Bot
     {
-        private GameObject target;
+        private Unit target;
 
         private Vector3 direction;
 
@@ -12,30 +13,29 @@ namespace NeonBots.Components
 
         private double distance;
 
+        private Gun primaryGun;
+
         private void Start()
         {
             this.unit = this.GetComponent<Unit>();
+            this.primaryGun = this.unit.primarySockets.FirstOrDefault(socket =>
+                socket.item != default && socket.item.GetType() == typeof(Gun))?.item as Gun;
         }
 
         private void Update()
         {
-            if(this.target == default)
-            {
-                this.Scan();
-            }
-            else
-            {
-                this.Calculate();
-                this.Move();
-                this.Attack();
-                this.Tracking();
-            }
+            this.Scan();
+            this.Calculate();
+            this.Move();
+            this.Attack();
+            this.Tracking();
         }
 
         private void Scan()
         {
+            if(this.target != default) return;
+
             this.target = null;
-            this.distance = double.PositiveInfinity;
 
             var objects = new Collider[this.scanNumber];
             Physics.OverlapSphereNonAlloc(this.transform.position, this.scanRange, objects, this.layerMask);
@@ -49,13 +49,14 @@ namespace NeonBots.Components
 
                 if(target.fraction == this.unit.fraction) continue;
 
-                this.target = target.gameObject;
+                this.target = target;
                 break;
             }
         }
 
         private void Tracking()
         {
+            if(this.target == default) return;
             if((float)this.distance < this.scanRange) return;
             this.target = null;
             this.distance = double.PositiveInfinity;
@@ -63,69 +64,47 @@ namespace NeonBots.Components
 
         private void Calculate()
         {
+            this.distance = double.PositiveInfinity;
+
+            if(this.target == default) return;
+
             this.distance = Vector3.Distance(this.transform.position, this.target.transform.position);
 
-            if(this.unit.primarySockets.Count <= 0) return;
+            if(this.primaryGun == default) return;
 
-            var primaryItem = this.unit.primarySockets[0].item;
-
-            if(primaryItem == default && primaryItem.GetType() != typeof(Gun)) return;
-
-            var primaryGun = (Gun)primaryItem;
-            var bulletVelocity = primaryGun.projectilePrefab.impulse;
+            var bulletVelocity = this.primaryGun.shotImpulse;
             var timeDistance = (float)this.distance / bulletVelocity;
             var targetPosition = this.target.transform.position;
-            var targetVelocity = this.target.GetComponent<Rigidbody>().velocity;
+            var targetVelocity = this.target.rigidBody.velocity;
             this.aimPoint = targetPosition + targetVelocity * timeDistance;
-
             this.direction = this.aimPoint - this.transform.position;
         }
 
         private void Move()
         {
+            this.unit.Move(Vector3.zero);
+
+            if(this.target == default) return;
+
             foreach(var socket in this.unit.primarySockets)
                 if(socket.rotatable) socket.transform.LookAt(this.aimPoint);
 
             foreach(var socket in this.unit.secondarySockets)
                 if(socket.rotatable) socket.transform.LookAt(this.aimPoint);
 
-            this.unit.Rotate(new(
-                this.target.transform.position.x - this.transform.position.x,
-                0,
-                this.target.transform.position.z - this.transform.position.z
-            ));
+            var direction = this.direction;
+            direction.y = 0f;
+            this.unit.Rotate(direction);
 
-            if(this.distance > this.shotRange * 0.5) this.unit.Move(this.transform.forward);
-            else if(this.distance < this.shotRange * 0.25) this.unit.Move(-this.transform.forward);
+            if(this.distance > this.shotRange * 0.9) this.unit.Move(this.transform.forward);
+            else if(this.distance < this.shotRange * 0.8) this.unit.Move(-this.transform.forward);
         }
 
         private void Attack()
         {
-            if(this.distance < this.shotRange) this.unit.Shot();
-        }
-
-        private void OnDrawGizmos()
-        {
-            if(this.target)
-            {
-                var bulletVelocity = 40f;
-                var timeDistance = (float)this.distance / bulletVelocity;
-                var targetPosition = this.target.transform.position;
-                var targetVelocity = this.target.GetComponent<Rigidbody>().velocity;
-                var aimPoint = targetPosition + targetVelocity * timeDistance;
-
-                Gizmos.color = Color.yellow;
-                Gizmos.DrawRay(this.transform.position, this.target.transform.position - this.transform.position);
-                Gizmos.DrawWireSphere(targetPosition, 1.5f);
-
-                Gizmos.color = Color.gray;
-                Gizmos.DrawRay(targetPosition, targetVelocity);
-                Gizmos.DrawRay(this.transform.position, this.gameObject.GetComponent<Rigidbody>().velocity);
-
-                Gizmos.color = Color.green;
-                Gizmos.DrawWireSphere(aimPoint, 1.5f);
-                Gizmos.DrawRay(this.transform.position, aimPoint - this.transform.position);
-            }
+            if(this.target == default) return;
+            if(this.distance < this.shotRange) this.unit.UsePrimary();
+            this.unit.UseSecondary();
         }
     }
 }

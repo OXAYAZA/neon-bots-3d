@@ -11,12 +11,12 @@ namespace NeonBots.Components
 
         public float damage = 1f;
 
-        private Unit owner;
+        protected Unit owner;
 
         [SerializeField]
         private GameObject explosionPrefab;
 
-        private new void Start()
+        protected override void Start()
         {
             base.Start();
             this.rigidBody.AddForce(this.transform.forward * this.impulse, ForceMode.Impulse);
@@ -33,7 +33,7 @@ namespace NeonBots.Components
             if(this.lifeTime <= 0) this.Death();
         }
 
-        private void OnCollisionEnter(Collision other)
+        protected virtual void OnCollisionEnter(Collision other)
         {
             var unit = other.gameObject.GetComponent<Unit>();
             if(unit is not null) unit.hp -= this.damage;
@@ -50,7 +50,7 @@ namespace NeonBots.Components
             this.impulse = impulse;
         }
 
-        private void Death()
+        protected void Death()
         {
             Destroy(this.gameObject);
 

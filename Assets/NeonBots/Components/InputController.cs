@@ -50,7 +50,7 @@ namespace NeonBots.Components
                         if(socket.rotatable) socket.transform.localRotation = Quaternion.identity;
                 }
 
-                if(this.inputManager.MainAction) this.unit.Shot();
+                if(this.inputManager.MainAction) this.unit.UsePrimary();
             }
         }
     }

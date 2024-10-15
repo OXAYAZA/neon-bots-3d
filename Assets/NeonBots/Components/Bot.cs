@@ -4,6 +4,7 @@ namespace NeonBots.Components
 {
     public class Bot : Controller
     {
+        [Header("Bot")]
         public float scanRange = 30f;
 
         public int scanNumber = 20;

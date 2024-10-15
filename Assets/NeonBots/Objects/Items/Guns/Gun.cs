@@ -14,8 +14,7 @@ namespace NeonBots.Components
         [SerializeField]
         private float reloadDuration = 0.5f;
 
-        [SerializeField]
-        private float shotImpulse = 25f;
+        public float shotImpulse = 25f;
 
         [SerializeField]
         private AudioClip shotSound;

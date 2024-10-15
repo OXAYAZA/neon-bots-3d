@@ -11,6 +11,9 @@ namespace NeonBots.Managers
         private Color heroColor = Color.green;
 
         [SerializeField]
+        private float heroHp = 1000f;
+
+        [SerializeField]
         private List<Unit> heroPrefabs;
 
         public Unit Hero { get; private set; }
@@ -36,7 +39,7 @@ namespace NeonBots.Managers
 
             this.Hero.fraction = "green";
             this.Hero.color = this.heroColor;
-            this.Hero.baseHp = 1000f;
+            this.Hero.baseHp = this.heroHp;
             this.Hero.ResetValues();
 
             Destroy(this.Hero.GetComponent<Controller>());
