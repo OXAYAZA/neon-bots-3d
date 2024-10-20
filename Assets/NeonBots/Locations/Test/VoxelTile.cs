@@ -14,10 +14,13 @@ namespace NeonBots.Locations
             Back, // Z+ (Vector3.forward)
             Right, // X- (Vector3.left)
             Front, // Z- (Vector3.back)
-            Left // X+ (Vector3.right)
+            Left, // X+ (Vector3.right)
+            Top, // Y- (Vector3.down)
+            Bottom, // Y+ (Vector3.up)
         }
 
-        public MeshCollider meshCollider;
+        [SerializeField]
+        private float tileSize = 1f;
 
         [SerializeField]
         private float voxelSize = 0.1f;
@@ -32,6 +35,8 @@ namespace NeonBots.Locations
             data.right = new(this.tileDimension);
             data.front = new(this.tileDimension);
             data.left = new(this.tileDimension);
+            data.top = new(this.tileDimension);
+            data.bottom = new(this.tileDimension);
 
             for(var l = 0; l < this.tileDimension; l++)
                 for(var p = 0; p < this.tileDimension; p++)
@@ -48,6 +53,14 @@ namespace NeonBots.Locations
             for(var l = 0; l < this.tileDimension; l++)
                 for(var p = 0; p < this.tileDimension; p++)
                     data.left.data[l * this.tileDimension + p] = this.GetVoxelSideColor(l, p, Side.Left);
+
+            for(var l = 0; l < this.tileDimension; l++)
+                for(var p = 0; p < this.tileDimension; p++)
+                    data.top.data[l * this.tileDimension + p] = this.GetVoxelSideColor(l, p, Side.Top);
+
+            for(var l = 0; l < this.tileDimension; l++)
+                for(var p = 0; p < this.tileDimension; p++)
+                    data.bottom.data[l * this.tileDimension + p] = this.GetVoxelSideColor(l, p, Side.Bottom);
 
             return data;
         }
@@ -69,8 +82,9 @@ namespace NeonBots.Locations
         // If we need to compare opposite tiles, we need to mirror comparable tile side data vertically.
         private int GetVoxelSideColor(int layer, int position, Side side)
         {
+            var tileHalf = this.tileSize * 0.5f;
             var voxelHalf = this.voxelSize * 0.5f;
-            var bounds = this.meshCollider.bounds;
+            var start = this.transform.position - Vector3.one * tileHalf;
 
             var rayDirection = side switch
             {
@@ -78,30 +92,42 @@ namespace NeonBots.Locations
                 Side.Right => Vector3.left,
                 Side.Front => Vector3.back,
                 Side.Left => Vector3.right,
+                Side.Top => Vector3.down,
+                Side.Bottom => Vector3.up,
                 _ => throw new ArgumentOutOfRangeException(nameof(side), side, null)
             };
 
             var rayStart = side switch
             {
-                Side.Back => bounds.min + new Vector3(
+                Side.Back => start + new Vector3(
                     voxelHalf + position * this.voxelSize,
                     voxelHalf + layer * this.voxelSize,
                     -voxelHalf
                 ),
-                Side.Right => bounds.min + new Vector3(bounds.size.x, 0f, 0f) + new Vector3(
+                Side.Right => start + new Vector3(this.tileSize, 0f, 0f) + new Vector3(
                     voxelHalf,
                     voxelHalf + layer * this.voxelSize,
                     voxelHalf + position * this.voxelSize
                 ),
-                Side.Front => bounds.min + new Vector3(bounds.size.x, 0f, bounds.size.z) + new Vector3(
+                Side.Front => start + new Vector3(this.tileSize, 0f, this.tileSize) + new Vector3(
                     -voxelHalf - position * this.voxelSize,
                     voxelHalf + layer * this.voxelSize,
                     voxelHalf
                 ),
-                Side.Left => bounds.min + new Vector3(0f, 0f, bounds.size.z) + new Vector3(
+                Side.Left => start + new Vector3(0f, 0f, this.tileSize) + new Vector3(
                     -voxelHalf,
                     voxelHalf + layer * this.voxelSize,
                     -voxelHalf - position * this.voxelSize
+                ),
+                Side.Top => start + new Vector3(0f, this.tileSize, 0f) + new Vector3(
+                    voxelHalf + position * this.voxelSize,
+                    voxelHalf,
+                    voxelHalf + layer * this.voxelSize
+                ),
+                Side.Bottom => start + new Vector3(0f, 0f, 0f) + new Vector3(
+                    voxelHalf + position * this.voxelSize,
+                    -voxelHalf,
+                    voxelHalf + layer * this.voxelSize
                 ),
                 _ => throw new ArgumentOutOfRangeException(nameof(side), side, null)
             };
@@ -109,7 +135,20 @@ namespace NeonBots.Locations
             var ray = new Ray(rayStart, rayDirection);
 
             if(Physics.Raycast(ray, out var hit, this.voxelSize)) return (int)(hit.textureCoord.x * 256);
+
+            Debug.DrawLine(rayStart, rayStart + rayDirection * this.voxelSize, Color.red, 3f);
+
             return 0;
+        }
+
+        private void OnDrawGizmos()
+        {
+            var initialColor = Gizmos.color;
+
+            Gizmos.color = Color.cyan;
+            Gizmos.DrawWireCube(this.transform.position, Vector3.one * this.tileSize);
+
+            Gizmos.color = initialColor;
         }
     }
 }
