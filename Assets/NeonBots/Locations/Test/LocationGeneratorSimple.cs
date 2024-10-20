@@ -28,9 +28,10 @@ namespace NeonBots.Locations
             this.isReady = true;
         }
 
-        private void Update()
+        [ContextMenu("Regenerate")]
+        private void Regenerate()
         {
-            if(!this.isReady || !Input.GetKeyDown(KeyCode.Space)) return;
+            if(!Application.isPlaying || !this.isReady) return;
 
             this.Generate();
 
@@ -121,36 +122,24 @@ namespace NeonBots.Locations
             this.data = new VoxelTileData[this.locationSize.x + 2, this.locationSize.y + 2];
 
             for(var y = 1; y < this.data.GetLength(1) - 1; y++)
-                for(var x = 1; x < this.data.GetLength(0) - 1; x++)
-                    this.SetTile(x, y);
-        }
-
-        private void SetTile(int x, int y)
-        {
-            var filteredSamples = this.workSamples.Where(tile =>
-                this.CanAppendTile(this.data[x, y - 1], tile, VoxelTile.Side.Front) &&
-                this.CanAppendTile(this.data[x + 1, y], tile, VoxelTile.Side.Left) &&
-                this.CanAppendTile(this.data[x, y + 1], tile, VoxelTile.Side.Back) &&
-                this.CanAppendTile(this.data[x - 1, y], tile, VoxelTile.Side.Right)).ToList();
-
-            if(filteredSamples.Count == 0) return;
-
-            this.data[x, y] = this.RandomTile(filteredSamples);
-        }
-
-        private bool CanAppendTile(VoxelTileData target, VoxelTileData comparable, VoxelTile.Side side)
-        {
-            if(target == default) return true;
-
-            return side switch
             {
-                VoxelTile.Side.Back => target.back.data.SequenceEqual(comparable.front.Mirrored()),
-                VoxelTile.Side.Right => target.right.data.SequenceEqual(comparable.left.Mirrored()),
-                VoxelTile.Side.Front => target.front.data.SequenceEqual(comparable.back.Mirrored()),
-                VoxelTile.Side.Left => target.left.data.SequenceEqual(comparable.right.Mirrored()),
-                _ => throw new ArgumentOutOfRangeException(nameof(side), side, null)
-            };
+                for(var x = 1; x < this.data.GetLength(0) - 1; x++)
+                {
+                    var filteredSamples = this.workSamples.Where(tile =>
+                        this.CanAppendTile(this.data[x, y - 1], tile, VoxelTile.Side.Front) &&
+                        this.CanAppendTile(this.data[x + 1, y], tile, VoxelTile.Side.Left) &&
+                        this.CanAppendTile(this.data[x, y + 1], tile, VoxelTile.Side.Back) &&
+                        this.CanAppendTile(this.data[x - 1, y], tile, VoxelTile.Side.Right)).ToList();
+
+                    if(filteredSamples.Count == 0) continue;
+
+                    this.data[x, y] = this.RandomTile(filteredSamples);
+                }
+            }
         }
+
+        private bool CanAppendTile(VoxelTileData target, VoxelTileData comparable, VoxelTile.Side side) =>
+            target == default || target.CompareSide(side, comparable);
 
         private VoxelTileData RandomTile(List<VoxelTileData> tiles)
         {

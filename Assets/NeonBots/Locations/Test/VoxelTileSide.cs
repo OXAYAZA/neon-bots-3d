@@ -9,6 +9,8 @@ namespace NeonBots.Locations
 
         public int[] data;
 
+        private int[] mirrored;
+
         public VoxelTileSide(int size)
         {
             this.size = size;
@@ -19,13 +21,15 @@ namespace NeonBots.Locations
 
         public int[] Mirrored()
         {
-            var result = new int[this.data.Length];
+            if(this.mirrored != default) return this.mirrored;
+
+            this.mirrored = new int[this.data.Length];
 
             for(var l = 0; l < this.size; l++)
                 for(var p = 0; p < this.size; p++)
-                    result[l * this.size + p] = this.data[l * this.size + this.size - 1 - p];
+                    this.mirrored[l * this.size + p] = this.data[l * this.size + this.size - 1 - p];
 
-            return result;
+            return this.mirrored;
         }
     }
 }

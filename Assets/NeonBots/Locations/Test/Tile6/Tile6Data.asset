@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: Tile6Data
   m_EditorClassIdentifier: 
   tile: {fileID: 7640823579374033935, guid: 6cc59db9bedf1264b811d5a6cc2b2fda, type: 3}
-  weight: 0.5
+  weight: 0.2
   rotations: 2
   back:
     size: 10

@@ -247,7 +247,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1339588208}
-  - component: {fileID: 1339588207}
+  - component: {fileID: 1339588209}
   m_Layer: 0
   m_Name: Location
   m_TagString: Untagged
@@ -255,30 +255,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1339588207
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1339588206}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7cb7b7c41f6495eb9d07bfe3f48d76a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  locationSize: {x: 10, y: 10}
-  tileSize: 1
-  samples:
-  - {fileID: 11400000, guid: 507925331cca51e46977726d69948b39, type: 2}
-  - {fileID: 11400000, guid: 7ffabf6d1dd42044faadeb17c64160be, type: 2}
-  - {fileID: 11400000, guid: bde78125c45af4548a1f6d1589776d99, type: 2}
-  - {fileID: 11400000, guid: 9bc92ea2be21fc54eac0d72a9cb8bce0, type: 2}
-  - {fileID: 11400000, guid: c7a8cac76a11f684689619fe56f479ed, type: 2}
-  - {fileID: 11400000, guid: 3c2f983bae7f74a4aae4aaef4df2cf07, type: 2}
-  - {fileID: 11400000, guid: 95fe8119dd4203a428d02bd9d5db6c90, type: 2}
-  - {fileID: 11400000, guid: b81683a4dce035e43a19f315cfc1305a, type: 2}
-  tiles: []
 --- !u!4 &1339588208
 Transform:
   m_ObjectHideFlags: 0
@@ -294,6 +270,31 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1339588209
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1339588206}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b70195c396902d6498aff809206ebdd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  locationSize: {x: 50, y: 50}
+  tileSize: 1
+  samples:
+  - {fileID: 11400000, guid: 507925331cca51e46977726d69948b39, type: 2}
+  - {fileID: 11400000, guid: 7ffabf6d1dd42044faadeb17c64160be, type: 2}
+  - {fileID: 11400000, guid: bde78125c45af4548a1f6d1589776d99, type: 2}
+  - {fileID: 11400000, guid: 9bc92ea2be21fc54eac0d72a9cb8bce0, type: 2}
+  - {fileID: 11400000, guid: c7a8cac76a11f684689619fe56f479ed, type: 2}
+  - {fileID: 11400000, guid: 3c2f983bae7f74a4aae4aaef4df2cf07, type: 2}
+  - {fileID: 11400000, guid: 95fe8119dd4203a428d02bd9d5db6c90, type: 2}
+  - {fileID: 11400000, guid: b81683a4dce035e43a19f315cfc1305a, type: 2}
+  tiles: []
+  iterationsDelay: 0.001
 --- !u!1 &1350323033
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,6 +306,7 @@ GameObject:
   - component: {fileID: 1350323036}
   - component: {fileID: 1350323035}
   - component: {fileID: 1350323034}
+  - component: {fileID: 1350323037}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -379,13 +381,57 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1350323033}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: -10}
+  m_LocalRotation: {x: 0.5, y: 0, z: 0, w: 0.8660254}
+  m_LocalPosition: {x: 0, y: 38, z: -30}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 60, y: 0, z: 0}
+--- !u!114 &1350323037
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1350323033}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a79441f348de89743a2939f4d699eac1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_RenderShadows: 1
+  m_RequiresDepthTextureOption: 2
+  m_RequiresOpaqueTextureOption: 2
+  m_CameraType: 0
+  m_Cameras: []
+  m_RendererIndex: -1
+  m_VolumeLayerMask:
+    serializedVersion: 2
+    m_Bits: 1
+  m_VolumeTrigger: {fileID: 0}
+  m_VolumeFrameworkUpdateModeOption: 2
+  m_RenderPostProcessing: 0
+  m_Antialiasing: 0
+  m_AntialiasingQuality: 2
+  m_StopNaN: 0
+  m_Dithering: 0
+  m_ClearDepth: 1
+  m_AllowXRRendering: 1
+  m_AllowHDROutput: 1
+  m_UseScreenCoordOverride: 0
+  m_ScreenSizeOverride: {x: 0, y: 0, z: 0, w: 0}
+  m_ScreenCoordScaleBias: {x: 0, y: 0, z: 0, w: 0}
+  m_RequiresDepthTexture: 0
+  m_RequiresColorTexture: 0
+  m_Version: 2
+  m_TaaSettings:
+    quality: 3
+    frameInfluence: 0.1
+    jitterScale: 1
+    mipBias: 0
+    varianceClampScale: 0.9
+    contrastAdaptiveSharpening: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

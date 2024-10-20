@@ -7,7 +7,8 @@ namespace NeonBots.Locations
 {
     public class VoxelTile : MonoBehaviour
     {
-        
+        // Front side of tile is looking in direction of Z+ axis.
+        // So if we need data from front side, we need to look on it in Z- direction.
         public enum Side
         {
             Back, // Z+ (Vector3.forward)

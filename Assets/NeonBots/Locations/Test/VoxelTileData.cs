@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using System.Linq;
+using UnityEngine;
 
 namespace NeonBots.Locations
 {
@@ -21,6 +23,18 @@ namespace NeonBots.Locations
         public VoxelTileSide left;
 
         public Vector3 rotation = Vector3.zero;
+
+        public bool CompareSide(VoxelTile.Side side, VoxelTileData target)
+        {
+            return side switch
+            {
+                VoxelTile.Side.Back => this.back.data.SequenceEqual(target.front.Mirrored()),
+                VoxelTile.Side.Right => this.right.data.SequenceEqual(target.left.Mirrored()),
+                VoxelTile.Side.Front => this.front.data.SequenceEqual(target.back.Mirrored()),
+                VoxelTile.Side.Left => this.left.data.SequenceEqual(target.right.Mirrored()),
+                _ => throw new ArgumentOutOfRangeException(nameof(side), side, null)
+            };
+        }
 
         public void Rotate90()
         {
