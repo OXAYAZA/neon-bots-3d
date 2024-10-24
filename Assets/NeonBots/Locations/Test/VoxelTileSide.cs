@@ -31,5 +31,20 @@ namespace NeonBots.Locations
 
             return this.mirrored;
         }
+
+        public string Log()
+        {
+            var str = "\n";
+
+            for(var l = this.size - 1; l >= 0 ; l--)
+            {
+                for(var p = 0; p < this.size; p++)
+                    str += $"[{this.data[l * this.size + p]:000}] ";
+
+                str += "\n";
+            }
+
+            return str;
+        }
     }
 }

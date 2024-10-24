@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using NeonBots.Locations.Constraints;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -12,11 +13,9 @@ namespace NeonBots.Locations
     {
         public Vector3Int locationSize = new(10, 10, 10);
 
-        public float tileSize = 1f;
-
         public Transform initialTilesContainer;
 
-        public List<VoxelTileData> samples;
+        public TileSet tileSet;
 
         private List<VoxelTile> tiles;
 
@@ -39,8 +38,7 @@ namespace NeonBots.Locations
 
         private void Update()
         {
-            if(!Input.GetKeyDown(KeyCode.Space)) return;
-            this.Generate().Forget();
+            if(Input.GetKeyDown(KeyCode.Space)) this.Generate().Forget();
         }
 
         private IEnumerable<(int, int, int)> IterateData()
@@ -55,7 +53,15 @@ namespace NeonBots.Locations
         private async UniTask Generate()
         {
             if(!Application.isPlaying) return;
-            
+
+            if(this.tileSet == default)
+            {
+                Debug.LogError("No tile set selected");
+                return;
+            }
+
+            Debug.Log($"Location generation started: {DateTime.UtcNow}");
+
             if(this.tiles != default && this.tiles.Count > 0)
             {
                 foreach(var tile in this.tiles) Destroy(tile.gameObject);
@@ -75,18 +81,34 @@ namespace NeonBots.Locations
                 list.AddRange(this.workSamples);
             }
 
-            // Find preset tiles and propagate initial influence.
+            // Find preset samples.
             var initialPositions = new List<Vector3Int>();
 
             foreach(var (x, y, z) in this.IterateData())
-                if(this.data[x, y, z] != default && this.data[x, y, z].Count > 0)
+                if(this.data[x, y, z] != default && this.data[x, y, z].Count == 1)
                     initialPositions.Add(new(x, y, z));
 
-            foreach(var initialPosition in initialPositions)
+            // Apply initial constraints.
+            // TODO: Possible requires propagation.
+            foreach(var (x, y, z) in this.IterateData())
             {
-                await this.Propagate(initialPosition);
-                await UniTask.Yield(this.cts.Token);
+                this.gizmo1 = new(x, y, z);
+                var samples = this.data[x, y, z];
+
+                foreach(var sample in samples.ToList())
+                {
+                    foreach(var constraint in sample.constraints)
+                    {
+                        if(!constraint.GetType().IsSubclassOf(typeof(InitialConstraint))) continue;
+                        if(((InitialConstraint)constraint).Check(this.data, new(x, y, z))) continue;
+                        samples.Remove(sample);
+                    }
+                }
             }
+
+            // Propagate influence of initial samples.
+            foreach(var initialPosition in initialPositions)
+                await this.Propagate(initialPosition);
 
             // Start generation.
             while(!this.IsCollapsed() && !this.cts.Token.IsCancellationRequested)
@@ -94,7 +116,6 @@ namespace NeonBots.Locations
                 var position = this.GetMinEntropyPosition();
                 this.Collapse(position);
                 await this.Propagate(position);
-                await UniTask.Yield(this.cts.Token);
             }
 
             // Fill location.
@@ -102,13 +123,14 @@ namespace NeonBots.Locations
             this.data = null;
             this.tiles = new();
 
+            var tileSize = this.tileSet.tileSize * this.tileSet.tileScale;
             var size = new Vector3(
-                this.locationSize.x * this.tileSize,
-                this.locationSize.y * this.tileSize,
-                this.locationSize.z * this.tileSize
+                this.locationSize.x * tileSize,
+                this.locationSize.y * tileSize,
+                this.locationSize.z * tileSize
             );
             var halfSize = size * 0.5f;
-            var offset = Vector3.one * (this.tileSize * 0.5f);
+            var offset = Vector3.one * (tileSize * 0.5f);
             var start = this.transform.position - halfSize + offset;
 
             for(var y = 0; y < data.GetLength(1); y++)
@@ -119,22 +141,24 @@ namespace NeonBots.Locations
                     {
                         var tileData = data[x, y, z];
                         if(tileData == null || tileData.Count == 0) continue;
-                        var position = start + new Vector3(x, y, z) * this.tileSize;
+                        var position = start + new Vector3(x, y, z) * tileSize;
                         var sample = tileData[0];
-                        var tile = Instantiate(sample.tile, position, Quaternion.Euler(sample.rotation),
-                            this.transform);
+                        var tile = Instantiate(sample.tile, position, Quaternion.Euler(sample.rotation), this.transform);
+                        tile.transform.localScale = Vector3.one * this.tileSet.tileScale;
                         tile.name = sample.tile.name;
                         this.tiles.Add(tile);
                     }
                 }
             }
+
+            Debug.Log($"Location generation ended: {DateTime.UtcNow}");
         }
 
         private void ProcessSamples()
         {
             this.workSamples = new();
 
-            foreach(var sample in this.samples)
+            foreach(var sample in this.tileSet.samples)
             {
                 switch(sample.rotations)
                 {
@@ -148,43 +172,45 @@ namespace NeonBots.Locations
                     case VoxelTileRotations.Two:
                     {
                         var weight = sample.weight * 0.5f;
-                        var clone = Instantiate(sample);
-                        clone.name = sample.name;
-                        clone.weight = weight;
-                        this.workSamples.Add(clone);
 
-                        clone = Instantiate(sample);
-                        clone.Rotate90();
-                        clone.name = $"{sample.name}90";
-                        clone.weight = weight;
-                        this.workSamples.Add(clone);
+                        var clone1 = Instantiate(sample);
+                        clone1.name = sample.name;
+                        clone1.weight = weight;
+                        this.workSamples.Add(clone1);
+
+                        var clone2 = Instantiate(sample);
+                        clone2.Rotate90();
+                        clone2.name = $"{sample.name}-90";
+                        clone2.weight = weight;
+                        this.workSamples.Add(clone2);
                         break;
                     }
                     case VoxelTileRotations.Four:
                     {
                         var weight = sample.weight * 0.25f;
-                        var clone = Instantiate(sample);
-                        clone.name = sample.name;
-                        clone.weight = weight;
-                        this.workSamples.Add(clone);
 
-                        clone = Instantiate(sample);
-                        clone.Rotate90();
-                        clone.name = $"{sample.name}90";
-                        clone.weight = weight;
-                        this.workSamples.Add(clone);
+                        var clone1 = Instantiate(sample);
+                        clone1.name = sample.name;
+                        clone1.weight = weight;
+                        this.workSamples.Add(clone1);
 
-                        clone = Instantiate(sample);
-                        clone.Rotate180();
-                        clone.name = $"{sample.name}180";
-                        clone.weight = weight;
-                        this.workSamples.Add(clone);
+                        var clone2 = Instantiate(sample);
+                        clone2.Rotate90();
+                        clone2.name = $"{sample.name}-90";
+                        clone2.weight = weight;
+                        this.workSamples.Add(clone2);
 
-                        clone = Instantiate(sample);
-                        clone.Rotate270();
-                        clone.name = $"{sample.name}270";
-                        clone.weight = weight;
-                        this.workSamples.Add(clone);
+                        var clone3 = Instantiate(sample);
+                        clone3.Rotate180();
+                        clone3.name = $"{sample.name}-180";
+                        clone3.weight = weight;
+                        this.workSamples.Add(clone3);
+
+                        var clone4 = Instantiate(sample);
+                        clone4.Rotate270();
+                        clone4.name = $"{sample.name}-270";
+                        clone4.weight = weight;
+                        this.workSamples.Add(clone4);
                         break;
                     }
                     default:
@@ -199,20 +225,21 @@ namespace NeonBots.Locations
 
             this.initialTilesContainer.gameObject.SetActive(true);
 
+            var tileSize = this.tileSet.tileSize * this.tileSet.tileScale;
             var size = new Vector3(
-                this.locationSize.x * this.tileSize,
-                this.locationSize.y * this.tileSize,
-                this.locationSize.z * this.tileSize
+                this.locationSize.x * tileSize,
+                this.locationSize.y * tileSize,
+                this.locationSize.z * tileSize
             );
             var halfSize = size * 0.5f;
-            var offset = Vector3.one * (this.tileSize * 0.5f);
+            var offset = Vector3.one * (tileSize * 0.5f);
             var start = this.transform.position - halfSize + offset;
 
             this.initialTiles = this.initialTilesContainer.GetComponentsInChildren<VoxelTile>().ToList();
 
             foreach(var item in this.initialTiles)
             {
-                var position = Vector3Int.FloorToInt((item.transform.position - start) / this.tileSize);
+                var position = Vector3Int.FloorToInt((item.transform.position - start) / tileSize);
                 var sample = this.workSamples.FirstOrDefault(sample =>
                     sample.tile.name == item.name && sample.rotation == item.transform.rotation.eulerAngles);
 
@@ -272,11 +299,11 @@ namespace NeonBots.Locations
 
         private void Collapse(Vector3Int pos)
         {
-            var tiles = this.data[pos.x, pos.y, pos.z];
-            if(tiles.Count == 0) return;
+            var samples = this.data[pos.x, pos.y, pos.z];
+            if(samples.Count == 0) return;
 
             this.data[pos.x, pos.y, pos.z] = new();
-            var weights = tiles.Select(item => item.weight).ToList();
+            var weights = samples.Select(item => item.weight).ToList();
             var value = Random.Range(0f, weights.Sum());
             var sum = 0f;
 
@@ -286,38 +313,38 @@ namespace NeonBots.Locations
 
                 if(value < sum)
                 {
-                    this.data[pos.x, pos.y, pos.z].Add(tiles[i]);
+                    this.data[pos.x, pos.y, pos.z].Add(samples[i]);
                     break;
                 }
             }
         }
 
-        private async UniTask Propagate(Vector3Int position)
+        private async UniTask Propagate(Vector3Int startPosition)
         {
-            this.gizmo1 = position;
+            this.gizmo1 = startPosition;
             var stack = new Stack<Vector3Int>();
             this.gizmo2 = stack;
-            stack.Push(position);
+            stack.Push(startPosition);
 
             while(stack.Count > 0 && !this.cts.Token.IsCancellationRequested)
             {
                 var currentPosition = stack.Pop();
-                var currentSamples = this.data[currentPosition.x, currentPosition.y, currentPosition.z];
 
                 foreach(var (neighborPosition, side) in this.ValidPositions(currentPosition))
                 {
-                    var possibleSamples = this.PossibleSamples(currentSamples, side);
-                    var neighborSamples = this.data[neighborPosition.x, neighborPosition.y, neighborPosition.z];
+                    var neighbors = this.data[neighborPosition.x, neighborPosition.y, neighborPosition.z];
+                    if(neighbors.Count <= 1) continue;
+                    var possibleNeighbors = this.PossibleSamples(startPosition, currentPosition, neighborPosition, side);
 
-                    foreach(var neighborSample in neighborSamples.ToList())
+                    foreach(var neighbor in neighbors.ToList())
                     {
-                        if(possibleSamples.Contains(neighborSample)) continue;
-                        neighborSamples.Remove(neighborSample);
+                        if(possibleNeighbors.Contains(neighbor)) continue;
+                        neighbors.Remove(neighbor);
                         if(stack.All(pos => pos != neighborPosition)) stack.Push(neighborPosition);
                     }
-
-                    await UniTask.Yield(this.cts.Token);
                 }
+
+                await UniTask.Yield(this.cts.Token);
             }
         }
 
@@ -353,14 +380,29 @@ namespace NeonBots.Locations
             return neighbourPositions;
         }
 
-        private List<VoxelTileData> PossibleSamples(List<VoxelTileData> currentSamples, VoxelTile.Side side)
+        private List<VoxelTileData> PossibleSamples(Vector3Int startPosition, Vector3Int currentPosition, Vector3Int neighborPosition, VoxelTile.Side side)
         {
+            var constrainingSample = this.data[startPosition.x, startPosition.y, startPosition.z][0];
+            var targetSamples = this.data[currentPosition.x, currentPosition.y, currentPosition.z];
             var possibleSamples = new List<VoxelTileData>();
 
-            foreach(var currentSample in currentSamples)
+            foreach(var currentSample in targetSamples)
                 foreach(var workSample in this.workSamples)
                     if(currentSample.CompareSide(side, workSample) && !possibleSamples.Contains(workSample))
                         possibleSamples.Add(workSample);
+
+            if(constrainingSample != default && neighborPosition != startPosition)
+            {
+                foreach(var constraint in constrainingSample.constraints)
+                {
+                    if(!constraint.GetType().IsSubclassOf(typeof(ActiveConstraint))) continue;
+
+                    var possibleSamples2 = this.workSamples.Where(sample =>
+                        ((ActiveConstraint)constraint).Apply(sample, neighborPosition, startPosition));
+
+                    possibleSamples = possibleSamples.Where(sample => possibleSamples2.Contains(sample)).ToList();
+                }
+            }
 
             return possibleSamples;
         }
@@ -377,58 +419,62 @@ namespace NeonBots.Locations
         {
             var initialColor = Gizmos.color;
 
+            if(this.tileSet == default) return;
+
             var center = this.transform.position;
+            var tileSize = this.tileSet.tileSize * this.tileSet.tileScale;
             var size = new Vector3(
-                this.locationSize.x * this.tileSize,
-                this.locationSize.y * this.tileSize,
-                this.locationSize.z * this.tileSize
+                this.locationSize.x * tileSize,
+                this.locationSize.y * tileSize,
+                this.locationSize.z * tileSize
             );
             var halfSize = size * 0.5f;
-            var offset = Vector3.one * (this.tileSize * 0.5f);
+            var offset = Vector3.one * (tileSize * 0.5f);
             var start = center - halfSize + offset;
 
             Gizmos.color = Color.cyan;
             Gizmos.DrawWireCube(center, size);
             Gizmos.DrawSphere(center - halfSize, 0.1f);
 
+            Gizmos.color = initialColor;
+
             if(!Application.isPlaying || this.data == default) return;
-
-            var tileSize = Vector3.one * this.tileSize * 0.9f;
-
+            
+            var selectorSize = Vector3.one * tileSize * 0.9f;
+            var sampleSize = Vector3.one * tileSize * 0.8f;
+            
             foreach(var (x, y, z) in this.IterateData())
             {
                 if(this.data[x, y, z] == default) continue;
-
+            
                 if(this.data[x, y, z].Count > 1)
                 {
                     Gizmos.color = new(1f, 1f, 0f, 0.5f);
-                    Gizmos.DrawCube(start + new Vector3(x, y, z) * this.tileSize,
-                        tileSize * (1f - (float)this.data[x, y, z].Count / (this.workSamples.Count + 3)));
+                    Gizmos.DrawCube(start + new Vector3(x, y, z) * tileSize,
+                        sampleSize * (1f - (float)this.data[x, y, z].Count / (this.workSamples.Count + 3)));
                 }
                 else if(this.data[x, y, z].Count == 1)
                 {
                     Gizmos.color = new(0f, 1f, 0f, 0.5f);
-                    Gizmos.DrawCube(start + new Vector3(x, y, z) * this.tileSize, tileSize);
+                    Gizmos.DrawCube(start + new Vector3(x, y, z) * tileSize, sampleSize);
                 }
                 else
                 {
                     Gizmos.color = new(1f, 0f, 0f, 0.5f);
-                    Gizmos.DrawCube(start + new Vector3(x, y, z) * this.tileSize, tileSize);
+                    Gizmos.DrawCube(start + new Vector3(x, y, z) * tileSize, sampleSize);
                 }
             }
-
+            
             if(this.gizmo2 != default && this.gizmo2.Count > 0)
             {
                 Gizmos.color = new(0f, 0f, 1f, 0.5f);
-
+            
                 foreach(var pos in this.gizmo2)
-                    Gizmos.DrawCube(start + new Vector3(pos.x, pos.y, pos.z) * this.tileSize, tileSize);
+                    Gizmos.DrawCube(start + new Vector3(pos.x, pos.y, pos.z) * tileSize, selectorSize);
             }
-
-            Gizmos.color = Color.cyan;
-            Gizmos.DrawCube(start + new Vector3(this.gizmo1.x, this.gizmo1.y, this.gizmo1.z) * this.tileSize, tileSize);
-
-            Gizmos.color = initialColor;
+            
+            Gizmos.color = new(0f, 1f, 1f, 0.5f);
+            Gizmos.DrawCube(start + new Vector3(this.gizmo1.x, this.gizmo1.y, this.gizmo1.z) * tileSize, selectorSize);
         }
     }
 }

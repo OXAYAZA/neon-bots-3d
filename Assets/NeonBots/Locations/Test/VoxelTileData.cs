@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using NeonBots.Locations.Constraints;
 using UnityEngine;
 
 namespace NeonBots.Locations
@@ -8,13 +9,6 @@ namespace NeonBots.Locations
     [CreateAssetMenu(fileName = "VoxelTileData", menuName = "Neon Bots/Location/Voxel Tile Data", order = 1)]
     public class VoxelTileData : ScriptableObject
     {
-        public enum Constraint
-        {
-            OneInColumn,
-            RestrictedAtBottom,
-            RestrictedAtTop
-        }
-
         public VoxelTile tile;
 
         [Range(0f, 1f)]
@@ -38,39 +32,16 @@ namespace NeonBots.Locations
 
         public Vector3 rotation = Vector3.zero;
 
-        public bool CompareSide(VoxelTile.Side side, VoxelTileData target)
+        public bool CompareSide(VoxelTile.Side side, VoxelTileData target) => side switch
         {
-            return side switch
-            {
-                VoxelTile.Side.Back => this.back.data.SequenceEqual(target.front.Mirrored()),
-                VoxelTile.Side.Right => this.right.data.SequenceEqual(target.left.Mirrored()),
-                VoxelTile.Side.Front => this.front.data.SequenceEqual(target.back.Mirrored()),
-                VoxelTile.Side.Left => this.left.data.SequenceEqual(target.right.Mirrored()),
-                VoxelTile.Side.Top => this.top.data.SequenceEqual(target.bottom.data),
-                VoxelTile.Side.Bottom => this.bottom.data.SequenceEqual(target.top.data),
-                _ => throw new ArgumentOutOfRangeException(nameof(side), side, null)
-            };
-        }
-
-        public bool CheckConstraints()
-        {
-            foreach(var constraint in this.constraints)
-            {
-                switch(constraint)
-                {
-                    case Constraint.OneInColumn:
-                        break;
-                    case Constraint.RestrictedAtBottom:
-                        break;
-                    case Constraint.RestrictedAtTop:
-                        break;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-
-            return true;
-        }
+            VoxelTile.Side.Back => this.back.data.SequenceEqual(target.front.Mirrored()),
+            VoxelTile.Side.Right => this.right.data.SequenceEqual(target.left.Mirrored()),
+            VoxelTile.Side.Front => this.front.data.SequenceEqual(target.back.Mirrored()),
+            VoxelTile.Side.Left => this.left.data.SequenceEqual(target.right.Mirrored()),
+            VoxelTile.Side.Top => this.top.data.SequenceEqual(target.bottom.data),
+            VoxelTile.Side.Bottom => this.bottom.data.SequenceEqual(target.top.data),
+            _ => throw new ArgumentOutOfRangeException(nameof(side), side, null)
+        };
 
         public void Rotate90()
         {
@@ -97,13 +68,13 @@ namespace NeonBots.Locations
             {
                 for(var l = 0; l < this.top.size; l++)
                     for(var p = 0; p < this.top.size; p++)
-                        this.top.data[p * this.top.size + this.top.size - l - 1] = top.data[l * this.top.size + p];
+                        this.top.data[(this.top.size - p - 1) * this.top.size + l] = top.data[l * this.top.size + p];
             }
 
             {
-                for(var l = 0; l < this.top.size; l++)
-                    for(var p = 0; p < this.top.size; p++)
-                        this.bottom.data[p * this.top.size + this.top.size - l - 1] = bottom.data[l * this.top.size + p];
+                for(var l = 0; l < this.bottom.size; l++)
+                    for(var p = 0; p < this.bottom.size; p++)
+                        this.bottom.data[(this.bottom.size - p - 1) * this.bottom.size + l] = bottom.data[l * this.bottom.size + p];
             }
         }
 
@@ -153,13 +124,13 @@ namespace NeonBots.Locations
             {
                 for(var l = 0; l < this.top.size; l++)
                     for(var p = 0; p < this.top.size; p++)
-                        this.top.data[(this.top.size - p - 1) * this.top.size + l] = top.data[l * this.top.size + p];
+                        this.top.data[p * this.top.size + this.top.size - l - 1] = top.data[l * this.top.size + p];
             }
 
             {
-                for(var l = 0; l < this.top.size; l++)
-                    for(var p = 0; p < this.top.size; p++)
-                        this.bottom.data[(this.top.size - p - 1) * this.top.size + l] = bottom.data[l * this.top.size + p];
+                for(var l = 0; l < this.bottom.size; l++)
+                    for(var p = 0; p < this.bottom.size; p++)
+                        this.bottom.data[p * this.bottom.size + this.bottom.size - l - 1] = bottom.data[l * this.bottom.size + p];
             }
         }
     }

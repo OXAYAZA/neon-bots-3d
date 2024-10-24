@@ -16,20 +16,21 @@ namespace NeonBots.Locations
             Front, // Z- (Vector3.back)
             Left, // X+ (Vector3.right)
             Top, // Y- (Vector3.down)
-            Bottom, // Y+ (Vector3.up)
+            Bottom // Y+ (Vector3.up)
         }
 
         [SerializeField]
         private float tileSize = 1f;
 
         [SerializeField]
-        private float voxelSize = 0.1f;
-
-        [SerializeField]
         private int tileDimension = 10;
+
+        private float voxelSize;
 
         public VoxelTileData GenerateData()
         {
+            this.voxelSize = this.tileSize / this.tileDimension;
+
             var data = ScriptableObject.CreateInstance<VoxelTileData>();
             data.back = new(this.tileDimension);
             data.right = new(this.tileDimension);
@@ -146,7 +147,7 @@ namespace NeonBots.Locations
             var initialColor = Gizmos.color;
 
             Gizmos.color = Color.cyan;
-            Gizmos.DrawWireCube(this.transform.position, Vector3.one * this.tileSize);
+            Gizmos.DrawWireCube(this.transform.position, this.transform.localScale * this.tileSize);
 
             Gizmos.color = initialColor;
         }
