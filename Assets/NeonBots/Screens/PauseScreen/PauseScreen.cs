@@ -44,16 +44,6 @@ namespace NeonBots.Screens
             this.optionsButton.onClick.RemoveListener(this.uim.GetScreen<OptionsScreen>().Open);
         }
 
-        private void OnExit() => this.Exit().Forget();
-
-        private async UniTask Exit()
-        {
-            await MainManager.UnloadScene();
-            this.uim.GetScreen<RootScreen>().GoTo();
-            var sceneData = await MainManager.LoadScene("Level-0");
-            MainManager.Camera.transform.position = sceneData.cameraSpawn.position;
-            MainManager.Camera.transform.rotation = sceneData.cameraSpawn.rotation;
-            MainManager.GetManager<GameManager>().Dissolve();
-        }
+        private void OnExit() => MainManager.LoadMainMenu().Forget();
     }
 }

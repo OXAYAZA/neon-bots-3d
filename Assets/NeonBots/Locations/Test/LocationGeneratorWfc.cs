@@ -9,39 +9,30 @@ using Random = UnityEngine.Random;
 
 namespace NeonBots.Locations
 {
-    public class LocationGeneratorWfc : MonoBehaviour
+    public class LocationGeneratorWfc : LocationGenerator
     {
+        [Header("Location Generator WFC")]
         public Vector3Int locationSize = new(10, 10, 10);
 
         public Transform initialTilesContainer;
 
         public TileSet tileSet;
 
-        private List<VoxelTile> tiles;
+        protected List<VoxelTile> tiles;
 
-        private List<VoxelTile> initialTiles;
+        protected List<VoxelTile> initialTiles;
 
-        private List<VoxelTileData> workSamples;
+        protected List<VoxelTileData> workSamples;
 
-        private List<VoxelTileData>[,,] data;
+        protected List<VoxelTileData>[,,] data;
 
-        private CancellationTokenSource cts;
+        protected CancellationTokenSource cts;
 
-        private Vector3Int gizmo1;
+        protected Vector3Int gizmo1;
 
         private Stack<Vector3Int> gizmo2;
 
-        private void Start()
-        {
-            this.Generate().Forget();
-        }
-
-        private void Update()
-        {
-            if(Input.GetKeyDown(KeyCode.Space)) this.Generate().Forget();
-        }
-
-        private IEnumerable<(int, int, int)> IterateData()
+        protected IEnumerable<(int, int, int)> IterateData()
         {
             for(var y = 0; y < this.data.GetLength(1); y++)
                 for(var z = 0; z < this.data.GetLength(2); z++)
@@ -49,18 +40,13 @@ namespace NeonBots.Locations
                         yield return (x, y, z);
         }
 
-        [ContextMenu("Generate")]
-        private async UniTask Generate()
+        public override async UniTask Generate()
         {
-            if(!Application.isPlaying) return;
-
             if(this.tileSet == default)
             {
                 Debug.LogError("No tile set selected");
                 return;
             }
-
-            Debug.Log($"Location generation started: {DateTime.UtcNow}");
 
             if(this.tiles != default && this.tiles.Count > 0)
             {
@@ -150,11 +136,9 @@ namespace NeonBots.Locations
                     }
                 }
             }
-
-            Debug.Log($"Location generation ended: {DateTime.UtcNow}");
         }
 
-        private void ProcessSamples()
+        protected void ProcessSamples()
         {
             this.workSamples = new();
 
@@ -219,7 +203,7 @@ namespace NeonBots.Locations
             }
         }
 
-        private void GetInitialTiles()
+        protected void GetInitialTiles()
         {
             if(this.initialTilesContainer == default) return;
 
@@ -260,15 +244,13 @@ namespace NeonBots.Locations
             this.initialTilesContainer.gameObject.SetActive(false);
         }
 
-        private bool IsCollapsed()
+        protected bool IsCollapsed()
         {
-            foreach(var (x, y, z) in this.IterateData())
-                if(this.data[x, y, z].Count > 1) return false;
-
+            foreach(var (x, y, z) in this.IterateData()) if(this.data[x, y, z].Count > 1) return false;
             return true;
         }
 
-        private Vector3Int GetMinEntropyPosition()
+        protected Vector3Int GetMinEntropyPosition()
         {
             var entropy = this.workSamples.Count;
             var none = new Vector3Int(-1, -1, -1);
@@ -297,7 +279,7 @@ namespace NeonBots.Locations
             return position;
         }
 
-        private void Collapse(Vector3Int pos)
+        protected void Collapse(Vector3Int pos)
         {
             var samples = this.data[pos.x, pos.y, pos.z];
             if(samples.Count == 0) return;
@@ -319,7 +301,7 @@ namespace NeonBots.Locations
             }
         }
 
-        private async UniTask Propagate(Vector3Int startPosition)
+        protected async UniTask Propagate(Vector3Int startPosition)
         {
             this.gizmo1 = startPosition;
             var stack = new Stack<Vector3Int>();
@@ -408,14 +390,15 @@ namespace NeonBots.Locations
         }
 
         [ContextMenu("Cancel generation")]
-        private void Cancel()
+        public void Cancel()
         {
-            if(!Application.isPlaying) return;
             this.cts?.Cancel();
             this.cts = new();
         }
 
-        private void OnDrawGizmos()
+        public override Vector3 GetStartPosition() => default;
+
+        protected void OnDrawGizmos()
         {
             var initialColor = Gizmos.color;
 

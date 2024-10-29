@@ -40,17 +40,7 @@ namespace NeonBots.Screens
             this.exitButton.onClick.RemoveListener(this.Exit);
         }
 
-        private void OnPlayClick() => this.Play().Forget();
-
-        private async UniTask Play()
-        {
-            this.uim.SwitchOverlay(true);
-            await MainManager.UnloadScene();
-            var sceneData = await MainManager.LoadScene("Level-1");
-            MainManager.GetManager<GameManager>().Init(sceneData);
-            this.uim.GetScreen<GameScreen>().Open();
-            this.uim.SwitchOverlay(false);
-        }
+        private void OnPlayClick() => MainManager.LoadLevel().Forget();
 
         private void Exit() => Application.Quit();
     }

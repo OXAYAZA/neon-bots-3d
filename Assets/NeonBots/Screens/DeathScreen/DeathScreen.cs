@@ -28,28 +28,12 @@ namespace NeonBots.Screens
             this.exitButton.onClick.RemoveListener(this.OnExit);
         }
 
-        private void OnExit() => this.Exit().Forget();
+        private void OnExit() => MainManager.LoadMainMenu().Forget();
 
-        private async UniTask Exit()
+        private void OnRestart()
         {
-            await MainManager.UnloadScene();
-            this.uim.GetScreen<RootScreen>().GoTo();
-            var sceneData = await MainManager.LoadScene("Level-0");
-            MainManager.Camera.transform.position = sceneData.cameraSpawn.position;
-            MainManager.Camera.transform.rotation = sceneData.cameraSpawn.rotation;
-        }
-
-        private void OnRestart() => this.Restart().Forget();
-
-        private async UniTask Restart()
-        {
-            this.uim.SwitchOverlay(true);
             this.Close();
-            await MainManager.UnloadScene();
-            var sceneData = await MainManager.LoadScene("Level-1");
-            MainManager.GetManager<GameManager>().Init(sceneData);
-            this.uim.GetScreen<GameScreen>().Open();
-            this.uim.SwitchOverlay(false);
+            MainManager.LoadLevel().Forget();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Cysharp.Threading.Tasks;
 using NeonBots.Components;
 using NeonBots.Screens;
 using UnityEngine;
@@ -30,27 +31,38 @@ namespace NeonBots.Managers
             uiManager.GetScreen<DeathScreen>().Open();
         }
 
-        public Unit Init(SceneData sceneData)
+        public async UniTask Init(SceneData sceneData)
         {
-            var randomNumber = Random.Range(0, this.heroPrefabs.Count);
-            this.Hero = Instantiate(this.heroPrefabs[randomNumber],
-                sceneData.heroSpawn.position, sceneData.heroSpawn.rotation);
-            DontDestroyOnLoad(this.Hero.gameObject);
+            if(sceneData.locationGenerator != default)
+            {
+                await sceneData.locationGenerator.Generate();
+                sceneData.heroSpawnPosition = sceneData.locationGenerator.GetStartPosition();
+            }
 
-            this.Hero.fraction = "green";
-            this.Hero.color = this.heroColor;
-            this.Hero.baseHp = this.heroHp;
-            this.Hero.ResetValues();
+            if(this.Hero == default)
+            {
+                var randomNumber = Random.Range(0, this.heroPrefabs.Count);
+                this.Hero = Instantiate(this.heroPrefabs[randomNumber], sceneData.heroSpawnPosition, Quaternion.identity);
+                DontDestroyOnLoad(this.Hero.gameObject);
 
-            Destroy(this.Hero.GetComponent<Controller>());
-            var controller = this.Hero.gameObject.AddComponent<InputController>();
-            controller.Init();
+                this.Hero.fraction = "green";
+                this.Hero.color = this.heroColor;
+                this.Hero.baseHp = this.heroHp;
+                this.Hero.ResetValues();
 
-            var watcher = MainManager.Camera.GetComponent<Watcher>();
-            watcher.target = this.Hero.gameObject; 
-            
+                Destroy(this.Hero.GetComponent<Controller>());
+                var controller = this.Hero.gameObject.AddComponent<InputController>();
+                controller.Init();
+
+                var watcher = MainManager.Camera.GetComponent<Watcher>();
+                watcher.target = this.Hero.gameObject;
+            }
+            else
+            {
+                this.Hero.transform.position = sceneData.heroSpawnPosition;
+            }
+
             this.IsReady = true;
-            return this.Hero;
         }
 
         public void Dissolve()

@@ -85,34 +85,21 @@ namespace NeonBots.Managers
 
             var localConfig = GetManager<LocalConfig>();
             var uiManager = GetManager<UIManager>();
-            var loadingScreen = uiManager.GetScreen<LoadingScreen>();
-            var progressBar = loadingScreen.progressBar;
 
-            loadingScreen.Switch();
-            loadingScreen.SetText("Loading...");
-            progressBar.Animate(0.8f, 30f, MainCts.Token).Forget();
+            uiManager.SwitchOverlay(true);
+
             localConfig.Init();
             uiManager.GetScreen<DebugScreen>().Switch(localConfig.Get<bool>("console"));
 
             if(Application.platform == RuntimePlatform.Android ||
                Application.platform == RuntimePlatform.IPhonePlayer ||
                (Application.platform == RuntimePlatform.WebGLPlayer && External.IsMobile()))
-            {
                 localConfig.Set("touch_control", true);
-            }
-
-            var sceneData = await LoadScene("Level-0");
-            Camera.transform.position = sceneData.cameraSpawn.position;
-            Camera.transform.rotation = sceneData.cameraSpawn.rotation;
-
-            await UniTask.Delay(10, cancellationToken: MainCts.Token);
 
             IsReady = true;
             OnReady?.Invoke();
-            await progressBar.Animate(1f, 0.9f, MainCts.Token);
-            await UniTask.Delay(1000, cancellationToken: MainCts.Token);
-            uiManager.GetScreen<RootScreen>().Open();
-            loadingScreen.Switch(false);
+
+            await LoadMainMenu();
         }
 
         public static T GetManager<T>() where T : Manager
@@ -123,6 +110,44 @@ namespace NeonBots.Managers
                 throw new InvalidOperationException($"No child manager of type {typeof(T)}.");
 
             return (T)manager;
+        }
+
+        public static async UniTask LoadMainMenu()
+        {
+            var uiManager = GetManager<UIManager>();
+            var gameManager = GetManager<GameManager>();
+
+            uiManager.overlay.progressBar.Progress = 0f;
+            uiManager.SwitchOverlay(true);
+            uiManager.overlay.progressBar.Animate(0.8f, 10f, MainCts.Token).Forget();
+            if(SceneManager.GetActiveScene() != MainScene) await UnloadScene();
+            uiManager.GetScreen<RootScreen>().GoTo();
+            var sceneData = await LoadScene("Level-0");
+            Camera.transform.position = sceneData.cameraSpawn.position;
+            Camera.transform.rotation = sceneData.cameraSpawn.rotation;
+            if(gameManager.IsReady) gameManager.Dissolve();
+            await uiManager.overlay.progressBar.Animate(1f, 0.9f, MainCts.Token);
+            await UniTask.Delay(1000, cancellationToken: MainCts.Token);
+            uiManager.SwitchOverlay(false);
+        }
+
+        public static async UniTask LoadLevel()
+        {
+            var uiManager = GetManager<UIManager>();
+            var gameManager = GetManager<GameManager>();
+
+            uiManager.overlay.progressBar.Progress = 0f;
+            uiManager.SwitchOverlay(true);
+            uiManager.overlay.progressBar.Animate(0.8f, 30f, MainCts.Token).Forget();
+            gameManager.Hero?.gameObject.SetActive(false);
+            await UnloadScene();
+            var sceneData = await LoadScene("Level-1");
+            await gameManager.Init(sceneData);
+            gameManager.Hero?.gameObject.SetActive(true);
+            uiManager.GetScreen<GameScreen>().Open();
+            await uiManager.overlay.progressBar.Animate(1f, 0.9f, MainCts.Token);
+            await UniTask.Delay(1000, cancellationToken: MainCts.Token);
+            uiManager.SwitchOverlay(false);
         }
 
         public static async UniTask<SceneData> LoadScene(string name)
@@ -138,7 +163,7 @@ namespace NeonBots.Managers
             SceneManager.SetActiveScene(MainScene);
         }
 
-        public static void SetGamePauseState(bool isPaused)
+        public static void SetPause(bool isPaused)
         {
             if(GamePaused == isPaused) return;
 

@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using NeonBots.Locations;
+using UnityEngine;
 
 namespace NeonBots
 {
@@ -6,6 +7,8 @@ namespace NeonBots
     {
         public Transform cameraSpawn;
 
-        public Transform heroSpawn;
+        public Vector3 heroSpawnPosition;
+
+        public LocationGenerator locationGenerator;
     }
 }

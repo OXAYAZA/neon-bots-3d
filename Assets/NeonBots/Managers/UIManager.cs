@@ -29,8 +29,7 @@ namespace NeonBots.Managers
 
         public GameObject rootObject;
 
-        [SerializeField]
-        private UIScreen overlay;
+        public LoadingScreen overlay;
 
         public float ScaleFactor { get; private set; }
 

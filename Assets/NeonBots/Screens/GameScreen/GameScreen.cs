@@ -24,7 +24,7 @@ namespace NeonBots.Screens
         protected override void OnEnable()
         {
             base.OnEnable();
-            MainManager.SetGamePauseState(false);
+            MainManager.SetPause(false);
             this.localConfig = MainManager.GetManager<LocalConfig>();
             this.Refresh();
             this.localConfig.OnLocalValueChanged += this.Refresh;
@@ -53,7 +53,7 @@ namespace NeonBots.Screens
 
         public override void Back()
         {
-            MainManager.SetGamePauseState(true);
+            MainManager.SetPause(true);
             this.uim.GetScreen<PauseScreen>().Open();
         }
     }

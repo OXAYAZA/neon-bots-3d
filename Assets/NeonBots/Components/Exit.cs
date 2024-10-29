@@ -57,17 +57,5 @@ public class Exit : MonoBehaviour
             this.units.Remove((Unit)link.target);
     }
 
-    private async UniTask ToNextLevel()
-    {
-        var gameManager = MainManager.GetManager<GameManager>();
-        var hero = gameManager.Hero?.gameObject;
-
-        if(hero == default) return;
-
-        hero.SetActive(false);
-        await MainManager.UnloadScene();
-        var sceneData = await MainManager.LoadScene("Level-1");
-        hero.transform.position = sceneData.heroSpawn.position;
-        hero.SetActive(true);
-    }
+    private async UniTask ToNextLevel() => await MainManager.LoadLevel();
 }
