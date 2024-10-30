@@ -40,8 +40,11 @@ namespace NeonBots.Locations
                         yield return (x, y, z);
         }
 
+        [ContextMenu("Generate")]
         public override async UniTask Generate()
         {
+            if(!Application.isPlaying) return;
+
             if(this.tileSet == default)
             {
                 Debug.LogError("No tile set selected");
@@ -160,12 +163,14 @@ namespace NeonBots.Locations
                         var clone1 = Instantiate(sample);
                         clone1.name = sample.name;
                         clone1.weight = weight;
+                        clone1.constraints.AddRange(clone1.constraints0);
                         this.workSamples.Add(clone1);
 
                         var clone2 = Instantiate(sample);
                         clone2.Rotate90();
                         clone2.name = $"{sample.name}-90";
                         clone2.weight = weight;
+                        clone2.constraints.AddRange(clone2.constraints90);
                         this.workSamples.Add(clone2);
                         break;
                     }
@@ -176,24 +181,28 @@ namespace NeonBots.Locations
                         var clone1 = Instantiate(sample);
                         clone1.name = sample.name;
                         clone1.weight = weight;
+                        clone1.constraints.AddRange(clone1.constraints0);
                         this.workSamples.Add(clone1);
 
                         var clone2 = Instantiate(sample);
                         clone2.Rotate90();
                         clone2.name = $"{sample.name}-90";
                         clone2.weight = weight;
+                        clone2.constraints.AddRange(clone2.constraints90);
                         this.workSamples.Add(clone2);
 
                         var clone3 = Instantiate(sample);
                         clone3.Rotate180();
                         clone3.name = $"{sample.name}-180";
                         clone3.weight = weight;
+                        clone3.constraints.AddRange(clone3.constraints180);
                         this.workSamples.Add(clone3);
 
                         var clone4 = Instantiate(sample);
                         clone4.Rotate270();
                         clone4.name = $"{sample.name}-270";
                         clone4.weight = weight;
+                        clone4.constraints.AddRange(clone4.constraints270);
                         this.workSamples.Add(clone4);
                         break;
                     }

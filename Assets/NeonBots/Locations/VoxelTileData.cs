@@ -18,6 +18,16 @@ namespace NeonBots.Locations
 
         public List<Constraint> constraints;
 
+        [Header("Variation Constraints")]
+        public List<Constraint> constraints0;
+
+        public List<Constraint> constraints90;
+
+        public List<Constraint> constraints180;
+
+        public List<Constraint> constraints270;
+
+        [Header("Sides Data")]
         public VoxelTileSide back;
 
         public VoxelTileSide right;
@@ -30,6 +40,7 @@ namespace NeonBots.Locations
 
         public VoxelTileSide bottom;
 
+        [HideInInspector]
         public Vector3 rotation = Vector3.zero;
 
         public bool CompareSide(VoxelTile.Side side, VoxelTileData target) => side switch

@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a5e6c8ee1b794d0db5835e5ad6a599b7, type: 3}
-  m_Name: DisallowAtBottom
+  m_Name: DisallowAtLeft
   m_EditorClassIdentifier: 
-  min: {x: 0, y: 1, z: 0}
+  min: {x: 1, y: 0, z: 0}
   max: {x: -1, y: -1, z: -1}
