@@ -5,6 +5,7 @@ namespace NeonBots.Components
 {
     public class WorldCursor : MonoBehaviour
     {
+        // TODO: Get watcher from camera.
         [SerializeField]
         private Watcher watcher;
 

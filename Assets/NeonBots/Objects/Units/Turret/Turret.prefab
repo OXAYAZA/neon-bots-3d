@@ -253,6 +253,7 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 128
+  position: {x: 0, y: 0, z: 0}
   hoverAlt: 3
   strength: 4000
   dampening: 10000
@@ -274,6 +275,8 @@ MonoBehaviour:
   layerMask:
     serializedVersion: 2
     m_Bits: 8
+  battleDistanceMin: 8
+  battleDistanceMax: 10
 --- !u!1 &3368203317030251514
 GameObject:
   m_ObjectHideFlags: 0

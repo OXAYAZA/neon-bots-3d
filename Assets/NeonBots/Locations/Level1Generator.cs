@@ -36,20 +36,14 @@ namespace NeonBots.Locations
             this.data = new List<VoxelTileData>[this.locationSize.x, this.locationSize.y, this.locationSize.z];
 
             // Place start.
-            var startPosition = new Vector3Int(
-                Random.Range(0, this.data.GetLength(0)),
-                Random.Range(0, this.data.GetLength(1)),
-                Random.Range(0, this.data.GetLength(2))
-            );
+            var startPosition = new Vector3Int(Random.Range(1, this.data.GetLength(0) - 1), 0,
+                Random.Range(1, this.data.GetLength(2) - 1));
 
             this.data[startPosition.x, startPosition.y, startPosition.z] = new() { this.startTile };
 
             // Place exit.
-            var exitPosition = new Vector3Int(
-                Random.Range(0, this.data.GetLength(0)),
-                Random.Range(0, this.data.GetLength(1)),
-                Random.Range(0, this.data.GetLength(2))
-            );
+            var exitPosition = new Vector3Int(Random.Range(1, this.data.GetLength(0) - 1), 0,
+                Random.Range(1, this.data.GetLength(2) - 1));
 
             this.data[exitPosition.x, exitPosition.y, exitPosition.z] = new() { this.exitTile };
 
