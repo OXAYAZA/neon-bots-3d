@@ -24,6 +24,8 @@ namespace NeonBots.Components
         [Space]
         public List<ItemSocket> secondarySockets;
 
+        public Sleeper sleeper;
+
         private Vector3 moveDirection = Vector3.zero;
 
         private Vector3 lookDirection;

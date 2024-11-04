@@ -585,6 +585,7 @@ MonoBehaviour:
   heroHp: 1000
   heroPrefabs:
   - {fileID: 8324628740504926646, guid: 5c1dc3d3b35d2b449aaf5053b277ab78, type: 3}
+  wakerPrefab: {fileID: 4409332167459834278, guid: 184b798ed99ae074f99ba2bc2c934001, type: 3}
 --- !u!1 &1223381665
 GameObject:
   m_ObjectHideFlags: 0

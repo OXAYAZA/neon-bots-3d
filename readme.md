@@ -1,3 +1,3 @@
 # Neon Bots Project
 
-| [Web version](https://play.unity.com/mg/other/build_1-b)
+| [Web version](http://34.134.202.11/neon-bots.html)

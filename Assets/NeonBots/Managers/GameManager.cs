@@ -19,6 +19,8 @@ namespace NeonBots.Managers
 
         public Unit Hero { get; private set; }
 
+        public Waker wakerPrefab;
+
         private void Update()
         {
             if(!this.IsReady) return;
@@ -43,7 +45,10 @@ namespace NeonBots.Managers
             {
                 var randomNumber = Random.Range(0, this.heroPrefabs.Count);
                 this.Hero = Instantiate(this.heroPrefabs[randomNumber], sceneData.heroSpawnPosition, Quaternion.identity);
+                this.Hero.sleeper.enabled = false;
                 DontDestroyOnLoad(this.Hero.gameObject);
+
+                Instantiate(this.wakerPrefab, this.Hero.transform);
 
                 this.Hero.fraction = "green";
                 this.Hero.color = this.heroColor;
