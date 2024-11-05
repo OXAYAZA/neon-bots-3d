@@ -3388,7 +3388,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e5a602f9694346baa65dc5510a351ff1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  locationSize: {x: 20, y: 1, z: 20}
+  locationSize: {x: 7, y: 1, z: 7}
   initialTilesContainer: {fileID: 0}
   tileSet: {fileID: 11400000, guid: 745d6a74cf1d47c47ba945e2eed0c181, type: 2}
   startTile: {fileID: 11400000, guid: fc040a1999384d04eb5322a19464023d, type: 2}

@@ -66,6 +66,7 @@ namespace NeonBots.Locations
             return data;
         }
 
+#if UNITY_EDITOR
         [ContextMenu("Generate VoxelTileData")]
         public void SaveData()
         {
@@ -77,6 +78,7 @@ namespace NeonBots.Locations
             var data = this.GenerateData();
             AssetDatabase.CreateAsset(data, $"{pathToCurrentFolder}/{this.name}Data.asset");
         }
+#endif
 
         // If we look on any side, we count voxel position from left to right.
         // Layer position from bottom to top.
